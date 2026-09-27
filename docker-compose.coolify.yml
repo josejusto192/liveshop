@@ -21,6 +21,8 @@ services:
       TURN_USER: ${TURN_USER:-}
       TURN_PASS: ${TURN_PASS:-}
       MEDIAMTX_AUTH_SECRET: ${MEDIAMTX_AUTH_SECRET}
+      MEDIAMTX_API_URL: http://mediamtx:9997
+      HLS_AUDIO_AAC: ${HLS_AUDIO_AAC:-1}
       SUPPORT_WHATSAPP: ${SUPPORT_WHATSAPP}
       SUPPORT_EMAIL: ${SUPPORT_EMAIL}
       UPLOAD_DIR: /data/uploads
@@ -47,13 +49,15 @@ services:
     restart: unless-stopped
 
   mediamtx:
-    image: bluenviron/mediamtx:latest-ffmpeg
+    image: bluenviron/mediamtx:1.15.3-ffmpeg
     environment:
       SERVICE_FQDN_MEDIAMTX_8889: ${SERVICE_FQDN_MEDIAMTX_8889}   # video.dominio.com.br (WHIP)
       SERVICE_FQDN_MEDIAMTX_8888: ${SERVICE_FQDN_MEDIAMTX_8888}   # hls.dominio.com.br (HLS)
       # Autenticação pela rede interna, sem sair para a internet.
       MTX_AUTHHTTPADDRESS: http://app:3000/api/internal/mediamtx/auth
       MTX_WEBRTCADDITIONALHOSTS: ${MEDIAMTX_PUBLIC_HOST}           # IP/domínio público da VPS
+      MEDIAMTX_AUTH_SECRET: ${MEDIAMTX_AUTH_SECRET}                # credencial interna do FFmpeg (áudio AAC)
+    # A API (9997) e o RTSP (8554) ficam só na rede interna: sem "ports" para eles.
     ports:
       - "8189:8189/udp"   # mídia WebRTC (liberar 8189/UDP no firewall da VPS)
     volumes:

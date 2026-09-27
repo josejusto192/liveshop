@@ -73,6 +73,8 @@ Formato: `event: <nome>` + `data: <json>`.
 | `stock` | `{ productId, available }` | a cada registro/alteração/exclusão |
 | `activity` | `{ text }` | a cada registro (se `show_activity`) |
 | `viewers` | `{ count }` | a cada 5 s |
+| `items` | `{ items }` | roteiro mudou durante a live (produto adicionado pela Central) |
+| `my-order` | `{ order }` | o pedido da própria empresa mudou (só para ela; mantém outros aparelhos em dia) |
 
 ### Canal da Central `/api/admin/lives/[id]/stream`
 

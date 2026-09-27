@@ -1,33 +1,61 @@
 # MediaMTX: recebe a transmissão do navegador por WebRTC/WHIP e entrega LL-HLS aos compradores.
-# Na produção roda na mesma VPS do app (docs/04-arquitetura.md). Sem RTMP/OBS.
+# Roda na mesma VPS do app (docs/04-arquitetura.md). Sem RTMP/OBS.
 logLevel: info
 
-# Toda publicação e leitura passa pelo app (POST /api/internal/mediamtx/auth, M2):
-# leitura liberada; publicação só com token de publicação válido de dona/operador.
+# Publicar passa pelo app (POST /api/internal/mediamtx/auth): só com o token da tela Transmitir,
+# emitido para dona ou operador. Assistir (HLS) e a API interna não passam pelo app.
 # O endereço vem de MTX_AUTHHTTPADDRESS (docker-compose).
 authMethod: http
+authHTTPAddress: http://localhost:3000/api/internal/mediamtx/auth
+authHTTPExclude:
+  - action: read
+  - action: playback
+  - action: api
+  - action: metrics
+  - action: pprof
 
-api: no
+# API de controle: só na rede interna (o app consulta o sinal aqui). Não publicar a porta.
+api: yes
+apiAddress: :9997
+
 rtmp: no
-rtsp: no
 srt: no
+metrics: no
+pprof: no
+playback: no
+
+# RTSP só para uso interno: conversão do áudio para AAC e `pnpm stream:test`. Não publicar a porta em produção.
+rtsp: yes
+rtspTransports: [tcp]
+rtspAddress: :8554
 
 webrtc: yes
 webrtcAddress: :8889            # sinalização WHIP (HTTP; HTTPS pelo proxy do Coolify)
 webrtcLocalUDPAddress: :8189    # mídia (UDP, aberta no firewall)
 webrtcLocalTCPAddress: ''
+webrtcIPsFromInterfaces: yes
 # webrtcAdditionalHosts vem de MTX_WEBRTCADDITIONALHOSTS (IP/domínio público da VPS).
+webrtcAdditionalHosts: []
 webrtcAllowOrigin: '*'
 
 hls: yes
 hlsAddress: :8888
+# LL-HLS. Se iPhones travarem (aviso "part duration changed" no log), use MTX_HLSVARIANT=fmp4
+# (HLS comum, alguns segundos a mais de atraso: aumente o "Atraso do vídeo" da live).
 hlsVariant: lowLatency
+hlsPartDuration: 500ms          # partes maiores oscilam menos com o vídeo do WebRTC (iOS exige duração estável)
+hlsSegmentDuration: 1s
+hlsAlwaysRemux: yes             # o HLS fica pronto assim que o sinal chega
 hlsAllowOrigin: '*'
 
 paths:
-  # live/{liveId}
-  # Se o Safari do iPhone não tocar o áudio Opus no HLS, ligar a conversão para AAC (docs/04),
-  # com rtsp habilitado só para uso interno do FFmpeg:
-  #   runOnReady: ffmpeg -i rtsp://localhost:$RTSP_PORT/$MTX_PATH -c:v copy -c:a aac -f rtsp rtsp://localhost:$RTSP_PORT/$MTX_PATH-aac
-  #   runOnReadyRestart: yes
-  "~^live/[0-9a-f-]{36}(-aac)?$": {}
+  # live/{id da live}: o que a tela Transmitir publica (vídeo H.264 + áudio Opus).
+  # Assim que fica pronto, o FFmpeg republica em live/{id}-aac com o áudio em AAC, que toca também
+  # no Safari do iPhone. O player do comprador usa o caminho -aac (HLS_AUDIO_AAC=1, padrão).
+  "~^live/[0-9a-f-]{36}$":
+    runOnReady: >-
+      ffmpeg -hide_banner -loglevel error -rtsp_transport tcp -i rtsp://localhost:$RTSP_PORT/$MTX_PATH
+      -map 0:v:0? -map 0:a:0? -c:v copy -c:a aac -b:a 128k -ar 48000
+      -strict experimental -f rtsp -rtsp_transport tcp rtsp://internal:$MEDIAMTX_AUTH_SECRET@localhost:$RTSP_PORT/$MTX_PATH-aac
+    runOnReadyRestart: yes
+  "~^live/[0-9a-f-]{36}-aac$": {}

@@ -15,6 +15,13 @@
       "when": 1790537867920,
       "tag": "0001_product_stock_view",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790539859896,
+      "tag": "0002_live_ops",
+      "breakpoints": true
     }
   ]
 }

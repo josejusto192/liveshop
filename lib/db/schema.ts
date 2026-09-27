@@ -9,6 +9,7 @@ import {
   inet,
   integer,
   pgEnum,
+  pgSequence,
   pgTable,
   pgView,
   primaryKey,
@@ -49,6 +50,8 @@ export const settings = pgTable(
     mailFromName: text('mail_from_name'),
     mailFromEmail: text('mail_from_email'),
     mailSubject: text('mail_subject'),
+    // Texto do prazo da fatura mostrado ao comprador (pergunta em aberto: padrão "em até 5 dias úteis").
+    invoiceDeadline: text('invoice_deadline').notNull().default('em até 5 dias úteis'),
   },
   (t) => [check('settings_single_row', sql`${t.id} = 1`)],
 );
@@ -187,6 +190,19 @@ export const sessions = pgTable(
   (t) => [check('sessions_one_owner', sql`(${t.companyId} is null) <> (${t.adminUserId} is null)`)],
 );
 
+// Link de uso único (QR code da Central) que abre a tela Transmitir no celular já logado.
+export const loginLinks = pgTable('login_links', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  tokenHash: text('token_hash').notNull().unique(),
+  adminUserId: uuid('admin_user_id')
+    .notNull()
+    .references(() => adminUsers.id),
+  liveId: uuid('live_id').references(() => lives.id, { onDelete: 'cascade' }),
+  expiresAt: ts('expires_at').notNull(),
+  usedAt: ts('used_at'),
+  createdAt: ts('created_at').notNull().defaultNow(),
+});
+
 export const liveAttendance = pgTable(
   'live_attendance',
   {
@@ -198,6 +214,9 @@ export const liveAttendance = pgTable(
 );
 
 // Pedidos
+// Código legível do pedido: #LV-0001, #LV-0002…
+export const orderCodeSeq = pgSequence('order_code_seq', { startWith: 1 });
+
 export const orders = pgTable(
   'orders',
   {

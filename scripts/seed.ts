@@ -13,6 +13,7 @@ async function main() {
     order_item_events, order_items, orders, stock_alerts, live_attendance, support_tickets,
     sessions, otp_codes, live_items, lives, products, brands, companies, admin_users, settings
     restart identity cascade`);
+  await db.execute(sql`alter sequence order_code_seq restart with 1`);
 
   await db.insert(schema.settings).values({
     id: 1,
@@ -56,10 +57,8 @@ async function main() {
   }
   const bySku = Object.fromEntries(products.map((p) => [p.sku, p]));
 
-  // Próxima quinta-feira às 14h (horário de Brasília).
-  const now = new Date();
-  const daysToThu = (4 - now.getUTCDay() + 7) % 7 || 7;
-  const startsAt = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysToThu, 17, 0, 0));
+  // Daqui a ~1 hora (próxima meia hora cheia): dá para testar a sala de espera e iniciar a live pela Central a qualquer momento.
+  const startsAt = new Date(Math.ceil((Date.now() + 3600_000) / 1800_000) * 1800_000);
 
   const [live] = await db
     .insert(schema.lives)

@@ -9,9 +9,10 @@ import { AdminLogin } from './AdminLogin';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminLoginPage() {
+export default async function AdminLoginPage({ searchParams }: { searchParams: Promise<{ link?: string }> }) {
   if (await getAdmin()) redirect('/admin');
   const settings = await getSettings();
+  const { link } = await searchParams;
   const pending = (await cookies()).get(PENDING_EMAIL_COOKIE.admin)?.value ?? null;
   const wait = pending ? await resendWaitS(pending, 'admin') : 0;
 
@@ -22,6 +23,11 @@ export default async function AdminLoginPage() {
       <section className="anim-in box-border flex flex-grow flex-col gap-[18px] rounded-[26px] bg-surface px-[22px] py-6 lg:w-[500px] lg:flex-grow-0 lg:gap-[22px] lg:rounded-panel lg:p-10">
         <span className="hidden h-14 w-14 items-center justify-center rounded-[18px] bg-ink text-accent lg:flex"><IconMail /></span>
         <h1 className="text-[26px] font-medium tracking-[-0.035em] lg:text-[30px]">Entrar no painel</h1>
+        {link === 'expirado' && (
+          <p role="alert" className="m-0 rounded-2xl bg-warn-bg px-4 py-3 text-[14px] leading-[1.45] text-warn">
+            Este link já foi usado ou expirou. Gere um novo QR code na Central ou entre com o seu e-mail.
+          </p>
+        )}
         <AdminLogin ttlMin={settings.otpTtlMin} initialEmail={pending} initialWait={wait} />
       </section>
       <div className="hidden flex-grow lg:block" />
