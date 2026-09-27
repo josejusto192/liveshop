@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Live encerrada</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}a:hover{color:#44474D}
+h1,h2,h3{margin:0}
+button{font-family:inherit;cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes lsPopC{from{opacity:0;transform:translate(-50%,-8px) scale(.98)}to{opacity:1;transform:translate(-50%,0)}}
+.ls-in{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) both}
+.ls-in-2{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) .1s both}
+.ls-pop-c{animation:lsPopC .35s cubic-bezier(.2,.7,.2,1) both}
+button,a{transition:background-color .2s ease,color .2s ease,opacity .2s ease,transform .15s ease;white-space:nowrap;flex-shrink:0}
+button:active,a:active{transform:scale(.97)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; padding: 16px; display: flex; gap: 16px; background: #EDEEF0; position: relative; overflow: hidden">
+  <section class="ls-in" style="flex-grow: 1; box-sizing: border-box; padding: 48px; border-radius: 28px; background: #141518; color: #FFFFFF; display: flex; flex-direction: column; gap: 22px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <span style="width: 32px; height: 32px; border-radius: 10px; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#111214" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg></span>
+      <span style="font-size: 17px; font-weight: 600">Live Shop</span>
+    </div>
+    <div style="flex-grow: 1"></div>
+    <span style="align-self: flex-start; padding: 5px 12px; border-radius: 999px; background: #26282D; color: #A9ADB5; font-size: 12px; font-weight: 500">Encerrada · durou 58 min</span>
+    <h1 style="font-size: 60px; font-weight: 500; line-height: 1.02; letter-spacing: -0.045em">A live terminou.<br>Obrigado por participar.</h1>
+    <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #A9ADB5; max-width: 520px">Seus pedidos foram enviados para a Marca Exemplo. Você recebe a fatura por e-mail, sem precisar fazer mais nada agora.</p>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding-top: 10px; max-width: 720px">
+      <div style="padding: 18px; border-radius: 20px; background: #1E2024; display: flex; flex-direction: column; gap: 10px"><span style="width: 30px; height: 30px; border-radius: 50%; background: #D6F35B; color: #111214; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="font-size: 14px; font-weight: 500">Pedidos enviados</span><span style="font-size: 12px; color: #A9ADB5">Agora mesmo</span></div>
+      <div style="padding: 18px; border-radius: 20px; background: #1E2024; display: flex; flex-direction: column; gap: 10px"><span style="width: 30px; height: 30px; border-radius: 50%; background: #26282D; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">2</span><span style="font-size: 14px; font-weight: 500">Fatura por e-mail</span><span style="font-size: 12px; color: #A9ADB5">Em até [prazo] dias úteis</span></div>
+      <div style="padding: 18px; border-radius: 20px; background: #1E2024; display: flex; flex-direction: column; gap: 10px"><span style="width: 30px; height: 30px; border-radius: 50%; background: #26282D; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">3</span><span style="font-size: 14px; font-weight: 500">Pagamento e entrega</span><span style="font-size: 12px; color: #A9ADB5">Combinados com a marca</span></div>
+    </div>
+  </section>
+
+  <aside class="ls-in-2" style="width: 460px; flex-shrink: 0; box-sizing: border-box; padding: 26px; border-radius: 28px; background: #FFFFFF; display: flex; flex-direction: column; gap: 16px">
+    <h2 style="font-size: 20px; font-weight: 500; letter-spacing: -0.02em">Resumo dos seus pedidos</h2>
+    <div style="padding: 18px 20px; border-radius: 20px; background: #F4F5F6; display: flex; justify-content: space-between; align-items: center"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #6B6F76">Valor estimado · 3 produtos</span><span style="font-size: 32px; font-weight: 500; letter-spacing: -0.04em">R$ 52.340,00</span></span><span style="padding: 6px 12px; border-radius: 999px; background: #111214; color: #D6F35B; font-size: 13px">1.700 un.</span></div>
+    <sc-for list="{{ items }}" as="i" hint-placeholder-count="3">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #F1F2F4"><span style="width: 44px; height: 44px; border-radius: 12px; background: #F1F2F4"></span><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 500">{{ i.name }}</span><span style="font-size: 12px; color: #6B6F76">{{ i.qty }} × {{ i.unit }}</span></span><span style="font-size: 14px; font-weight: 500">{{ i.sub }}</span></div>
+    </sc-for>
+    <span style="font-size: 12px; color: #6B6F76; line-height: 1.5">Valores de atacado. Frete e impostos vêm na fatura. Enviamos este resumo para compras@papelariacentral.com.br.</span>
+    <div style="flex-grow: 1"></div>
+    <button onClick="{{ pdf }}" style="height: 54px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 15px; font-weight: 500">Baixar resumo em PDF</button>
+    <a href="MinhaConta.dc.html" style="height: 50px; border-radius: 999px; border: 1px solid #E4E6EA; font-size: 14px; text-decoration: none; display: flex; align-items: center; justify-content: center">Acompanhar meus pedidos</a>
+  </aside>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" class="ls-pop-c" style="position: absolute; left: 50%; top: 28px; transform: translateX(-50%); padding: 12px 18px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 14px; display: flex; align-items: center; gap: 10px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #D6F35B"></span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { toast: '' }; }
+  renderVals() {
+    var self = this;
+    return {
+      items: [{ name: 'Caneta esferográfica azul', qty: '1.000 un.', unit: 'R$ 0,89', sub: 'R$ 890,00' }, { name: 'Ventilador de mesa 40 cm', qty: '500 un.', unit: 'R$ 89,90', sub: 'R$ 44.950,00' }, { name: 'Garrafa térmica 1 L', qty: '200 un.', unit: 'R$ 32,50', sub: 'R$ 6.500,00' }],
+      toast: this.state.toast,
+      pdf: function () { self.setState({ toast: 'Resumo em PDF baixado' }); clearTimeout(self.tt); self.tt = setTimeout(function () { self.setState({ toast: '' }); }, 2400); }
+    };
+  }
+}
+</script>
+</body>
+</html>

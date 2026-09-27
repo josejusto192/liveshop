@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Código de acesso</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}a:hover{color:#44474D}
+h1,h2,h3{margin:0}
+button,input{font-family:inherit}
+@keyframes lsIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes lsFade{from{opacity:0}to{opacity:1}}
+.ls-in{animation:lsIn .55s cubic-bezier(.2,.7,.2,1) both}
+.ls-fade{animation:lsFade .4s ease both}
+a{transition:background-color .2s ease,color .2s ease,transform .15s ease}
+a:active{transform:scale(.97)}
+input{transition:background-color .2s ease,border-color .2s ease}
+button,a{white-space:nowrap;flex-shrink:0}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; padding: 32px; display: flex; flex-direction: column; align-items: center; background: #EDEEF0">
+  <div style="align-self: stretch; display: flex; align-items: center; gap: 10px">
+    <span style="width: 32px; height: 32px; border-radius: 10px; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#111214" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg></span>
+    <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Live Shop</span>
+  </div>
+  <div style="flex-grow: 1"></div>
+  <div class="ls-in" style="width: 500px; box-sizing: border-box; padding: 40px; border-radius: 28px; background: #FFFFFF; display: flex; flex-direction: column; gap: 22px">
+    <span style="width: 56px; height: 56px; border-radius: 18px; background: #111214; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D6F35B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M3 8l9 6 9-6"></path></svg></span>
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <h1 style="font-size: 30px; font-weight: 500; letter-spacing: -0.035em">Confira seu e-mail</h1>
+      <p style="margin: 0; font-size: 15px; line-height: 1.5; color: #6B6F76">Enviamos um código de 6 dígitos para <span style="color: #111214; font-weight: 500">compras@papelariacentral.com.br</span></p>
+    </div>
+    <fieldset style="border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+      <legend style="font-size: 13px; color: #6B6F76; padding: 0; margin-bottom: 10px">Código de acesso</legend>
+      <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px">
+        <input aria-label="Dígito 1" value="4" style="height: 64px; box-sizing: border-box; border-radius: 16px; border: none; background: #F4F5F6; text-align: center; font-size: 28px; font-weight: 500">
+        <input aria-label="Dígito 2" value="8" style="height: 64px; box-sizing: border-box; border-radius: 16px; border: none; background: #F4F5F6; text-align: center; font-size: 28px; font-weight: 500">
+        <input aria-label="Dígito 3" value="2" style="height: 64px; box-sizing: border-box; border-radius: 16px; border: none; background: #F4F5F6; text-align: center; font-size: 28px; font-weight: 500">
+        <input aria-label="Dígito 4" value="" style="height: 64px; box-sizing: border-box; border-radius: 16px; border: 2px solid #111214; background: #FFFFFF; text-align: center; font-size: 28px; font-weight: 500">
+        <input aria-label="Dígito 5" value="" style="height: 64px; box-sizing: border-box; border-radius: 16px; border: none; background: #F4F5F6; text-align: center; font-size: 28px; font-weight: 500">
+        <input aria-label="Dígito 6" value="" style="height: 64px; box-sizing: border-box; border-radius: 16px; border: none; background: #F4F5F6; text-align: center; font-size: 28px; font-weight: 500">
+      </div>
+      <span style="font-size: 13px; color: #6B6F76">O código vale por 10 minutos.</span>
+    </fieldset>
+    <a href="SalaEspera.dc.html" style="height: 56px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 24px">Entrar na live<span style="width: 42px; height: 42px; border-radius: 50%; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a>
+    <div style="display: flex; justify-content: space-between; font-size: 14px">
+      <a href="Login.dc.html" style="font-weight: 500">Trocar e-mail</a>
+      <span style="color: #6B6F76">Reenviar em <span style="font-family: 'Geist Mono', monospace; color: #111214">0:42</span></span>
+    </div>
+  </div>
+  <div style="flex-grow: 1"></div>
+  <p style="margin: 0; font-size: 13px; color: #6B6F76">Não recebeu? Olhe a caixa de spam ou promoções.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

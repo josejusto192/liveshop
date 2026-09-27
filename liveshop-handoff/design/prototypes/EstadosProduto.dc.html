@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Estados do produto na live</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+h1,h2,h3{margin:0}
+button,input{font-family:inherit}
+button{cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes lsShake{0%,100%{transform:none}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.ls-in{animation:lsIn .45s cubic-bezier(.2,.7,.2,1) both}
+button{transition:background-color .2s ease,color .2s ease,opacity .2s ease,transform .15s ease;white-space:nowrap;flex-shrink:0}
+button:active{transform:scale(.97)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; padding: 32px; display: flex; flex-direction: column; gap: 24px; background: #EDEEF0">
+  <div style="display: flex; flex-direction: column; gap: 4px">
+    <h1 style="font-size: 28px; font-weight: 500; letter-spacing: -0.03em">Card do produto: estados de estoque</h1>
+    <span style="font-size: 14px; color: #6B6F76">Vale para a live horizontal, a vertical e o celular.</span>
+  </div>
+
+  <div class="ls-in" style="flex-grow: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; min-height: 0">
+
+    <section style="display: flex; flex-direction: column; gap: 12px">
+      <span style="align-self: flex-start; padding: 5px 12px; border-radius: 999px; background: #EEF8D0; color: #3F5A06; font-size: 12px; font-weight: 500">Disponível</span>
+      <div style="flex-grow: 1; box-sizing: border-box; padding: 20px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 13px; color: #6B6F76">Produto 2 de 6</span><span style="padding: 6px 12px; border-radius: 999px; background: #D6F35B; font-size: 13px; font-weight: 500">Disponível por <span style="font-family: 'Geist Mono', monospace">12:40</span></span></div>
+        <div style="height: 150px; border-radius: 18px; background: repeating-linear-gradient(135deg, #F1F2F4 0 6px, #F7F8F9 6px 12px)"></div>
+        <h2 style="font-size: 22px; font-weight: 500; letter-spacing: -0.03em">Ventilador de mesa 40 cm</h2>
+        <div style="display: flex; gap: 8px"><span style="padding: 5px 10px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 12px; font-weight: 500">R$ 89,90 / un.</span><span style="padding: 5px 10px; border-radius: 999px; background: #F4F5F6; font-size: 12px">Estoque 4.800 un.</span></div>
+        <div style="height: 60px; box-sizing: border-box; padding: 0 20px; border-radius: 18px; background: #F4F5F6; display: flex; align-items: center; font-size: 28px; font-weight: 500; letter-spacing: -0.03em">500 <span style="font-size: 14px; color: #6B6F76; margin-left: 8px; letter-spacing: 0">un.</span></div>
+        <div style="flex-grow: 1"></div>
+        <button style="height: 56px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 15px; font-weight: 500">Registrar pedido</button>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 12px">
+      <span style="align-self: flex-start; padding: 5px 12px; border-radius: 999px; background: #FFF1E0; color: #8A4A0B; font-size: 12px; font-weight: 500">Estoque baixo · teste a quantidade</span>
+      <div style="flex-grow: 1; box-sizing: border-box; padding: 20px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 13px; color: #6B6F76">Produto 4 de 6</span><span style="padding: 6px 12px; border-radius: 999px; background: #FFF1E0; color: #8A4A0B; font-size: 13px; font-weight: 500">Últimas {{ leftText }} un.</span></div>
+        <div style="height: 150px; border-radius: 18px; background: repeating-linear-gradient(135deg, #F1F2F4 0 6px, #F7F8F9 6px 12px)"></div>
+        <h2 style="font-size: 22px; font-weight: 500; letter-spacing: -0.03em">Kit organizador de mesa</h2>
+        <div style="height: 6px; border-radius: 999px; background: #F1F2F4; overflow: hidden"><div style="width: 9%; height: 6px; border-radius: 999px; background: #F5A25A"></div></div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <label for="lq" style="font-size: 13px; color: #6B6F76">Quantidade</label>
+          <div style="height: 60px; box-sizing: border-box; padding: 0 20px; border-radius: 18px; background: {{ fieldBg }}; box-shadow: {{ fieldRing }}; display: flex; align-items: center; gap: 8px; transition: background-color .2s ease, box-shadow .2s ease; animation: {{ shake }} .3s ease">
+            <input id="lq" inputmode="numeric" aria-invalid="{{ over }}" aria-describedby="lqerr" value="{{ qtyText }}" onChange="{{ onQty }}" style="flex-grow: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 28px; font-weight: 500; letter-spacing: -0.03em; color: #111214">
+            <span style="font-size: 14px; color: #6B6F76">un.</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+            <button onClick="{{ add50 }}" style="height: 42px; border-radius: 999px; border: 1px solid #E4E6EA; background: #FFFFFF; font-size: 13px; font-weight: 500">+50</button>
+            <button onClick="{{ add100 }}" style="height: 42px; border-radius: 999px; border: 1px solid #E4E6EA; background: #FFFFFF; font-size: 13px; font-weight: 500">+100</button>
+            <button onClick="{{ useMax }}" style="height: 42px; border-radius: 999px; border: none; background: #FFF1E0; color: #8A4A0B; font-size: 13px; font-weight: 500">Pedir o máximo</button>
+          </div>
+          <span id="lqerr" style="min-height: 18px; font-size: 13px; color: #A11F24">{{ errText }}</span>
+        </div>
+        <div style="flex-grow: 1"></div>
+        <button onClick="{{ register }}" disabled="{{ over }}" style="height: 56px; border-radius: 999px; border: none; background: {{ btnBg }}; color: {{ btnFg }}; font-size: 15px; font-weight: 500">{{ btnLabel }}</button>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 12px">
+      <span style="align-self: flex-start; padding: 5px 12px; border-radius: 999px; background: #FDECEC; color: #A11F24; font-size: 12px; font-weight: 500">Esgotado</span>
+      <div style="flex-grow: 1; box-sizing: border-box; padding: 20px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><span style="font-size: 13px; color: #6B6F76">Produto 6 de 6</span><span style="padding: 6px 12px; border-radius: 999px; background: #FDECEC; color: #A11F24; font-size: 13px; font-weight: 500">Esgotado</span></div>
+        <div style="height: 150px; border-radius: 18px; background: repeating-linear-gradient(135deg, #F1F2F4 0 6px, #F7F8F9 6px 12px); opacity: 0.5; position: relative; display: flex; align-items: center; justify-content: center"><span style="padding: 8px 16px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 13px; font-weight: 500">Todo o estoque foi pedido</span></div>
+        <h2 style="font-size: 22px; font-weight: 500; letter-spacing: -0.03em; color: #6B6F76">Mochila executiva</h2>
+        <div style="padding: 16px; border-radius: 18px; background: #F4F5F6; display: flex; flex-direction: column; gap: 6px">
+          <span style="font-size: 14px; font-weight: 500">Este produto esgotou durante a live</span>
+          <span style="font-size: 13px; line-height: 1.5; color: #6B6F76">Quem já registrou pedido está garantido. Fique na live: o próximo produto entra em instantes.</span>
+        </div>
+        <button onClick="{{ toggleWait }}" style="height: 44px; border-radius: 999px; border: 1px solid #E4E6EA; background: {{ waitBg }}; color: {{ waitFg }}; font-size: 13px; font-weight: 500">{{ waitLabel }}</button>
+        <div style="flex-grow: 1"></div>
+        <button disabled="{{ yes }}" style="height: 56px; border-radius: 999px; border: none; background: #EDEEF0; color: #8A8F99; font-size: 15px; font-weight: 500; cursor: default">Esgotado</button>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { qty: 500, left: 320, done: false, wait: false, bump: 0 }; }
+  renderVals() {
+    var self = this, s = this.state, over = s.qty > s.left;
+    function f(n) { return n.toLocaleString('pt-BR'); }
+    return {
+      yes: true,
+      leftText: f(s.left),
+      qtyText: s.qty ? f(s.qty) : '',
+      over: over,
+      fieldBg: over ? '#FDECEC' : '#F4F5F6',
+      fieldRing: over ? 'inset 0 0 0 2px #C92A2F' : 'none',
+      shake: over ? (s.bump % 2 ? 'lsShake' : 'none') : 'none',
+      errText: over ? 'Só restam ' + f(s.left) + ' un. Ajuste a quantidade ou peça o máximo.' : (s.done ? 'Pedido registrado. Estoque atualizado.' : ''),
+      btnBg: over ? '#EDEEF0' : '#111214', btnFg: over ? '#8A8F99' : '#FFFFFF',
+      btnLabel: over ? 'Quantidade acima do estoque' : 'Registrar pedido',
+      onQty: function (e) { var n = parseInt(String(e.target.value).replace(/\D/g, ''), 10); self.setState({ qty: isNaN(n) ? 0 : n, done: false, bump: self.state.bump + 1 }); },
+      add50: function () { self.setState({ qty: self.state.qty + 50, done: false, bump: self.state.bump + 1 }); },
+      add100: function () { self.setState({ qty: self.state.qty + 100, done: false, bump: self.state.bump + 1 }); },
+      useMax: function () { self.setState({ qty: self.state.left, done: false }); },
+      register: function () { if (over || !s.qty) return; self.setState({ left: Math.max(0, s.left - s.qty), qty: 0, done: true }); },
+      toggleWait: function () { self.setState({ wait: !self.state.wait }); },
+      waitBg: s.wait ? '#111214' : '#FFFFFF', waitFg: s.wait ? '#D6F35B' : '#111214',
+      waitLabel: s.wait ? 'Vamos avisar se voltar ao estoque' : 'Avisar se voltar ao estoque'
+    };
+  }
+}
+</script>
+</body>
+</html>

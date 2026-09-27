@@ -1,0 +1,61 @@
+/* Live Shop B2B: tokens. Importar em app/globals.css */
+:root {
+  --bg: #EDEEF0;
+  --surface: #FFFFFF;
+  --surface-2: #F4F5F6;
+  --line: #E4E6EA;
+  --line-2: #F1F2F4;
+  --ink: #111214;
+  --ink-2: #44474D;
+  --muted: #6B6F76;
+  --dark: #141518;
+  --dark-2: #1E2024;
+  --dark-3: #26282D;
+  --dark-line: #3A3D44;
+  --dark-muted: #A9ADB5;
+  --accent: #D6F35B;
+  --accent-ink: #3A4214;
+  --live: #C92A2F;
+  --danger-bg: #FDECEC; --danger: #A11F24;
+  --warn-bg: #FFF1E0;   --warn: #8A4A0B;
+  --ok-bg: #EEF8D0;     --ok: #3F5A06;
+
+  --r-input: 14px;
+  --r-card: 22px;
+  --r-card-lg: 24px;
+  --r-panel: 28px;
+  --r-pill: 999px;
+
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(.2,.7,.2,1);
+}
+
+body { background: var(--bg); color: var(--ink); font-family: var(--font-sans); }
+button, a { white-space: nowrap; flex-shrink: 0; }
+button:active { transform: scale(.97); }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+@keyframes lsIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes lsFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lsPopC { from { opacity: 0; transform: translate(-50%, 6px) scale(.96); } to { opacity: 1; transform: translate(-50%, 0) scale(1); } }
+@keyframes lsModal { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+@keyframes lsSheet { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes lsSheetOut { from { transform: none; } to { transform: translateY(100%); } }
+@keyframes lsDrawer { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes lsDrawerOut { from { transform: none; } to { transform: translateX(100%); } }
+@keyframes lsSwapOut { to { opacity: 0; transform: translateY(-6px); } }
+@keyframes lsSwapIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes lsPulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+.anim-in { animation: lsIn .5s var(--ease) both; }
+.anim-fade { animation: lsFade .3s ease both; }
+.anim-sheet { animation: lsSheet .35s var(--ease) both; }
+.anim-sheet-out { animation: lsSheetOut .25s ease-in both; }
+.anim-drawer { animation: lsDrawer .35s var(--ease) both; }
+.anim-drawer-out { animation: lsDrawerOut .25s ease-in both; }
+.anim-modal { animation: lsModal .25s var(--ease) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

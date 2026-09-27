@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Minha conta</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}a:hover{color:#44474D}
+h1,h2,h3{margin:0}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes lsPopC{from{opacity:0;transform:translate(-50%,-8px) scale(.98)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes lsSwapA{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes lsSwapB{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes lsSwapC{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.ls-in{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) both}
+.ls-pop-c{animation:lsPopC .35s cubic-bezier(.2,.7,.2,1) both}
+button,a{transition:background-color .2s ease,color .2s ease,border-color .2s ease,opacity .2s ease,transform .15s ease;white-space:nowrap;flex-shrink:0}
+button:active,a:active{transform:scale(.97)}
+input,select,textarea{transition:box-shadow .2s ease}
+input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 2px #111214}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px; background: #EDEEF0; position: relative; overflow: hidden">
+
+  <header style="height: 64px; flex-shrink: 0; box-sizing: border-box; padding: 0 10px 0 20px; border-radius: 22px; background: #FFFFFF; display: flex; align-items: center; gap: 14px">
+    <span style="width: 32px; height: 32px; border-radius: 10px; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#111214" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg></span>
+    <span style="font-size: 16px; font-weight: 600; letter-spacing: -0.01em">Live Shop</span>
+    <span style="width: 1px; height: 24px; background: #E4E6EA"></span>
+    <span style="font-size: 15px; color: #6B6F76">Minha conta</span>
+    <div style="flex-grow: 1"></div>
+    <a href="Main.dc.html" style="height: 44px; padding: 0 16px; border-radius: 999px; background: #F4F5F6; font-size: 13px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 8px"><span style="width: 7px; height: 7px; border-radius: 50%; background: #C92A2F"></span>Voltar para a live</a>
+    <div style="height: 44px; padding: 0 16px 0 6px; border-radius: 999px; background: #111214; color: #FFFFFF; display: flex; align-items: center; gap: 10px"><span style="width: 32px; height: 32px; border-radius: 50%; background: #D6F35B; color: #111214; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600">PC</span><span style="font-size: 13px; font-weight: 500">Papelaria Central Ltda</span></div>
+  </header>
+
+  <main class="ls-in" style="flex-grow: 1; display: flex; gap: 16px; min-height: 0">
+    <nav aria-label="Minha conta" style="width: 240px; flex-shrink: 0; box-sizing: border-box; padding: 14px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+        <button onClick="{{ t.pick }}" aria-current="{{ t.cur }}" style="height: 46px; padding: 0 14px; border-radius: 14px; border: none; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px; text-align: left">
+          <span style="flex-grow: 1">{{ t.label }}</span>
+          <sc-if value="{{ t.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 999px; background: {{ t.badgeBg }}; color: #111214; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{ t.badge }}</span></sc-if>
+        </button>
+      </sc-for>
+      <div style="flex-grow: 1"></div>
+      <div style="padding: 14px; border-radius: 16px; background: #F4F5F6; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #6B6F76">Cliente desde</span><span style="font-size: 14px; font-weight: 500">março de 2026</span></div>
+      <a href="Login.dc.html" style="height: 44px; padding: 0 14px; border-radius: 14px; font-size: 14px; color: #A11F24; text-decoration: none; display: flex; align-items: center">Sair da conta</a>
+    </nav>
+
+    <sc-if value="{{ isOrders }}" hint-placeholder-val="{{ true }}">
+      <section style="width: 440px; flex-shrink: 0; box-sizing: border-box; padding: 20px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px; min-height: 0">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 6px"><h1 style="font-size: 22px; font-weight: 500; letter-spacing: -0.02em">Meus pedidos</h1><span style="font-size: 13px; color: #6B6F76">3 lives · {{ allMoney }}</span></div>
+        <sc-for list="{{ orders }}" as="o" hint-placeholder-count="3">
+          <button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="width: 100%; box-sizing: border-box; padding: 14px; border-radius: 18px; border: {{ o.border }}; background: {{ o.bg }}; display: flex; flex-direction: column; gap: 10px; text-align: left; color: #111214">
+            <span style="display: flex; align-items: center; gap: 10px; width: 100%"><span style="flex-grow: 1; font-size: 15px; font-weight: 500">{{ o.live }}</span><span style="padding: 4px 10px; border-radius: 999px; background: {{ o.stBg }}; color: {{ o.stFg }}; font-size: 11px; font-weight: 500">{{ o.status }}</span></span>
+            <span style="display: flex; justify-content: space-between; width: 100%; font-size: 13px; color: #6B6F76"><span>{{ o.brand }} · {{ o.date }} · {{ o.units }}</span><span style="color: #111214; font-weight: 500">{{ o.money }}</span></span>
+          </button>
+        </sc-for>
+      </section>
+
+      <section style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 24px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 18px; animation: {{ selAnim }} .4s cubic-bezier(.2,.7,.2,1) both">
+        <div style="display: flex; align-items: flex-start; gap: 12px">
+          <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #6B6F76">{{ d.brand }} · {{ d.date }} · pedido {{ d.code }}</span><h2 style="font-size: 26px; font-weight: 500; letter-spacing: -0.03em">{{ d.live }}</h2></div>
+          <span style="padding: 6px 12px; border-radius: 999px; background: {{ d.stBg }}; color: {{ d.stFg }}; font-size: 12px; font-weight: 500">{{ d.status }}</span>
+        </div>
+
+        <ol aria-label="Andamento do pedido" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+          <sc-for list="{{ d.steps }}" as="s" hint-placeholder-count="4">
+            <li style="display: flex; flex-direction: column; gap: 8px">
+              <span style="height: 6px; border-radius: 999px; background: {{ s.bar }}"></span>
+              <span style="font-size: 13px; font-weight: 500; color: {{ s.fg }}">{{ s.label }}</span>
+              <span style="font-size: 12px; color: #6B6F76">{{ s.when }}</span>
+            </li>
+          </sc-for>
+        </ol>
+
+        <div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; border-radius: 18px; border: 1px solid #EDEEF0; overflow: hidden">
+          <div style="display: grid; grid-template-columns: 2.2fr 1fr 1fr 1.1fr; gap: 12px; padding: 12px 16px; background: #F7F8F9; font-size: 12px; color: #6B6F76"><span>Produto</span><span>Preço atacado</span><span>Quantidade</span><span style="text-align: right">Subtotal</span></div>
+          <sc-for list="{{ d.items }}" as="i" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: 2.2fr 1fr 1fr 1.1fr; gap: 12px; padding: 0 16px; height: 56px; align-items: center; border-top: 1px solid #F1F2F4; font-size: 14px"><span style="display: flex; align-items: center; gap: 10px"><span style="width: 34px; height: 34px; border-radius: 10px; background: #F1F2F4"></span><span style="font-weight: 500">{{ i.name }}</span></span><span style="color: #44474D">{{ i.unit }}</span><span style="color: #44474D">{{ i.qty }}</span><span style="text-align: right; font-weight: 500">{{ i.sub }}</span></div>
+          </sc-for>
+          <div style="flex-grow: 1"></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: #141518; color: #FFFFFF"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; color: #A9ADB5">Total do pedido · {{ d.units }}</span><span style="font-size: 11px; color: #7C8088">Frete e impostos vêm na fatura</span></span><span style="font-size: 22px; font-weight: 500; letter-spacing: -0.03em; color: #D6F35B">{{ d.money }}</span></div>
+        </div>
+
+        <div style="display: flex; gap: 8px">
+          <button onClick="{{ invoice }}" disabled="{{ d.noInvoice }}" style="height: 48px; padding: 0 20px; border-radius: 999px; border: none; background: {{ d.invBg }}; color: {{ d.invFg }}; font-size: 14px; font-weight: 500">{{ d.invLabel }}</button>
+          <button onClick="{{ summary }}" style="height: 48px; padding: 0 18px; border-radius: 999px; border: 1px solid #E4E6EA; background: #FFFFFF; font-size: 14px">Baixar resumo</button>
+          <div style="flex-grow: 1"></div>
+          <button onClick="{{ helpOrder }}" style="height: 48px; padding: 0 18px; border-radius: 999px; border: none; background: #F4F5F6; font-size: 14px; font-weight: 500">Falar com o suporte</button>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+      <section class="ls-in" style="flex-grow: 1; box-sizing: border-box; padding: 26px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; align-items: center; gap: 16px">
+          <span style="width: 64px; height: 64px; border-radius: 20px; background: #111214; color: #D6F35B; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600">PC</span>
+          <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><h1 style="font-size: 22px; font-weight: 500; letter-spacing: -0.02em">Perfil da empresa</h1><span style="font-size: 13px; color: #6B6F76">Esses dados vão na fatura e no contato da entrega</span></div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="p1" style="font-size: 12px; color: #6B6F76">Nome da empresa</label><input id="p1" value="Papelaria Central Ltda" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="p2" style="font-size: 12px; color: #6B6F76">CNPJ</label><input id="p2" placeholder="00.000.000/0000-00" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="p3" style="font-size: 12px; color: #6B6F76">E-mail de compras</label><input id="p3" type="email" value="compras@papelariacentral.com.br" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="p4" style="font-size: 12px; color: #6B6F76">WhatsApp</label><input id="p4" type="tel" value="(11) 98812-4410" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="p5" style="font-size: 12px; color: #6B6F76">Responsável pelas compras</label><input id="p5" placeholder="Nome de quem recebe o contato" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+          <div style="display: flex; flex-direction: column; gap: 6px"><label for="p6" style="font-size: 12px; color: #6B6F76">CEP</label><input id="p6" placeholder="00000-000" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+          <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 6px"><label for="p7" style="font-size: 12px; color: #6B6F76">Endereço de entrega</label><input id="p7" placeholder="Rua, número, bairro, cidade" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 14px; font-weight: 500">Avisos</span>
+          <sc-for list="{{ prefs }}" as="p" hint-placeholder-count="2">
+            <div style="display: flex; align-items: center; gap: 12px"><span style="flex-grow: 1; font-size: 14px">{{ p.label }}</span><button role="switch" aria-checked="{{ p.on }}" aria-label="{{ p.label }}" onClick="{{ p.flip }}" style="width: 44px; height: 26px; border-radius: 999px; border: none; padding: 0; background: {{ p.track }}; position: relative"><span style="position: absolute; top: 3px; left: {{ p.x }}; width: 20px; height: 20px; border-radius: 50%; background: {{ p.knob }}; transition: left .22s cubic-bezier(.2,.7,.2,1), background-color .22s ease"></span></button></div>
+          </sc-for>
+        </div>
+        <div style="flex-grow: 1"></div>
+        <button onClick="{{ saveProfile }}" style="align-self: flex-start; height: 50px; padding: 0 26px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 14px; font-weight: 500">Salvar alterações</button>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isSupport }}" hint-placeholder-val="{{ false }}">
+      <section class="ls-in" style="flex-grow: 1; min-width: 0; box-sizing: border-box; padding: 26px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 2px"><h1 style="font-size: 22px; font-weight: 500; letter-spacing: -0.02em">Falar com o suporte</h1><span style="font-size: 13px; color: #6B6F76">Respondemos em horário comercial, normalmente no mesmo dia</span></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <button onClick="{{ whats }}" style="height: 72px; padding: 0 18px; border-radius: 18px; border: none; background: #D6F35B; display: flex; align-items: center; gap: 12px; text-align: left"><span style="width: 40px; height: 40px; border-radius: 50%; background: #111214; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D6F35B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z"></path></svg></span><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 500">WhatsApp</span><span style="font-size: 12px; color: #3A4214">Resposta mais rápida</span></span></button>
+          <button onClick="{{ mail }}" style="height: 72px; padding: 0 18px; border-radius: 18px; border: none; background: #F4F5F6; display: flex; align-items: center; gap: 12px; text-align: left"><span style="width: 40px; height: 40px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M3 8l9 6 9-6"></path></svg></span><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 500">E-mail</span><span style="font-size: 12px; color: #6B6F76">suporte@[dominio].com.br</span></span></button>
+        </div>
+        <div style="flex-grow: 1; display: flex; gap: 16px; min-height: 0">
+          <form style="flex-grow: 1; box-sizing: border-box; padding: 18px; border-radius: 18px; border: 1px solid #EDEEF0; display: flex; flex-direction: column; gap: 12px">
+            <span style="font-size: 15px; font-weight: 500">Abrir um chamado</span>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+              <div style="display: flex; flex-direction: column; gap: 6px"><label for="s1" style="font-size: 12px; color: #6B6F76">Assunto</label><select id="s1" style="height: 44px; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 12px; font-size: 14px"><option>Dúvida sobre pedido</option><option>Fatura e pagamento</option><option>Entrega</option><option>Acesso à live</option></select></div>
+              <div style="display: flex; flex-direction: column; gap: 6px"><label for="s2" style="font-size: 12px; color: #6B6F76">Pedido relacionado</label><select id="s2" style="height: 44px; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 12px; font-size: 14px"><option>{{ ticketOrder }}</option><option>Nenhum</option></select></div>
+            </div>
+            <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 6px"><label for="s3" style="font-size: 12px; color: #6B6F76">Mensagem</label><textarea id="s3" value="{{ msg }}" onChange="{{ onMsg }}" placeholder="Conte o que aconteceu" style="flex-grow: 1; min-height: 90px; border-radius: 12px; border: none; background: #F4F5F6; padding: 12px 14px; font-size: 14px; resize: none"></textarea></div>
+            <button type="button" onClick="{{ sendTicket }}" style="align-self: flex-start; height: 46px; padding: 0 22px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 14px; font-weight: 500">Enviar chamado</button>
+          </form>
+          <div style="width: 300px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 15px; font-weight: 500">Seus chamados</span>
+            <sc-for list="{{ tickets }}" as="t" hint-placeholder-count="2">
+              <div class="ls-in" style="padding: 14px; border-radius: 16px; background: #F4F5F6; display: flex; flex-direction: column; gap: 6px"><span style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 13px; font-weight: 500">{{ t.title }}</span><span style="padding: 2px 8px; border-radius: 999px; background: {{ t.bg }}; font-size: 11px; font-weight: 500">{{ t.status }}</span></span><span style="font-size: 12px; color: #6B6F76">{{ t.meta }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" class="ls-pop-c" style="position: absolute; left: 50%; top: 28px; transform: translateX(-50%); padding: 12px 18px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 14px; display: flex; align-items: center; gap: 10px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #D6F35B"></span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.orders = [
+      { live: 'Lançamento Coleção Verão', brand: 'Marca Exemplo', date: 'hoje, 14:00', code: '#LV-2291', st: 0, when: ['hoje, 14:34', 'após a live', '', ''], items: [['Caneta esferográfica azul', 1000], ['Ventilador de mesa 40 cm', 500], ['Garrafa térmica 1 L', 200]] },
+      { live: 'Volta às Aulas Atacado', brand: 'Cliente B', date: '09/09', code: '#LV-2104', st: 2, when: ['09/09', '09/09', '12/09', ''], items: [['Caderno universitário', 2000], ['Caneta esferográfica azul', 1200]] },
+      { live: 'Queima de Estoque Inverno', brand: 'Cliente C', date: '18/08', code: '#LV-1987', st: 3, when: ['18/08', '18/08', '21/08', '02/09'], items: [['Mochila executiva', 100], ['Luminária LED articulada', 150]] }
+    ];
+    this.state = { tab: 'orders', sel: 0, msg: '', tickets: [{ title: 'Prazo de entrega', status: 'Respondido', meta: 'Pedido #LV-1987 · 25/08' }], prefs: { mail: true, wpp: true }, toast: '', ticketFor: '#LV-2291' };
+  }
+  flash(m) { var self = this; this.setState({ toast: m }); clearTimeout(this.tt); this.tt = setTimeout(function () { self.setState({ toast: '' }); }, 2600); }
+  renderVals() {
+    var self = this, s = this.state;
+    function f(n) { return n.toLocaleString('pt-BR'); }
+    var stLabels = ['Registrado', 'Em faturamento', 'Faturado', 'Entregue'];
+    var stColors = [['#F1F2F4', '#111214'], ['#FFF1E0', '#8A4A0B'], ['#EEF8D0', '#3F5A06'], ['#111214', '#D6F35B']];
+    var stepNames = ['Pedido registrado', 'Enviado à marca', 'Fatura emitida', 'Entregue'];
+    function sum(o) { return o.items.reduce(function (a, i) { return a + i[1]; }, 0); }
+    var PRICE = { 'Caneta esferográfica azul': 0.89, 'Ventilador de mesa 40 cm': 89.9, 'Garrafa térmica 1 L': 32.5, 'Caderno universitário': 7.4, 'Mochila executiva': 119, 'Luminária LED articulada': 54 };
+    function money(n) { return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function val(o) { return o.items.reduce(function (a, i) { return a + i[1] * PRICE[i[0]]; }, 0); }
+    var o = this.orders[s.sel];
+    var tabs = [['orders', 'Meus pedidos', '3', '#D6F35B'], ['profile', 'Perfil da empresa', '', ''], ['support', 'Suporte', String(s.tickets.filter(function (t) { return t.status === 'Aberto'; }).length || ''), '#F5B97A']];
+    return {
+      tabs: tabs.map(function (t) { var on = s.tab === t[0]; return { label: t[1], cur: on ? 'page' : 'false', bg: on ? '#111214' : 'transparent', fg: on ? '#FFFFFF' : '#44474D', hasBadge: !!t[2], badge: t[2], badgeBg: t[3], pick: function () { self.setState({ tab: t[0] }); } }; }),
+      allMoney: money(this.orders.reduce(function (a, x) { return a + val(x); }, 0)),
+      isOrders: s.tab === 'orders', isProfile: s.tab === 'profile', isSupport: s.tab === 'support',
+      orders: this.orders.map(function (x, i) {
+        var on = i === s.sel;
+        return { live: x.live, brand: x.brand, date: x.date, units: f(sum(x)) + ' un.', money: money(val(x)), status: stLabels[x.st], stBg: stColors[x.st][0], stFg: stColors[x.st][1], on: on,
+          bg: on ? '#F4F5F6' : '#FFFFFF', border: on ? '2px solid #111214' : '2px solid #F1F2F4', pick: function () { self.setState({ sel: i }); } };
+      }),
+      selAnim: s.sel % 2 ? 'lsSwapA' : (s.sel === 0 ? 'lsSwapB' : 'lsSwapC'),
+      d: {
+        live: o.live, brand: o.brand, date: o.date, code: o.code, units: f(sum(o)) + ' un.', money: money(val(o)),
+        status: stLabels[o.st], stBg: stColors[o.st][0], stFg: stColors[o.st][1],
+        steps: stepNames.map(function (n, i) { var done = i <= o.st; return { label: n, when: o.when[i] || 'aguardando', bar: done ? (i === o.st ? '#D6F35B' : '#111214') : '#EDEEF0', fg: done ? '#111214' : '#8A8F99' }; }),
+        items: o.items.map(function (i) { return { name: i[0], qty: f(i[1]) + ' un.', unit: money(PRICE[i[0]]), sub: money(i[1] * PRICE[i[0]]) }; }),
+        noInvoice: o.st < 2, invBg: o.st < 2 ? '#EDEEF0' : '#111214', invFg: o.st < 2 ? '#8A8F99' : '#FFFFFF',
+        invLabel: o.st < 2 ? 'Fatura ainda não emitida' : 'Baixar fatura (PDF)'
+      },
+      invoice: function () { if (o.st >= 2) self.flash('Fatura do pedido ' + o.code + ' baixada'); },
+      summary: function () { self.flash('Resumo do pedido ' + o.code + ' baixado'); },
+      helpOrder: function () { self.setState({ tab: 'support', ticketFor: o.code }); },
+      ticketOrder: 'Pedido ' + s.ticketFor,
+      prefs: [['mail', 'Receber resumo e fatura por e-mail'], ['wpp', 'Receber lembrete das lives no WhatsApp']].map(function (p) {
+        var on = s.prefs[p[0]];
+        return { label: p[1], on: on, track: on ? '#111214' : '#E4E6EA', knob: on ? '#D6F35B' : '#FFFFFF', x: on ? '21px' : '3px', flip: function () { var n = Object.assign({}, self.state.prefs); n[p[0]] = !n[p[0]]; self.setState({ prefs: n }); } };
+      }),
+      saveProfile: function () { self.flash('Dados da empresa salvos'); },
+      msg: s.msg,
+      onMsg: function (e) { self.setState({ msg: e.target.value }); },
+      tickets: s.tickets.map(function (t) { return { title: t.title, status: t.status, meta: t.meta, bg: t.status === 'Aberto' ? '#FFF1E0' : '#EEF8D0' }; }),
+      sendTicket: function () {
+        self.setState({ msg: '', tickets: [{ title: 'Dúvida sobre pedido', status: 'Aberto', meta: 'Pedido ' + s.ticketFor + ' · agora' }].concat(s.tickets) });
+        self.flash('Chamado enviado. Você recebe a resposta por e-mail e WhatsApp.');
+      },
+      whats: function () { self.flash('Abrindo o WhatsApp do suporte'); },
+      mail: function () { self.flash('Abrindo seu e-mail para suporte@[dominio].com.br'); },
+      toast: s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

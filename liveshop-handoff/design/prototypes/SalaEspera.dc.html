@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Sala de espera</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}a:hover{color:#44474D}
+h1,h2,h3{margin:0}
+button,input{font-family:inherit}
+button{cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes lsPopC{from{opacity:0;transform:translate(-50%,-8px) scale(.98)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes lsPulse{0%,100%{opacity:1}50%{opacity:.45}}
+.ls-in{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) both}
+.ls-pop-c{animation:lsPopC .35s cubic-bezier(.2,.7,.2,1) both}
+.ls-pulse{animation:lsPulse 1.6s ease-in-out infinite}
+button,a{transition:background-color .2s ease,color .2s ease,border-color .2s ease,opacity .2s ease,transform .15s ease}
+button:active,a:active{transform:scale(.97)}
+button,a{white-space:nowrap;flex-shrink:0}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; gap: 16px; background: #EDEEF0; position: relative; overflow: hidden">
+
+  <header style="height: 64px; flex-shrink: 0; box-sizing: border-box; padding: 0 10px 0 20px; border-radius: 22px; background: #FFFFFF; display: flex; align-items: center; gap: 16px">
+    <span style="width: 32px; height: 32px; border-radius: 10px; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#111214" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg></span>
+    <div style="display: flex; flex-direction: column"><span style="font-size: 15px; font-weight: 500; letter-spacing: -0.01em">Lançamento Coleção Verão</span><span style="font-size: 12px; color: #6B6F76">Marca Exemplo</span></div>
+    <span style="padding: 4px 10px; border-radius: 999px; background: {{ chipBg }}; color: {{ chipFg }}; font-size: 11px; font-weight: 600; letter-spacing: 0.06em">{{ chip }}</span>
+    <div style="flex-grow: 1"></div>
+    <div style="height: 44px; padding: 0 16px 0 6px; border-radius: 999px; background: #F4F5F6; display: flex; align-items: center; gap: 10px"><span style="width: 32px; height: 32px; border-radius: 50%; background: #111214; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600">PC</span><span style="font-size: 13px; font-weight: 500">Papelaria Central Ltda</span></div>
+  </header>
+
+  <main class="ls-in" style="flex-grow: 1; display: flex; gap: 16px; min-height: 0">
+    <section style="flex-grow: 1; border-radius: 24px; background: #141518; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; position: relative">
+      <sc-if value="{{ waiting }}" hint-placeholder-val="{{ true }}">
+        <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: #A9ADB5"><span class="ls-pulse" style="width: 8px; height: 8px; border-radius: 50%; background: #D6F35B"></span>Você está na sala de espera</span>
+        <span style="font-size: 16px; color: #D5D8DE">A transmissão começa em</span>
+        <span style="font-family: 'Geist Mono', monospace; font-size: 96px; letter-spacing: -0.05em; line-height: 1; color: #D6F35B">{{ countdown }}</span>
+        <span style="font-size: 14px; color: #A9ADB5">Hoje, 14:00 · Você entra automaticamente quando começar</span>
+        <div style="display: flex; gap: 8px; padding-top: 8px">
+          <button onClick="{{ addCal }}" style="height: 46px; padding: 0 20px; border-radius: 999px; border: 1px solid #3A3D44; background: transparent; color: #FFFFFF; font-size: 14px; display: flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M16 3v4M8 3v4M3 11h18"></path></svg>Adicionar à agenda</button>
+          <button onClick="{{ remind }}" style="height: 46px; padding: 0 20px; border-radius: 999px; border: 1px solid #3A3D44; background: transparent; color: #FFFFFF; font-size: 14px">Me avisar no WhatsApp</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ started }}" hint-placeholder-val="{{ false }}">
+        <span class="ls-in" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: #C92A2F; font-size: 12px; font-weight: 600; letter-spacing: 0.06em"><span style="width: 6px; height: 6px; border-radius: 50%; background: #FFFFFF"></span>AO VIVO</span>
+        <h1 class="ls-in" style="font-size: 44px; font-weight: 500; letter-spacing: -0.04em">A live começou</h1>
+        <a class="ls-in" href="Main.dc.html" style="height: 58px; border-radius: 999px; background: #D6F35B; color: #111214; font-size: 16px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 14px; padding: 0 8px 0 26px">Entrar na live<span style="width: 44px; height: 44px; border-radius: 50%; background: #111214; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D6F35B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a>
+      </sc-if>
+    </section>
+
+    <aside style="width: 420px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px">
+      <div style="flex-grow: 1; box-sizing: border-box; padding: 22px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px; min-height: 0">
+        <span style="font-size: 15px; font-weight: 500; padding-bottom: 10px">O que vai ser apresentado</span>
+        <sc-for list="{{ lineup }}" as="p" hint-placeholder-count="6">
+          <div style="display: flex; align-items: center; gap: 12px; height: 56px; border-top: 1px solid #F1F2F4">
+            <span style="width: 26px; font-family: 'Geist Mono', monospace; font-size: 12px; color: #6B6F76">{{ p.n }}</span>
+            <span style="width: 40px; height: 40px; border-radius: 12px; background: #F1F2F4"></span>
+            <span style="flex-grow: 1; display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 500">{{ p.name }}</span><span style="font-size: 12px; color: #6B6F76">{{ p.info }}</span></span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="box-sizing: border-box; padding: 20px 22px; border-radius: 24px; background: #D6F35B; display: flex; flex-direction: column; gap: 10px">
+        <span style="font-size: 15px; font-weight: 500">Como funciona</span>
+        <span style="font-size: 13px; line-height: 1.5; color: #2C3310">Cada produto fica disponível por um tempo. Escolha a quantidade e clique em Registrar pedido. Não há pagamento na live: a fatura chega por e-mail depois.</span>
+      </div>
+    </aside>
+  </main>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" class="ls-pop-c" style="position: absolute; left: 50%; top: 96px; transform: translateX(-50%); padding: 12px 18px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 14px; display: flex; align-items: center; gap: 10px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #D6F35B"></span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { left: 12, toast: '' };
+  }
+  componentDidMount() {
+    var self = this;
+    this.iv = setInterval(function () { if (self.state.left > 0) self.setState({ left: self.state.left - 1 }); }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.iv); clearTimeout(this.tt); }
+  flash(m) { var self = this; this.setState({ toast: m }); clearTimeout(this.tt); this.tt = setTimeout(function () { self.setState({ toast: '' }); }, 2400); }
+  renderVals() {
+    var self = this, s = this.state, w = s.left > 0;
+    var t = s.left, h = '00', m = '00', sec = (t < 10 ? '0' : '') + t;
+    var items = [['Caneta esferográfica azul', 'R$ 0,89/un. · estoque 82.000'], ['Ventilador de mesa 40 cm', 'R$ 89,90/un. · estoque 4.800'], ['Garrafa térmica 1 L', 'R$ 32,50/un. · estoque 12.000'], ['Kit organizador de mesa', 'R$ 24,90/un. · estoque 320'], ['Luminária LED articulada', 'R$ 54,00/un. · estoque 2.000'], ['Mochila executiva', 'R$ 119,00/un. · estoque 1.800']];
+    return {
+      waiting: w, started: !w,
+      countdown: h + ':' + m + ':' + sec,
+      chip: w ? 'EM BREVE' : 'AO VIVO', chipBg: w ? '#F1F2F4' : '#C92A2F', chipFg: w ? '#111214' : '#FFFFFF',
+      lineup: items.map(function (p, i) { return { n: (i < 9 ? '0' : '') + (i + 1), name: p[0], info: p[1] }; }),
+      toast: s.toast,
+      addCal: function () { self.flash('Evento salvo na sua agenda'); },
+      remind: function () { self.flash('Vamos avisar no WhatsApp quando a live começar'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

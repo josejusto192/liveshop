@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Admin: Pedidos em rascunho</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}a:hover{color:#44474D}
+h1,h2,h3{margin:0}
+button,input,select{font-family:inherit}
+button{cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes lsPopC{from{opacity:0;transform:translate(-50%,-8px) scale(.98)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes lsBarC{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes lsSwapA{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes lsSwapB{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes lsSwapC{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.ls-in{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) both}
+.ls-pop-c{animation:lsPopC .35s cubic-bezier(.2,.7,.2,1) both}
+.ls-bar-c{animation:lsBarC .35s cubic-bezier(.2,.7,.2,1) both}
+button,a{transition:background-color .2s ease,color .2s ease,border-color .2s ease,opacity .2s ease,transform .15s ease}
+button:active,a:active{transform:scale(.97)}
+button,a{white-space:nowrap;flex-shrink:0}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; display: flex; background: #EDEEF0">
+
+  <nav aria-label="Menu" style="width: 236px; flex-shrink: 0; margin: 24px 0 24px 24px; box-sizing: border-box; padding: 22px 14px; border-radius: 24px; background: #141518; display: flex; flex-direction: column; gap: 4px">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 8px 26px">
+      <span style="width: 32px; height: 32px; border-radius: 10px; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#111214" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg></span>
+      <span style="color: #FFFFFF; font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Live Shop</span>
+    </div>
+    <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: #7C8088; padding: 0 12px 8px">MENU</span>
+    <a href="AdminLives.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>Visão geral</a>
+    <a href="AdminCentral.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"></circle><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19 5a10 10 0 0 1 0 14M5 19A10 10 0 0 1 5 5"></path></svg><span style="flex-grow: 1">Central da live</span><span style="font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px; background: #C92A2F; color: #FFFFFF">AO VIVO</span></a>
+    <a href="AdminProdutos.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg>Produtos</a>
+    <a href="AdminPedidos.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #FFFFFF; background: #26282D"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h4"></path></svg><span style="flex-grow: 1">Pedidos</span><span style="width: 6px; height: 6px; border-radius: 50%; background: #D6F35B"></span></a>
+    <a href="AdminEmpresas.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h2a2 2 0 0 1 2 2v10M3 21h18M8 7h4M8 11h4M8 15h4"></path></svg>Empresas</a>
+    <a href="AdminMarcas.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg>Marcas</a>
+    <div style="flex-grow: 1"></div>
+    <a href="AdminConfig.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg>Configurações</a>
+    <div style="margin-top: 10px; padding: 12px; border-radius: 16px; background: #1E2024; display: flex; align-items: center; gap: 10px">
+      <span style="width: 36px; height: 36px; border-radius: 50%; background: #3A3D44; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AG</span>
+      <span style="display: flex; flex-direction: column; min-width: 0"><span style="color: #FFFFFF; font-size: 13px; font-weight: 500">Agência [Nome]</span><span style="color: #7C8088; font-size: 12px">Administradora</span></span>
+    </div>
+  </nav>
+
+  <main class="ls-in" style="flex-grow: 1; box-sizing: border-box; margin: 24px 24px 24px 16px; padding: 0; display: flex; flex-direction: column; gap: 16px; min-width: 0; position: relative">
+    <header style="height: 60px; display: flex; align-items: center; gap: 10px">
+      <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 14px; color: #6B6F76">Faturamento</span>
+        <h1 style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em">Pedidos em rascunho</h1>
+      </div>
+      <button onClick="{{ expCsv }}" style="height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #FFFFFF; font-size: 14px">CSV</button>
+      <button onClick="{{ expXls }}" style="height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #FFFFFF; font-size: 14px">Excel</button>
+      <button onClick="{{ expPdf }}" style="height: 44px; padding: 0 20px 0 8px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px"><span style="width: 30px; height: 30px; border-radius: 50%; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"></path></svg></span>PDF para a marca</button>
+    </header>
+
+    <div style="height: 104px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+      <div style="box-sizing: border-box; padding: 18px 20px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #6B6F76">Pedidos no filtro</span><span style="font-size: 32px; font-weight: 500; letter-spacing: -0.04em">386</span></div>
+      <div style="box-sizing: border-box; padding: 18px 20px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #6B6F76">Unidades</span><span style="font-size: 32px; font-weight: 500; letter-spacing: -0.04em">84.300</span></div>
+      <div style="box-sizing: border-box; padding: 18px 20px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #6B6F76">Empresas</span><span style="font-size: 32px; font-weight: 500; letter-spacing: -0.04em">147</span></div>
+      <div style="box-sizing: border-box; padding: 18px 20px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px"><span style="font-size: 13px; color: #6B6F76">Pedidos por minuto da live</span><div style="flex-grow: 1; display: flex; gap: 2px; align-items: flex-end"><sc-for list="{{ minutes }}" as="m" hint-placeholder-count="45"><span style="flex-grow: 1; height: {{ m.h }}; border-radius: 2px; background: {{ m.c }}"></span></sc-for></div></div>
+    </div>
+
+    <div style="display: flex; gap: 8px; align-items: center">
+      <div role="group" aria-label="Status" style="display: flex; padding: 4px; border-radius: 999px; background: #FFFFFF">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+          <button onClick="{{ t.pick }}" aria-pressed="{{ t.on }}" style="height: 34px; padding: 0 16px; border-radius: 999px; border: none; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 13px; font-weight: 500">{{ t.label }}</button>
+        </sc-for>
+      </div>
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+        <button style="height: 42px; padding: 0 14px 0 16px; border-radius: 999px; border: none; background: #FFFFFF; font-size: 13px; display: flex; align-items: center; gap: 6px"><span style="color: #6B6F76">{{ f.label }}</span><span style="font-weight: 500">{{ f.value }}</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+      </sc-for>
+      <div style="flex-grow: 1"></div>
+      <label style="display: flex; align-items: center; gap: 8px; height: 42px; width: 160px; box-sizing: border-box; padding: 0 16px; border-radius: 999px; background: #FFFFFF; color: #6B6F76"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input aria-label="Buscar empresa" placeholder="Empresa, e-mail, WhatsApp" style="border: none; outline: none; background: transparent; font-size: 14px; flex-grow: 1; min-width: 0"></label>
+    </div>
+
+    <div style="flex-grow: 1; border-radius: 22px; background: #FFFFFF; padding: 4px 22px; box-sizing: border-box; display: flex; flex-direction: column; min-height: 0; overflow: hidden; animation: {{ tabAnim }} .4s cubic-bezier(.2,.7,.2,1) both">
+      <div style="display: grid; grid-template-columns: 24px 2.1fr 2fr 1.8fr 0.8fr 0.8fr 0.9fr; gap: 14px; height: 42px; align-items: center; font-size: 12px; color: #6B6F76">
+        <input type="checkbox" aria-label="Selecionar todos" checked="{{ allSel }}" onChange="{{ toggleAll }}" style="width: 16px; height: 16px; margin: 0; accent-color: #111214"><span>Empresa</span><span>Contato</span><span>Produto</span><span>Qtd.</span><span>Minuto</span><span>Status</span>
+      </div>
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="7">
+        <div style="display: grid; grid-template-columns: 24px 2.1fr 2fr 1.8fr 0.8fr 0.8fr 0.9fr; gap: 14px; height: 56px; align-items: center; font-size: 14px; border-top: 1px solid #F1F2F4; background: {{ r.bg }}; margin: 0 -22px; padding: 0 22px">
+          <input type="checkbox" checked="{{ r.sel }}" onChange="{{ r.toggle }}" aria-label="Selecionar pedido" style="width: 16px; height: 16px; margin: 0; accent-color: #111214">
+          <span style="display: flex; align-items: center; gap: 10px"><span style="width: 32px; height: 32px; border-radius: 50%; background: #F1F2F4; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0">{{ r.ini }}</span><span style="font-weight: 500">{{ r.company }}</span></span>
+          <span style="display: flex; flex-direction: column; font-size: 13px"><span>{{ r.email }}</span><span style="color: #6B6F76">{{ r.phone }}</span></span>
+          <span>{{ r.product }}</span>
+          <span style="font-family: 'Geist Mono', monospace">{{ r.qty }}</span>
+          <span style="font-family: 'Geist Mono', monospace; color: #6B6F76">{{ r.min }}</span>
+          <span><span style="padding: 4px 10px; border-radius: 999px; background: {{ r.stBg }}; color: {{ r.stFg }}; font-size: 12px; font-weight: 500">{{ r.status }}</span></span>
+        </div>
+      </sc-for>
+      <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+        <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #6B6F76; font-size: 14px"><span style="font-size: 16px; color: #111214; font-weight: 500">Nada por aqui</span>Nenhum pedido com esse status no filtro atual.</div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ true }}">
+      <div class="ls-bar-c" style="position: absolute; left: 50%; bottom: 32px; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; padding: 8px 8px 8px 22px; border-radius: 999px; background: #141518; color: #FFFFFF; box-shadow: 0 16px 40px rgba(17,18,20,0.25)">
+        <span style="font-size: 14px; white-space: nowrap"><strong style="font-weight: 500">{{ selText }}</strong><span style="color: #A9ADB5"> · {{ selUnits }} un.</span></span>
+        <button onClick="{{ clearSel }}" style="height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #3A3D44; background: transparent; color: #FFFFFF; font-size: 13px; white-space: nowrap">Limpar seleção</button>
+        <button style="height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid #3A3D44; background: transparent; color: #FFFFFF; font-size: 13px; white-space: nowrap">Baixar selecionados</button>
+        <sc-if value="{{ isDraftTab }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ invoice }}" style="height: 40px; padding: 0 18px; border-radius: 999px; border: none; background: #D6F35B; color: #111214; font-size: 13px; font-weight: 500; white-space: nowrap">Marcar como faturado</button>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+      <div role="status" class="ls-pop-c" style="position: absolute; left: 50%; top: 28px; transform: translateX(-50%); padding: 12px 18px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 14px; display: flex; align-items: center; gap: 10px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #D6F35B"></span>{{ toast }}</div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'draft', sel: { 0: true, 1: true, 4: true }, billed: {}, toast: '' };
+  }
+  flash(msg) {
+    var self = this;
+    this.setState({ toast: msg });
+    clearTimeout(this.tt);
+    this.tt = setTimeout(function () { self.setState({ toast: '' }); }, 2600);
+  }
+  renderVals() {
+    var self = this, s = this.state;
+    var mins = [2,4,3,6,8,12,16,20,24,30,26,22,18,34,36,30,24,20,14,10,8,6,5,4,6,8,10,14,18,20,24,28,26,22,30,34,32,26,20,16,12,8,4,2,1];
+    var d = [
+      ['Papelaria Central Ltda', 'compras@papelariacentral.com.br', '(11) 98812-4410', 'Ventilador de mesa 40 cm', '500', '34:05', true],
+      ['Casa e Cia Utilidades', 'pedidos@casaecia.com.br', '(15) 99731-2208', 'Ventilador de mesa 40 cm', '200', '33:48', true],
+      ['Loja do Shopping Norte', 'gerencia@shoppingnorte.com.br', '(19) 99104-7732', 'Ventilador de mesa 40 cm', '100', '33:10', false],
+      ['Distribuidora Vale Sul', 'suprimentos@valesul.com.br', '(12) 98260-1195', 'Ventilador de mesa 40 cm', '400', '31:57', false],
+      ['Papelaria Central Ltda', 'compras@papelariacentral.com.br', '(11) 98812-4410', 'Caneta esferográfica azul', '1.000', '18:22', true],
+      ['Magazine Bairro Alto', 'compras@bairroalto.com.br', '(15) 99655-0381', 'Caneta esferográfica azul', '5.000', '17:40', false],
+      ['Escritório Total ME', 'contato@escritoriototal.com.br', '(11) 97420-6613', 'Caneta esferográfica azul', '2.000', '16:03', false]
+    ];
+    var extra = [
+      ['Mercado Ponto Certo', 'compras@pontocerto.com.br', '(15) 99102-3344', 'Garrafa térmica 1 L', '300', '09:12', 'billed'],
+      ['Bazar Três Irmãos', 'bazar3irmaos@email.com.br', '(11) 96611-2080', 'Caneta esferográfica azul', '500', '14:50', 'canceled']
+    ];
+    var all = d.map(function (r, i) {
+      return { i: i, r: r, st: s.billed[i] ? 'billed' : 'draft' };
+    }).concat(extra.map(function (r, j) { return { i: 100 + j, r: r, st: r[6] }; }));
+    var labels = { draft: ['Rascunho', '#F1F2F4', '#111214'], billed: ['Faturado', '#EEF8D0', '#3F5A06'], canceled: ['Cancelado', '#FDECEC', '#A11F24'] };
+    var rows = all.filter(function (x) { return x.st === s.tab; }).map(function (x) {
+      var r = x.r, w = r[0].split(' '), on = !!s.sel[x.i], lb = labels[x.st];
+      return { i: x.i, company: r[0], ini: (w[0][0] + w[1][0]).toUpperCase(), email: r[1], phone: r[2], product: r[3], qty: r[4], min: r[5], sel: on, bg: on ? '#F7F9EC' : '#FFFFFF', status: lb[0], stBg: lb[1], stFg: lb[2],
+        toggle: function () { var n = Object.assign({}, self.state.sel); if (n[x.i]) delete n[x.i]; else n[x.i] = true; self.setState({ sel: n }); } };
+    });
+    var selIdx = rows.filter(function (r) { return r.sel; }).map(function (r) { return r.i; });
+    var selUnits = rows.filter(function (r) { return r.sel; }).reduce(function (a, r) { return a + parseInt(r.qty.replace(/\D/g, ''), 10); }, 0);
+    return {
+      minutes: mins.map(function (v, i) { return { h: Math.round(v * 1.1 + 2) + 'px', c: i >= 30 && i <= 34 ? '#111214' : '#E4E6EA' }; }),
+      filters: [
+        { label: 'Live', value: 'Coleção Verão' },
+        { label: 'Produto', value: 'Todos' },
+        { label: 'Minuto', value: '00:00 a 45:00' }
+      ],
+      tabs: [['draft', 'Rascunho', 386], ['billed', 'Faturados', 1042], ['canceled', 'Cancelados', 12]].map(function (t) {
+        var on = s.tab === t[0];
+        var nBilled = Object.keys(s.billed).length;
+        var n = t[0] === 'draft' ? t[2] - nBilled : (t[0] === 'billed' ? t[2] + nBilled : t[2]);
+        return { label: t[1] + ' · ' + n.toLocaleString('pt-BR'), on: on, bg: on ? '#111214' : 'transparent', fg: on ? '#FFFFFF' : '#44474D', pick: function () { self.setState({ tab: t[0], sel: {}, toast: '' }); } };
+      }),
+      rows: rows,
+      tabAnim: { draft: 'lsSwapA', billed: 'lsSwapB', canceled: 'lsSwapC' }[s.tab],
+      empty: rows.length === 0,
+      allSel: rows.length > 0 && selIdx.length === rows.length,
+      toggleAll: function () {
+        var all = rows.length > 0 && selIdx.length === rows.length, n = {};
+        if (!all) rows.forEach(function (r) { n[r.i] = true; });
+        self.setState({ sel: n });
+      },
+      hasSel: selIdx.length > 0,
+      selText: selIdx.length + (selIdx.length === 1 ? ' selecionado' : ' selecionados'),
+      selUnits: selUnits.toLocaleString('pt-BR'),
+      isDraftTab: s.tab === 'draft',
+      clearSel: function () { self.setState({ sel: {} }); },
+      invoice: function () {
+        var b = Object.assign({}, self.state.billed);
+        selIdx.forEach(function (i) { b[i] = true; });
+        self.setState({ billed: b, sel: {}, toast: selIdx.length + ' pedidos marcados como faturados' });
+        setTimeout(function () { self.setState({ toast: '' }); }, 2600);
+      },
+      toast: s.toast,
+      expCsv: function () { self.flash('Arquivo CSV gerado com os pedidos do filtro'); },
+      expXls: function () { self.flash('Planilha Excel gerada com os pedidos do filtro'); },
+      expPdf: function () { self.flash('PDF da Marca Exemplo gerado, pronto para enviar'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

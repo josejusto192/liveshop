@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Live vertical no celular</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#0B0C0E;color:#111214}
+a{color:#FFFFFF}
+h1,h2,h3{margin:0}
+button,input{font-family:inherit}
+button{cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes lsFade{from{opacity:0}to{opacity:1}}
+@keyframes lsPop{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes lsSheet{from{transform:translateY(100%)}to{transform:none}}
+@keyframes lsSwapA{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes lsSwapB{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes lsBubble{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ls-in{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) both}
+.ls-fade{animation:lsFade .3s ease both}
+.ls-pop{animation:lsPop .35s cubic-bezier(.2,.7,.2,1) both}
+.ls-sheet{animation:lsSheet .42s cubic-bezier(.2,.8,.2,1) both}
+@keyframes lsSheetOut{from{transform:none}to{transform:translateY(100%)}}
+@keyframes lsFadeOut{from{opacity:1}to{opacity:0}}
+.ls-sheet-out{animation:lsSheetOut .26s cubic-bezier(.4,0,1,1) both}
+.ls-fade-out{animation:lsFadeOut .26s ease both}
+button,a{transition:background-color .2s ease,color .2s ease,opacity .2s ease,transform .15s ease}
+button:active,a:active{transform:scale(.96)}
+button,a{white-space:nowrap;flex-shrink:0}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #1A1C20; border-radius: 0">
+
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: #202226; display: flex; align-items: center; justify-content: center">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; color: #5E626A; margin-top: -120px">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="3"></rect><path d="M11 18h2"></path></svg>
+      <span style="font-size: 13px">Vídeo vertical 9:16</span>
+    </div>
+  </div>
+  <div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 0; height: 160px; background: linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0))"></div>
+  <div aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 0; height: 360px; background: linear-gradient(0deg, rgba(0,0,0,0.7), rgba(0,0,0,0))"></div>
+
+  <header style="position: absolute; top: 14px; left: 12px; right: 12px; display: flex; align-items: center; gap: 8px">
+    <div style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px 0 5px; border-radius: 999px; background: rgba(20,21,24,0.55); backdrop-filter: blur(12px)">
+      <span style="width: 34px; height: 34px; border-radius: 50%; background: #D6F35B; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600">ME</span>
+      <span style="display: flex; flex-direction: column"><span style="font-size: 13px; font-weight: 500; color: #FFFFFF">Marca Exemplo</span><span style="font-size: 11px; color: #C9CCD3">Coleção Verão</span></span>
+    </div>
+    <span style="display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 9px; border-radius: 999px; background: #C92A2F; color: #FFFFFF; font-size: 10px; font-weight: 600; letter-spacing: 0.06em"><span style="width: 6px; height: 6px; border-radius: 50%; background: #FFFFFF"></span>AO VIVO</span>
+    <div style="flex-grow: 1"></div>
+    <span style="height: 32px; padding: 0 10px; border-radius: 999px; background: rgba(20,21,24,0.55); color: #FFFFFF; font-size: 12px; display: flex; align-items: center; gap: 5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>312</span>
+    <a href="Codigo.dc.html" aria-label="Sair da live" style="width: 44px; height: 44px; border-radius: 50%; background: rgba(20,21,24,0.55); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"></path></svg></a>
+  </header>
+
+  <div style="position: absolute; right: 12px; top: 330px; display: flex; flex-direction: column; gap: 14px; align-items: center">
+    <button onClick="{{ openOrders }}" aria-label="Meus pedidos" style="width: 48px; height: 48px; border-radius: 50%; border: none; background: rgba(20,21,24,0.55); color: #FFFFFF; display: flex; align-items: center; justify-content: center; position: relative"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"></path><path d="M9 11V7a3 3 0 0 1 6 0v4"></path></svg><span style="position: absolute; top: -2px; right: -2px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #D6F35B; color: #111214; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{ ordersCount }}</span></button>
+    <button onClick="{{ openLineup }}" aria-label="Produtos da live" style="width: 48px; height: 48px; border-radius: 50%; border: none; background: rgba(20,21,24,0.55); color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg></button>
+    <button onClick="{{ toggleMute }}" aria-label="{{ muteLabel }}" style="width: 48px; height: 48px; border-radius: 50%; border: none; background: rgba(20,21,24,0.55); color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4z"></path><path d="M22 9l-6 6M16 9l6 6" style="opacity: {{ xOp }}"></path><path d="M15.5 8.5a5 5 0 0 1 0 7" style="opacity: {{ wOp }}"></path></svg></button>
+  </div>
+
+  <div aria-live="polite" style="position: absolute; left: 12px; bottom: 214px; width: 260px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start">
+    <sc-for list="{{ feed }}" as="f" hint-placeholder-count="3">
+      <div style="max-width: 260px; padding: 7px 12px 7px 7px; border-radius: 999px; background: rgba(20,21,24,0.55); backdrop-filter: blur(10px); display: flex; align-items: center; gap: 8px; opacity: {{ f.op }}; transition: opacity .4s ease; animation: {{ f.anim }} .45s cubic-bezier(.2,.7,.2,1) both">
+        <span style="width: 22px; height: 22px; border-radius: 50%; background: {{ f.dot }}; flex-shrink: 0"></span>
+        <span style="font-size: 12px; color: #FFFFFF; line-height: 1.3">{{ f.text }}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; left: 12px; right: 12px; bottom: 16px; box-sizing: border-box; padding: 12px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 16px 40px rgba(0,0,0,0.35)">
+    <div style="display: flex; gap: 12px; align-items: center; animation: {{ swapAnim }} .55s cubic-bezier(.2,.7,.2,1) both">
+      <span style="width: 72px; height: 72px; border-radius: 16px; background: repeating-linear-gradient(135deg, #F1F2F4 0 5px, #F7F8F9 5px 10px); flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; box-sizing: border-box"><span style="padding: 2px 7px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 10px">{{ pos }}</span></span>
+      <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <span style="align-self: flex-start; padding: 3px 9px; border-radius: 999px; background: #D6F35B; font-size: 11px; font-weight: 500">Disponível por <span style="font-family: 'Geist Mono', monospace">{{ timer }}</span></span>
+        <span style="font-size: 17px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.15">{{ prodName }}</span>
+        <span style="font-size: 12px; color: #6B6F76"><span style="color: #111214; font-weight: 600">{{ priceText }}/un.</span> · Estoque {{ prodStock }}</span>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px">
+      <sc-if value="{{ hasOrderHere }}" hint-placeholder-val="{{ false }}">
+        <span style="height: 50px; padding: 0 14px; border-radius: 999px; background: #F4F5F6; font-size: 13px; display: flex; align-items: center; white-space: nowrap">Você pediu {{ hereQty }}</span>
+      </sc-if>
+      <button onClick="{{ openBuy }}" style="flex-grow: 1; height: 50px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 15px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; padding: 0 6px 0 20px"><span>Pedir este produto</span><span style="width: 38px; height: 38px; border-radius: 50%; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></span></button>
+    </div>
+  </div>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" class="ls-pop" style="position: absolute; top: 70px; left: 12px; right: 12px; padding: 8px 14px 8px 8px; border-radius: 999px; background: #FFFFFF; display: flex; gap: 10px; align-items: center; box-shadow: 0 14px 34px rgba(0,0,0,0.3)">
+      <span style="width: 34px; height: 34px; border-radius: 50%; background: #111214; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D6F35B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span>
+      <span style="flex-grow: 1; display: flex; flex-direction: column"><span style="font-size: 13px; font-weight: 500">Pedido registrado</span><span style="font-size: 12px; color: #6B6F76">Total: <span style="color: #111214; font-weight: 500">{{ totalText }} un. · {{ moneyText }}</span></span></span>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+    <button class="{{ ovCls }}" onClick="{{ closeSheet }}" aria-label="Fechar" style="position: absolute; inset: 0; border: none; padding: 0; background: rgba(0,0,0,0.45)"></button>
+    <div role="dialog" class="{{ sheetCls }}" aria-modal="true" aria-label="{{ sheetTitle }}" style="position: absolute; left: 0; right: 0; bottom: 0; box-sizing: border-box; padding: 10px 16px 18px; border-radius: 28px 28px 0 0; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+      <span style="align-self: center; width: 40px; height: 5px; border-radius: 999px; background: #E4E6EA"></span>
+      <div style="display: flex; align-items: center"><h2 style="flex-grow: 1; font-size: 19px; font-weight: 500; letter-spacing: -0.02em">{{ sheetTitle }}</h2><button onClick="{{ closeSheet }}" aria-label="Fechar" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: #F4F5F6; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"></path></svg></button></div>
+
+      <sc-if value="{{ isBuy }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; gap: 12px; align-items: center"><span style="width: 52px; height: 52px; border-radius: 14px; background: #F1F2F4"></span><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 500">{{ prodName }}</span><span style="font-size: 12px; color: #6B6F76">Pedido mínimo 10 un. · múltiplos de 10</span></span></div>
+        <label for="vq" style="font-size: 12px; color: #6B6F76; margin-bottom: -8px">Quantidade</label>
+        <div style="height: 66px; box-sizing: border-box; padding: 0 8px 0 20px; border-radius: 18px; background: #F4F5F6; display: flex; align-items: center; gap: 8px"><input id="vq" inputmode="numeric" value="{{ qtyText }}" onChange="{{ onQty }}" placeholder="0" style="flex-grow: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 32px; font-weight: 500; letter-spacing: -0.03em"><span style="font-size: 13px; color: #6B6F76">un.</span><button onClick="{{ clear }}" aria-label="Zerar quantidade" style="width: 44px; height: 44px; border-radius: 50%; border: none; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"></path></svg></button></div>
+        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
+          <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+            <button onClick="{{ s.add }}" style="height: 46px; border-radius: 999px; border: 1px solid #E4E6EA; background: #FFFFFF; font-size: 14px; font-weight: 500">+{{ s.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: #6B6F76"><span>{{ priceText }}/un.</span><span>Subtotal <span style="font-size: 17px; font-weight: 600; color: #111214">{{ subMoney }}</span></span></div>
+        <button onClick="{{ register }}" style="height: 56px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 16px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; padding: 0 7px 0 22px">Registrar pedido<span style="width: 42px; height: 42px; border-radius: 50%; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span></button>
+        <span style="font-size: 12px; color: #6B6F76; text-align: center">Sem pagamento agora. A fatura chega depois da live.</span>
+      </sc-if>
+
+      <sc-if value="{{ isOrders }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 16px; border-radius: 18px; background: #141518; color: #FFFFFF; display: flex; justify-content: space-between; align-items: center"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #A9ADB5">Total registrado</span><span style="font-size: 13px; color: #FFFFFF">{{ totalText }} un.</span></span><span style="font-size: 24px; font-weight: 500; letter-spacing: -0.03em; color: #D6F35B">{{ moneyText }}</span></div>
+        <sc-for list="{{ orders }}" as="o" hint-placeholder-count="2">
+          <div style="border-top: 1px solid #F1F2F4; border-radius: 16px; background: {{ o.bg }}; transition: background-color .25s ease">
+            <button onClick="{{ o.toggle }}" aria-expanded="{{ o.open }}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 8px; border: none; background: transparent; text-align: left; font-family: inherit; color: #111214">
+              <span style="width: 40px; height: 40px; border-radius: 12px; background: #F1F2F4; flex-shrink: 0"></span>
+              <span style="flex-grow: 1; display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ o.name }}</span><span style="font-size: 12px; color: #6B6F76">{{ o.unit }} · {{ o.sub }}</span></span>
+              <span style="font-size: 14px; font-weight: 500">{{ o.qty }}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B6F76" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate({{ o.rot }}); transition: transform .25s ease"><path d="M6 9l6 6 6-6"></path></svg>
+            </button>
+            <sc-if value="{{ o.editing }}" hint-placeholder-val="{{ false }}">
+              <div class="ls-in" style="display: flex; align-items: center; gap: 8px; padding: 0 8px 12px">
+                <div style="display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 999px; background: #FFFFFF">
+                  <button onClick="{{ o.minus }}" aria-label="Diminuir 10 unidades" style="width: 38px; height: 38px; border-radius: 50%; border: none; background: #F4F5F6; font-size: 18px">−</button>
+                  <span style="display: flex; align-items: center; gap: 4px; padding: 0 4px"><input inputmode="numeric" aria-label="Quantidade de {{ o.name }}" value="{{ o.qtyNum }}" onChange="{{ o.onType }}" placeholder="0" style="width: 72px; height: 34px; box-sizing: border-box; border: none; border-radius: 10px; background: #F4F5F6; text-align: center; font-size: 16px; font-weight: 500; font-family: inherit; color: #111214; outline: none"><span style="font-size: 12px; color: #6B6F76">un.</span></span>
+                  <button onClick="{{ o.plus }}" aria-label="Aumentar 10 unidades" style="width: 38px; height: 38px; border-radius: 50%; border: none; background: #F4F5F6; font-size: 18px">+</button>
+                </div>
+                <div style="flex-grow: 1"></div>
+                <button onClick="{{ o.askDel }}" aria-label="Excluir pedido" style="width: 44px; height: 44px; border-radius: 50%; border: none; background: #FDECEC; color: #A11F24; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path></svg></button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ o.confirming }}" hint-placeholder-val="{{ false }}">
+              <div class="ls-in" style="display: flex; align-items: center; gap: 8px; margin: 0 8px 12px; padding: 8px 8px 8px 14px; border-radius: 999px; background: #FDECEC">
+                <span style="flex-grow: 1; font-size: 13px; color: #A11F24">Excluir este pedido?</span>
+                <button onClick="{{ o.keep }}" style="height: 34px; padding: 0 12px; border-radius: 999px; border: none; background: #FFFFFF; font-size: 12px">Manter</button>
+                <button onClick="{{ o.del }}" style="height: 34px; padding: 0 12px; border-radius: 999px; border: none; background: #C92A2F; color: #FFFFFF; font-size: 12px">Excluir</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noOrders }}" hint-placeholder-val="{{ false }}">
+          <span style="padding: 20px 0; font-size: 14px; color: #6B6F76; text-align: center">Você ainda não tem pedidos nesta live.</span>
+        </sc-if>
+        <span style="font-size: 12px; color: #6B6F76; text-align: center">Toque num pedido para alterar ou excluir. Vale até a live terminar.</span>
+      </sc-if>
+
+      <sc-if value="{{ isLineup }}" hint-placeholder-val="{{ false }}">
+        <sc-for list="{{ lineup }}" as="p" hint-placeholder-count="5">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid #F1F2F4; opacity: {{ p.op }}"><span style="width: 40px; height: 40px; border-radius: 12px; background: {{ p.thumb }}"></span><span style="flex-grow: 1; font-size: 14px; font-weight: 500">{{ p.name }}</span><span style="padding: 4px 10px; border-radius: 999px; background: {{ p.tagBg }}; color: {{ p.tagFg }}; font-size: 11px; font-weight: 500">{{ p.tag }}</span></div>
+        </sc-for>
+      </sc-if>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.products = [['Caneta esferográfica azul', '82.000'], ['Ventilador de mesa 40 cm', '4.800'], ['Garrafa térmica 1 L', '12.000'], ['Kit organizador de mesa', '320'], ['Luminária LED articulada', '2.000']];
+    this.state = { cur: 1, left: 45, sheet: '', qty: 0, orders: [[0, 1000, '18:22']], toast: false, muted: false, feedTick: 0, edit: -1, confirmDel: false };
+  }
+  componentDidMount() {
+    var self = this;
+    this.iv = setInterval(function () {
+      var s = self.state;
+      if (s.left <= 1) {
+        var n = Math.min(s.cur + 1, self.products.length - 1);
+        self.setState({ cur: n, left: n === s.cur ? 60 : 60, feedTick: s.feedTick + 1 });
+      } else {
+        self.setState({ left: s.left - 1, feedTick: s.left % 6 === 0 ? s.feedTick + 1 : s.feedTick });
+      }
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.iv); clearTimeout(this.tt); }
+  fmt(n) { return Number(n || 0).toLocaleString('pt-BR'); }
+  renderVals() {
+    var self = this, s = this.state, p = this.products[s.cur];
+    var total = s.orders.reduce(function (a, o) { return a + o[1]; }, 0);
+    var here = s.orders.filter(function (o) { return o[0] === s.cur; }).reduce(function (a, o) { return a + o[1]; }, 0);
+    var cities = ['Sorocaba', 'Campinas', 'Curitiba', 'Ribeirão Preto', 'Santos', 'Londrina', 'Goiânia'];
+    var qtys = [200, 500, 100, 1000, 300, 50, 400];
+    var feed = [];
+    for (var i = 2; i >= 0; i--) {
+      var k = (s.feedTick + i) % cities.length;
+      feed.push({ text: 'Uma empresa de ' + cities[k] + ' pediu ' + self.fmt(qtys[k]) + ' un.', op: i === 2 ? '0.55' : (i === 1 ? '0.8' : '1'), dot: i === 0 ? '#D6F35B' : '#5E626A', anim: i === 0 ? (s.feedTick % 2 ? 'lsSwapA' : 'lsSwapB') : 'none' });
+    }
+    var PRICE = [0.89, 89.9, 32.5, 24.9, 54];
+    function money(n) { return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    var value = s.orders.reduce(function (a, o) { return a + o[1] * PRICE[o[0]]; }, 0);
+    var titles = { buy: 'Fazer pedido', orders: 'Meus pedidos nesta live', lineup: 'Produtos da live' };
+    function closeAnim() {
+      self.setState({ closing: true });
+      clearTimeout(self.tc);
+      self.tc = setTimeout(function () { self.setState({ sheet: '', closing: false }); }, 250);
+    }
+    function sheet(v) { return function () { if (v) self.setState({ sheet: v, closing: false }); else closeAnim(); }; }
+    return {
+      pos: (s.cur + 1) + ' de ' + this.products.length,
+      priceText: money(PRICE[s.cur]),
+      subMoney: money((s.qty || 0) * PRICE[s.cur]),
+      moneyText: money(value),
+      swapAnim: s.cur % 2 ? 'lsSwapA' : 'lsSwapB',
+      timer: '00:' + (s.left < 10 ? '0' : '') + s.left,
+      prodName: p[0], prodStock: p[1] + ' un.',
+      hasOrderHere: here > 0, hereQty: self.fmt(here) + ' un.',
+      feed: feed,
+      ordersCount: s.orders.length,
+      totalText: self.fmt(total),
+      toast: s.toast,
+      xOp: s.muted ? '1' : '0', wOp: s.muted ? '0' : '1', muteLabel: s.muted ? 'Ativar som' : 'Silenciar',
+      toggleMute: function () { self.setState({ muted: !self.state.muted }); },
+      sheetOpen: !!s.sheet, sheetTitle: titles[s.sheet] || '',
+      sheetCls: s.closing ? 'ls-sheet-out' : 'ls-sheet',
+      ovCls: s.closing ? 'ls-fade-out' : 'ls-fade',
+      isBuy: s.sheet === 'buy', isOrders: s.sheet === 'orders', isLineup: s.sheet === 'lineup',
+      openBuy: sheet('buy'), openOrders: sheet('orders'), openLineup: sheet('lineup'), closeSheet: sheet(''),
+      qtyText: s.qty ? self.fmt(s.qty) : '',
+      onQty: function (e) { var n = parseInt(String(e.target.value).replace(/\D/g, ''), 10); self.setState({ qty: isNaN(n) ? 0 : n }); },
+      clear: function () { self.setState({ qty: 0 }); },
+      steps: [10, 50, 100, 1000].map(function (v) { return { label: self.fmt(v), add: function () { self.setState({ qty: (self.state.qty || 0) + v }); } }; }),
+      register: function () {
+        var q = self.state.qty;
+        if (!q) return;
+        self.setState({ orders: self.state.orders.concat([[self.state.cur, q, '34:' + (10 + self.state.orders.length * 7)]]), qty: 0, toast: false });
+        closeAnim();
+        clearTimeout(self.tt); clearTimeout(self.t1);
+        self.t1 = setTimeout(function () { self.setState({ toast: true }); }, 180);
+        self.tt = setTimeout(function () { self.setState({ toast: false }); }, 3000);
+      },
+      noOrders: s.orders.length === 0,
+      orders: s.orders.map(function (o, i) {
+        var open = s.edit === i, conf = open && s.confirmDel;
+        function setQty(q) { var l = self.state.orders.map(function (x) { return x.slice(); }); l[i][1] = q; self.setState({ orders: l }); }
+        return { name: self.products[o[0]][0], qty: self.fmt(o[1]) + ' un.', min: o[2], qtyNum: o[1] ? self.fmt(o[1]) : '',
+          unit: money(PRICE[o[0]]) + '/un.', sub: money(o[1] * PRICE[o[0]]),
+          onType: function (e) { var n = parseInt(String(e.target.value).replace(/\D/g, ''), 10); setQty(isNaN(n) ? 0 : n); },
+          open: open, editing: open && !conf, confirming: conf, rot: open ? '180deg' : '0deg', bg: open ? '#F4F5F6' : '#FFFFFF',
+          toggle: function () { self.setState({ edit: open ? -1 : i, confirmDel: false }); },
+          minus: function () { setQty(Math.max(10, o[1] - 10)); },
+          plus: function () { setQty(o[1] + 10); },
+          askDel: function () { self.setState({ confirmDel: true }); },
+          keep: function () { self.setState({ confirmDel: false }); },
+          del: function () { var l = self.state.orders.slice(); l.splice(i, 1); self.setState({ orders: l, edit: -1, confirmDel: false }); }
+        };
+      }),
+      lineup: this.products.map(function (x, i) {
+        var cur = i === s.cur, past = i < s.cur;
+        return { name: x[0], op: past ? '0.5' : '1', thumb: cur ? '#D6F35B' : '#F1F2F4', tag: cur ? 'No ar' : (past ? 'Apresentado' : 'Em breve'), tagBg: cur ? '#111214' : '#F4F5F6', tagFg: cur ? '#D6F35B' : '#44474D' };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

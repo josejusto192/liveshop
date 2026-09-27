@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Minha conta no celular</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}
+h1,h2,h3{margin:0}
+button,input,textarea{font-family:inherit}
+button{cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes lsFade{from{opacity:0}to{opacity:1}}
+@keyframes lsFadeOut{from{opacity:1}to{opacity:0}}
+@keyframes lsSheet{from{transform:translateY(100%)}to{transform:none}}
+@keyframes lsSheetOut{from{transform:none}to{transform:translateY(100%)}}
+@keyframes lsPop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.ls-in{animation:lsIn .45s cubic-bezier(.2,.7,.2,1) both}
+.ls-fade{animation:lsFade .3s ease both}
+.ls-fade-out{animation:lsFadeOut .26s ease both}
+.ls-sheet{animation:lsSheet .42s cubic-bezier(.2,.8,.2,1) both}
+.ls-sheet-out{animation:lsSheetOut .26s cubic-bezier(.4,0,1,1) both}
+.ls-pop{animation:lsPop .35s cubic-bezier(.2,.7,.2,1) both}
+button,a{transition:background-color .2s ease,color .2s ease,opacity .2s ease,transform .15s ease;white-space:nowrap;flex-shrink:0}
+button:active,a:active{transform:scale(.97)}
+input:focus,textarea:focus{outline:none;box-shadow:0 0 0 2px #111214}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 12px 12px; display: flex; flex-direction: column; gap: 12px; background: #EDEEF0; position: relative; overflow: hidden">
+  <div style="display: flex; align-items: center; gap: 10px; padding: 0 4px">
+    <a href="LiveVertical.dc.html" aria-label="Voltar para a live" style="width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg></a>
+    <span style="flex-grow: 1; display: flex; flex-direction: column"><span style="font-size: 17px; font-weight: 500; letter-spacing: -0.02em">Minha conta</span><span style="font-size: 12px; color: #6B6F76">Papelaria Central Ltda</span></span>
+    <span style="width: 40px; height: 40px; border-radius: 50%; background: #111214; color: #D6F35B; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">PC</span>
+  </div>
+
+  <div role="tablist" aria-label="Seções" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 4px; border-radius: 999px; background: #FFFFFF">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+      <button role="tab" aria-selected="{{ t.on }}" onClick="{{ t.pick }}" style="height: 38px; border-radius: 999px; border: none; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 13px; font-weight: 500">{{ t.label }}</button>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{ isOrders }}" hint-placeholder-val="{{ true }}">
+    <div class="ls-in" style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px; min-height: 0">
+      <sc-for list="{{ orders }}" as="o" hint-placeholder-count="3">
+        <button onClick="{{ o.open }}" style="box-sizing: border-box; padding: 16px; border-radius: 22px; border: none; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px; text-align: left; color: #111214">
+          <span style="display: flex; align-items: center; gap: 8px; width: 100%"><span style="flex-grow: 1; font-size: 15px; font-weight: 500">{{ o.live }}</span><span style="padding: 3px 9px; border-radius: 999px; background: {{ o.stBg }}; color: {{ o.stFg }}; font-size: 11px; font-weight: 500">{{ o.status }}</span></span>
+          <span style="display: flex; gap: 4px; width: 100%"><sc-for list="{{ o.bars }}" as="b" hint-placeholder-count="4"><span style="flex-grow: 1; height: 5px; border-radius: 999px; background: {{ b.c }}"></span></sc-for></span>
+          <span style="display: flex; justify-content: space-between; width: 100%; font-size: 12px; color: #6B6F76"><span>{{ o.brand }} · {{ o.date }} · {{ o.units }}</span><span style="color: #111214; font-weight: 500">{{ o.money }}</span></span>
+        </button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+    <form class="ls-in" style="flex-grow: 1; box-sizing: border-box; padding: 18px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="c1" style="font-size: 12px; color: #6B6F76">Nome da empresa</label><input id="c1" value="Papelaria Central Ltda" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 16px"></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="c2" style="font-size: 12px; color: #6B6F76">CNPJ</label><input id="c2" inputmode="numeric" placeholder="00.000.000/0000-00" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 16px"></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="c3" style="font-size: 12px; color: #6B6F76">E-mail de compras</label><input id="c3" type="email" value="compras@papelariacentral.com.br" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 16px"></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="c4" style="font-size: 12px; color: #6B6F76">WhatsApp</label><input id="c4" type="tel" value="(11) 98812-4410" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 16px"></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="c5" style="font-size: 12px; color: #6B6F76">Endereço de entrega</label><input id="c5" placeholder="Rua, número, bairro, cidade" style="height: 48px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 16px"></div>
+      <div style="flex-grow: 1"></div>
+      <button type="button" onClick="{{ saveProfile }}" style="height: 52px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 15px; font-weight: 500">Salvar alterações</button>
+      <a href="LoginMobile.dc.html" style="height: 40px; font-size: 14px; color: #A11F24; text-decoration: none; display: flex; align-items: center; justify-content: center">Sair da conta</a>
+    </form>
+  </sc-if>
+
+  <sc-if value="{{ isSupport }}" hint-placeholder-val="{{ false }}">
+    <div class="ls-in" style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px; min-height: 0">
+      <button onClick="{{ whats }}" style="height: 64px; padding: 0 16px; border-radius: 22px; border: none; background: #D6F35B; display: flex; align-items: center; gap: 12px; text-align: left"><span style="width: 38px; height: 38px; border-radius: 50%; background: #111214; display: flex; align-items: center; justify-content: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#D6F35B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z"></path></svg></span><span style="display: flex; flex-direction: column"><span style="font-size: 15px; font-weight: 500">Chamar no WhatsApp</span><span style="font-size: 12px; color: #3A4214">Resposta mais rápida</span></span></button>
+      <div style="flex-grow: 1; box-sizing: border-box; padding: 16px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+        <span style="font-size: 15px; font-weight: 500">Abrir um chamado</span>
+        <span style="font-size: 12px; color: #6B6F76">Sobre o pedido {{ ticketFor }}</span>
+        <label for="cm" style="position: absolute; width: 1px; height: 1px; overflow: hidden">Mensagem</label>
+        <textarea id="cm" value="{{ msg }}" onChange="{{ onMsg }}" placeholder="Conte o que aconteceu" style="flex-grow: 1; min-height: 110px; border-radius: 14px; border: none; background: #F4F5F6; padding: 12px 14px; font-size: 16px; resize: none"></textarea>
+        <button onClick="{{ sendTicket }}" style="height: 50px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 14px; font-weight: 500">Enviar chamado</button>
+        <sc-for list="{{ tickets }}" as="t" hint-placeholder-count="1">
+          <div class="ls-in" style="padding: 12px; border-radius: 14px; background: #F4F5F6; display: flex; justify-content: space-between; gap: 8px; font-size: 12px"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 500">{{ t.title }}</span><span style="color: #6B6F76">{{ t.meta }}</span></span><span style="align-self: flex-start; padding: 2px 8px; border-radius: 999px; background: {{ t.bg }}; font-weight: 500">{{ t.status }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+    <button class="{{ ovCls }}" onClick="{{ closeSheet }}" aria-label="Fechar" style="position: absolute; inset: 0; border: none; padding: 0; background: rgba(17,18,20,0.45); transform: none; cursor: default"></button>
+    <div role="dialog" class="{{ shCls }}" aria-modal="true" aria-labelledby="pdt" style="position: absolute; left: 0; right: 0; bottom: 0; box-sizing: border-box; padding: 10px 16px 18px; border-radius: 28px 28px 0 0; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+      <span style="align-self: center; width: 40px; height: 5px; border-radius: 999px; background: #E4E6EA"></span>
+      <div style="display: flex; align-items: flex-start; gap: 10px"><div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #6B6F76">{{ d.brand }} · {{ d.code }}</span><h2 id="pdt" style="font-size: 19px; font-weight: 500; letter-spacing: -0.02em">{{ d.live }}</h2></div><span style="padding: 4px 10px; border-radius: 999px; background: {{ d.stBg }}; color: {{ d.stFg }}; font-size: 11px; font-weight: 500">{{ d.status }}</span></div>
+      <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px">
+        <sc-for list="{{ d.steps }}" as="s" hint-placeholder-count="4">
+          <li style="display: flex; align-items: center; gap: 10px; font-size: 13px"><span style="width: 18px; height: 18px; border-radius: 50%; background: {{ s.dot }}; flex-shrink: 0"></span><span style="flex-grow: 1; color: {{ s.fg }}">{{ s.label }}</span><span style="font-size: 12px; color: #6B6F76">{{ s.when }}</span></li>
+        </sc-for>
+      </ol>
+      <div style="border-radius: 16px; background: #F4F5F6; padding: 4px 14px">
+        <sc-for list="{{ d.items }}" as="i" hint-placeholder-count="3">
+          <div style="display: flex; justify-content: space-between; gap: 8px; padding: 10px 0; font-size: 13px; border-bottom: 1px solid #E9EAEC"><span style="display: flex; flex-direction: column; gap: 1px"><span>{{ i.name }}</span><span style="font-size: 11px; color: #6B6F76">{{ i.qty }} × {{ i.unit }}</span></span><span style="font-weight: 500">{{ i.sub }}</span></div>
+        </sc-for>
+        <div style="display: flex; justify-content: space-between; padding: 12px 0; font-size: 14px; font-weight: 500"><span>Total · {{ d.units }}</span><span>{{ d.money }}</span></div>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <button onClick="{{ invoice }}" disabled="{{ d.noInvoice }}" style="flex-grow: 1; height: 50px; border-radius: 999px; border: none; background: {{ d.invBg }}; color: {{ d.invFg }}; font-size: 14px; font-weight: 500">{{ d.invLabel }}</button>
+        <button onClick="{{ helpOrder }}" style="height: 50px; padding: 0 16px; border-radius: 999px; border: none; background: #F4F5F6; font-size: 14px; font-weight: 500">Suporte</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" class="ls-pop" style="position: absolute; left: 12px; right: 12px; top: 12px; padding: 12px 16px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 13px; display: flex; align-items: center; gap: 10px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #D6F35B"></span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.orders = [
+      { live: 'Lançamento Coleção Verão', brand: 'Marca Exemplo', date: 'hoje', code: '#LV-2291', st: 0, when: ['hoje, 14:34', '', '', ''], items: [['Caneta esferográfica azul', 1000], ['Ventilador de mesa 40 cm', 500], ['Garrafa térmica 1 L', 200]] },
+      { live: 'Volta às Aulas Atacado', brand: 'Cliente B', date: '09/09', code: '#LV-2104', st: 2, when: ['09/09', '09/09', '12/09', ''], items: [['Caderno universitário', 2000], ['Caneta esferográfica azul', 1200]] },
+      { live: 'Queima de Estoque Inverno', brand: 'Cliente C', date: '18/08', code: '#LV-1987', st: 3, when: ['18/08', '18/08', '21/08', '02/09'], items: [['Mochila executiva', 100], ['Luminária LED articulada', 150]] }
+    ];
+    this.state = { tab: 'orders', sel: -1, closing: false, msg: '', tickets: [], toast: '', ticketFor: '#LV-2291' };
+  }
+  flash(m) { var self = this; this.setState({ toast: m }); clearTimeout(this.tt); this.tt = setTimeout(function () { self.setState({ toast: '' }); }, 2600); }
+  close(then) { var self = this; this.setState({ closing: true }); clearTimeout(this.tc); this.tc = setTimeout(function () { self.setState(Object.assign({ sel: -1, closing: false }, then || {})); }, 250); }
+  renderVals() {
+    var self = this, s = this.state;
+    function f(n) { return n.toLocaleString('pt-BR'); }
+    function sum(o) { return o.items.reduce(function (a, i) { return a + i[1]; }, 0); }
+    var PRICE = { 'Caneta esferográfica azul': 0.89, 'Ventilador de mesa 40 cm': 89.9, 'Garrafa térmica 1 L': 32.5, 'Caderno universitário': 7.4, 'Mochila executiva': 119, 'Luminária LED articulada': 54 };
+    function money(n) { return 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function val(o) { return o.items.reduce(function (a, i) { return a + i[1] * PRICE[i[0]]; }, 0); }
+    var stLabels = ['Registrado', 'Em faturamento', 'Faturado', 'Entregue'];
+    var stColors = [['#F1F2F4', '#111214'], ['#FFF1E0', '#8A4A0B'], ['#EEF8D0', '#3F5A06'], ['#111214', '#D6F35B']];
+    var stepNames = ['Pedido registrado', 'Enviado à marca', 'Fatura emitida', 'Entregue'];
+    var o = this.orders[s.sel >= 0 ? s.sel : 0];
+    return {
+      tabs: [['orders', 'Pedidos'], ['profile', 'Perfil'], ['support', 'Suporte']].map(function (t) { var on = s.tab === t[0]; return { label: t[1], on: on, bg: on ? '#111214' : 'transparent', fg: on ? '#FFFFFF' : '#44474D', pick: function () { self.setState({ tab: t[0] }); } }; }),
+      isOrders: s.tab === 'orders', isProfile: s.tab === 'profile', isSupport: s.tab === 'support',
+      orders: this.orders.map(function (x, i) {
+        return { live: x.live, brand: x.brand, date: x.date, units: f(sum(x)) + ' un.', money: money(val(x)), status: stLabels[x.st], stBg: stColors[x.st][0], stFg: stColors[x.st][1],
+          bars: [0, 1, 2, 3].map(function (k) { return { c: k <= x.st ? (k === x.st ? '#D6F35B' : '#111214') : '#EDEEF0' }; }),
+          open: function () { clearTimeout(self.tc); self.setState({ sel: i, closing: false }); } };
+      }),
+      sheetOpen: s.sel >= 0,
+      ovCls: s.closing ? 'ls-fade-out' : 'ls-fade', shCls: s.closing ? 'ls-sheet-out' : 'ls-sheet',
+      closeSheet: function () { self.close(); },
+      d: {
+        live: o.live, brand: o.brand, code: o.code, units: f(sum(o)) + ' un.', money: money(val(o)), status: stLabels[o.st], stBg: stColors[o.st][0], stFg: stColors[o.st][1],
+        steps: stepNames.map(function (n, i) { var done = i <= o.st; return { label: n, when: o.when[i] || 'aguardando', dot: done ? (i === o.st ? '#D6F35B' : '#111214') : '#EDEEF0', fg: done ? '#111214' : '#8A8F99' }; }),
+        items: o.items.map(function (i) { return { name: i[0], qty: f(i[1]) + ' un.', unit: money(PRICE[i[0]]), sub: money(i[1] * PRICE[i[0]]) }; }),
+        noInvoice: o.st < 2, invBg: o.st < 2 ? '#EDEEF0' : '#111214', invFg: o.st < 2 ? '#8A8F99' : '#FFFFFF', invLabel: o.st < 2 ? 'Fatura ainda não emitida' : 'Baixar fatura'
+      },
+      invoice: function () { if (o.st >= 2) self.flash('Fatura ' + o.code + ' baixada'); },
+      helpOrder: function () { self.close({ tab: 'support', ticketFor: o.code }); },
+      ticketFor: s.ticketFor,
+      saveProfile: function () { self.flash('Dados da empresa salvos'); },
+      whats: function () { self.flash('Abrindo o WhatsApp do suporte'); },
+      msg: s.msg,
+      onMsg: function (e) { self.setState({ msg: e.target.value }); },
+      tickets: s.tickets.map(function (t) { return { title: t.title, meta: t.meta, status: t.status, bg: '#FFF1E0' }; }),
+      sendTicket: function () { self.setState({ msg: '', tickets: [{ title: 'Dúvida sobre pedido', meta: 'Pedido ' + s.ticketFor + ' · agora', status: 'Aberto' }].concat(s.tickets) }); self.flash('Chamado enviado'); },
+      toast: s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

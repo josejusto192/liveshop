@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Cadastro no celular</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}
+h1,h2,h3{margin:0}
+input{font-family:inherit}
+@keyframes lsIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ls-in{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) both}
+.ls-in-2{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) .08s both}
+a{transition:background-color .2s ease,transform .15s ease;white-space:nowrap;flex-shrink:0}
+a:active{transform:scale(.97)}
+input{transition:box-shadow .2s ease}
+input:focus{outline:none;box-shadow:0 0 0 2px #111214}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 12px; background: #EDEEF0">
+  <section class="ls-in" style="box-sizing: border-box; padding: 22px; border-radius: 26px; background: #141518; color: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; align-items: center; gap: 8px"><span style="width: 28px; height: 28px; border-radius: 9px; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="#111214" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg></span><span style="font-size: 15px; font-weight: 600">Live Shop</span></div>
+    <div style="display: flex; gap: 6px"><span style="padding: 5px 10px; border-radius: 999px; background: #D6F35B; color: #111214; font-size: 12px; font-weight: 500">Quinta, 02/10</span><span style="padding: 5px 10px; border-radius: 999px; border: 1px solid #3A3D44; font-size: 12px; color: #D5D8DE">14h às 15h</span></div>
+    <h1 style="font-size: 32px; font-weight: 500; line-height: 1.05; letter-spacing: -0.04em">Lançamento Coleção Verão</h1>
+    <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #A9ADB5">Assista e registre os pedidos da sua loja na hora, sem pagar agora.</p>
+  </section>
+
+  <form class="ls-in-2" style="flex-grow: 1; box-sizing: border-box; padding: 22px; border-radius: 26px; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+    <h2 style="font-size: 22px; font-weight: 500; letter-spacing: -0.03em">Acesse a live</h2>
+    <div style="display: flex; flex-direction: column; gap: 6px"><label for="me" style="font-size: 12px; color: #6B6F76">Nome da empresa</label><input id="me" placeholder="Ex.: Papelaria Central Ltda" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: none; background: #F4F5F6; padding: 0 16px; font-size: 16px"></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><label for="mm" style="font-size: 12px; color: #6B6F76">E-mail</label><input id="mm" type="email" inputmode="email" placeholder="compras@suaempresa.com.br" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: none; background: #F4F5F6; padding: 0 16px; font-size: 16px"></div>
+    <div style="display: flex; flex-direction: column; gap: 6px"><label for="mw" style="font-size: 12px; color: #6B6F76">WhatsApp</label><input id="mw" type="tel" inputmode="tel" placeholder="(11) 90000-0000" style="height: 50px; box-sizing: border-box; border-radius: 14px; border: none; background: #F4F5F6; padding: 0 16px; font-size: 16px"></div>
+    <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 12px; color: #6B6F76; line-height: 1.45"><input type="checkbox" style="width: 18px; height: 18px; margin: 0; accent-color: #111214">Concordo com os termos e com o contato sobre meus pedidos.</label>
+    <div style="flex-grow: 1"></div>
+    <a href="CodigoMobile.dc.html" style="height: 56px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; justify-content: space-between; padding: 0 7px 0 22px">Receber código por e-mail<span style="width: 42px; height: 42px; border-radius: 50%; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a>
+    <p style="margin: 0; font-size: 13px; color: #6B6F76; text-align: center">Já tem cadastro? <a href="CodigoMobile.dc.html" style="font-weight: 500">Entrar só com o e-mail</a></p>
+  </form>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

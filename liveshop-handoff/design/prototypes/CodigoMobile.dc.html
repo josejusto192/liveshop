@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Código no celular</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}
+h1,h2,h3{margin:0}
+button,input{font-family:inherit}
+button{cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes lsDrop{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+@keyframes lsShakeA{0%,100%{transform:none}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes lsShakeB{0%,100%{transform:none}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.ls-in{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) both}
+.ls-drop{animation:lsDrop .45s cubic-bezier(.2,.7,.2,1) .6s both}
+button,a{transition:background-color .2s ease,color .2s ease,opacity .2s ease,transform .15s ease;white-space:nowrap;flex-shrink:0}
+button:active,a:active{transform:scale(.97)}
+input{transition:box-shadow .2s ease,background-color .2s ease}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 12px; display: flex; flex-direction: column; gap: 12px; background: #EDEEF0; position: relative; overflow: hidden">
+  <div class="ls-drop" aria-label="Notificação de e-mail" style="display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-radius: 20px; background: rgba(255,255,255,0.92); box-shadow: 0 10px 30px rgba(17,18,20,0.12)">
+    <span style="width: 34px; height: 34px; border-radius: 10px; background: #111214; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D6F35B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M3 8l9 6 9-6"></path></svg></span>
+    <span style="flex-grow: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 12px; font-weight: 600">E-mail · Live Shop</span><span style="font-size: 12px; color: #44474D">Seu código para entrar na live: <span style="font-family: 'Geist Mono', monospace; font-weight: 500; color: #111214">{{ currentCode }}</span></span></span>
+    <span style="font-size: 11px; color: #6B6F76">agora</span>
+  </div>
+
+  <section class="ls-in" style="flex-grow: 1; box-sizing: border-box; padding: 24px 22px; border-radius: 26px; background: #FFFFFF; display: flex; flex-direction: column; gap: 18px">
+    <sc-if value="{{ notOk }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <h1 style="font-size: 26px; font-weight: 500; letter-spacing: -0.035em">Confira seu e-mail</h1>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6B6F76">Enviamos um código de 6 dígitos para <span style="color: #111214; font-weight: 500">compras@papelariacentral.com.br</span></p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <label for="cm" style="font-size: 12px; color: #6B6F76">Código de acesso</label>
+        <input id="cm" inputmode="numeric" autocomplete="one-time-code" maxlength="6" value="{{ code }}" onChange="{{ onCode }}" disabled="{{ locked }}" aria-invalid="{{ hasError }}" aria-describedby="cmmsg" placeholder="000000" style="height: 72px; box-sizing: border-box; border-radius: 18px; border: none; background: {{ fieldBg }}; box-shadow: {{ fieldRing }}; text-align: center; font-family: 'Geist Mono', monospace; font-size: 34px; letter-spacing: 0.35em; padding-left: 0.35em; color: #111214; outline: none; animation: {{ shake }} .4s ease">
+        <span id="cmmsg" role="status" style="min-height: 36px; font-size: 13px; line-height: 1.4; color: {{ msgColor }}">{{ msg }}</span>
+      </div>
+      <div style="flex-grow: 1"></div>
+      <button onClick="{{ verify }}" disabled="{{ cantVerify }}" style="height: 56px; border-radius: 999px; border: none; background: {{ btnBg }}; color: {{ btnFg }}; font-size: 15px; font-weight: 500">Entrar</button>
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px">
+        <a href="LoginMobile.dc.html" style="font-weight: 500">Trocar e-mail</a>
+        <sc-if value="{{ canResend }}" hint-placeholder-val="{{ false }}"><button onClick="{{ resend }}" style="height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #E4E6EA; background: #FFFFFF; font-size: 13px; font-weight: 500">Reenviar código</button></sc-if>
+        <sc-if value="{{ waitResend }}" hint-placeholder-val="{{ true }}"><span style="color: #6B6F76">Reenviar em <span style="font-family: 'Geist Mono', monospace; color: #111214">{{ resendIn }}</span></span></sc-if>
+      </div>
+    </sc-if>
+    <sc-if value="{{ ok }}" hint-placeholder-val="{{ false }}">
+      <div class="ls-in" style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+        <span style="width: 72px; height: 72px; border-radius: 50%; background: #111214; display: flex; align-items: center; justify-content: center"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#D6F35B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span>
+        <h1 style="font-size: 26px; font-weight: 500; letter-spacing: -0.035em">Tudo certo</h1>
+        <p style="margin: 0; font-size: 14px; color: #6B6F76">Você já pode entrar na live.</p>
+      </div>
+      <a href="SalaEsperaMobile.dc.html" style="height: 56px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; justify-content: space-between; padding: 0 7px 0 22px">Continuar<span style="width: 42px; height: 42px; border-radius: 50%; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a>
+    </sc-if>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { code: '', valid: '482913', tries: 0, error: '', ok: false, resendIn: 30, info: '', shakeN: 0 };
+  }
+  componentDidMount() { var self = this; this.iv = setInterval(function () { if (self.state.resendIn > 0) self.setState({ resendIn: self.state.resendIn - 1 }); }, 1000); }
+  componentWillUnmount() { clearInterval(this.iv); }
+  renderVals() {
+    var self = this, s = this.state, locked = s.tries >= 3;
+    var hasError = !!s.error;
+    var msg = s.error || s.info || 'O código vale por 10 minutos.';
+    return {
+      currentCode: s.valid,
+      code: s.code, locked: locked, hasError: hasError,
+      notOk: !s.ok, ok: s.ok,
+      fieldBg: hasError ? '#FDECEC' : '#F4F5F6',
+      fieldRing: hasError ? 'inset 0 0 0 2px #C92A2F' : (s.code.length ? 'inset 0 0 0 2px #111214' : 'none'),
+      shake: hasError ? (s.shakeN % 2 ? 'lsShakeA' : 'lsShakeB') : 'none',
+      msg: msg, msgColor: hasError ? '#A11F24' : (s.info ? '#3F5A06' : '#6B6F76'),
+      cantVerify: s.code.length < 6 || locked,
+      btnBg: s.code.length === 6 && !locked ? '#111214' : '#EDEEF0',
+      btnFg: s.code.length === 6 && !locked ? '#FFFFFF' : '#8A8F99',
+      canResend: s.resendIn === 0 || locked, waitResend: s.resendIn > 0 && !locked,
+      resendIn: '0:' + (s.resendIn < 10 ? '0' : '') + s.resendIn,
+      onCode: function (e) { self.setState({ code: String(e.target.value).replace(/\D/g, '').slice(0, 6), error: s.tries >= 3 ? s.error : '', info: '' }); },
+      verify: function () {
+        if (s.code.length < 6 || locked) return;
+        if (s.code === s.valid) { self.setState({ ok: true, error: '' }); return; }
+        var t = s.tries + 1;
+        self.setState({ tries: t, shakeN: s.shakeN + 1, code: '',
+          error: t >= 3 ? 'Muitas tentativas. Por segurança, peça um novo código.' : 'Código incorreto. Você tem mais ' + (3 - t) + (3 - t === 1 ? ' tentativa.' : ' tentativas.') });
+      },
+      resend: function () {
+        var n = String(Math.floor(100000 + Math.random() * 900000));
+        self.setState({ valid: n, tries: 0, error: '', code: '', resendIn: 30, info: 'Enviamos um novo código. O anterior não vale mais.' });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

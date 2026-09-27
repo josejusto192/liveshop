@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Admin: Produtos e estoque</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}a:hover{color:#44474D}
+h1,h2,h3{margin:0}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes lsPopC{from{opacity:0;transform:translate(-50%,-8px) scale(.98)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes lsDrawer{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes lsSwapA{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes lsSwapB{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes lsSwapC{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes lsSwapD{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.ls-in{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) both}
+.ls-pop-c{animation:lsPopC .35s cubic-bezier(.2,.7,.2,1) both}
+.ls-drawer{animation:lsDrawer .38s cubic-bezier(.2,.7,.2,1) both}
+button,a{transition:background-color .2s ease,color .2s ease,border-color .2s ease,opacity .2s ease,transform .15s ease}
+button:active,a:active{transform:scale(.97)}
+button,a{white-space:nowrap;flex-shrink:0}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; display: flex; background: #EDEEF0; position: relative; overflow: hidden">
+
+  <nav aria-label="Menu" style="width: 236px; flex-shrink: 0; margin: 24px 0 24px 24px; box-sizing: border-box; padding: 22px 14px; border-radius: 24px; background: #141518; display: flex; flex-direction: column; gap: 4px">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 8px 26px">
+      <span style="width: 32px; height: 32px; border-radius: 10px; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#111214" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg></span>
+      <span style="color: #FFFFFF; font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Live Shop</span>
+    </div>
+    <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: #7C8088; padding: 0 12px 8px">MENU</span>
+    <a href="AdminLives.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>Visão geral</a>
+    <a href="AdminCentral.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"></circle><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19 5a10 10 0 0 1 0 14M5 19A10 10 0 0 1 5 5"></path></svg><span style="flex-grow: 1">Central da live</span><span style="font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px; background: #C92A2F; color: #FFFFFF">AO VIVO</span></a>
+    <a href="AdminProdutos.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #FFFFFF; background: #26282D"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg><span style="flex-grow: 1">Produtos</span><span style="width: 6px; height: 6px; border-radius: 50%; background: #D6F35B"></span></a>
+    <a href="AdminPedidos.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h4"></path></svg>Pedidos</a>
+    <a href="AdminEmpresas.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h2a2 2 0 0 1 2 2v10M3 21h18M8 7h4M8 11h4M8 15h4"></path></svg>Empresas</a>
+    <a href="AdminMarcas.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg>Marcas</a>
+    <div style="flex-grow: 1"></div>
+    <a href="AdminConfig.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 12px; text-decoration: none; font-size: 14px; font-weight: 500; color: #A9ADB5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"></path></svg>Configurações</a>
+    <div style="margin-top: 10px; padding: 12px; border-radius: 16px; background: #1E2024; display: flex; align-items: center; gap: 10px">
+      <span style="width: 36px; height: 36px; border-radius: 50%; background: #3A3D44; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">AG</span>
+      <span style="display: flex; flex-direction: column; min-width: 0"><span style="color: #FFFFFF; font-size: 13px; font-weight: 500">Agência [Nome]</span><span style="color: #7C8088; font-size: 12px">Administradora</span></span>
+    </div>
+  </nav>
+
+  <main class="ls-in" style="flex-grow: 1; box-sizing: border-box; margin: 24px 24px 24px 16px; padding: 0; display: flex; gap: 16px; min-width: 0">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 16px; min-width: 0">
+      <header style="height: 60px; display: flex; align-items: center; gap: 10px">
+        <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 14px; color: #6B6F76">Catálogo · Marca Exemplo</span>
+          <h1 style="font-size: 30px; font-weight: 500; letter-spacing: -0.03em">Produtos e estoque</h1>
+        </div>
+        <button onClick="{{ importSheet }}" style="height: 44px; padding: 0 18px; border-radius: 999px; border: none; background: #FFFFFF; font-size: 14px">Importar planilha</button>
+        <sc-if value="{{ formClosed }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ openForm }}" style="height: 44px; padding: 0 20px 0 8px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px"><span style="width: 30px; height: 30px; border-radius: 50%; background: #D6F35B; color: #111214; display: flex; align-items: center; justify-content: center; font-size: 18px; line-height: 1">+</span>Novo produto</button>
+        </sc-if>
+      </header>
+
+      <div style="height: 118px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+        <div style="box-sizing: border-box; padding: 18px 20px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B6F76">Produtos cadastrados</span><span style="font-size: 32px; font-weight: 500; letter-spacing: -0.04em">48</span><span style="font-size: 12px; color: #6B6F76">6 no roteiro da live de hoje</span></div>
+        <div style="box-sizing: border-box; padding: 18px 20px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #6B6F76">Estoque disponível</span><span style="font-size: 32px; font-weight: 500; letter-spacing: -0.04em">101.120 <span style="font-size: 15px; color: #6B6F76; letter-spacing: 0">un.</span></span><div style="display: flex; gap: 3px; height: 6px"><span style="width: 69%; border-radius: 999px; background: #111214"></span><span style="flex-grow: 1; border-radius: 999px; background: #D6F35B"></span></div></div>
+        <div style="box-sizing: border-box; padding: 18px 20px; border-radius: 22px; background: #141518; color: #FFFFFF; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 13px; color: #A9ADB5">Atenção no estoque</span><span style="font-size: 32px; font-weight: 500; letter-spacing: -0.04em">2 <span style="font-size: 15px; color: #A9ADB5; letter-spacing: 0">produtos</span></span><span style="font-size: 12px; color: #D6F35B">1 esgotado · 1 abaixo de 10%</span></div>
+      </div>
+
+      <div style="display: flex; gap: 10px; align-items: center">
+        <div role="group" aria-label="Filtro de estoque" style="display: flex; padding: 4px; border-radius: 999px; background: #FFFFFF">
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+            <button onClick="{{ f.pick }}" aria-pressed="{{ f.on }}" style="height: 34px; padding: 0 16px; border-radius: 999px; border: none; background: {{ f.bg }}; color: {{ f.fg }}; font-size: 13px; font-weight: 500">{{ f.label }}</button>
+          </sc-for>
+        </div>
+        <div style="flex-grow: 1"></div>
+        <label style="display: flex; align-items: center; gap: 8px; height: 42px; width: 240px; box-sizing: border-box; padding: 0 16px; border-radius: 999px; background: #FFFFFF; color: #6B6F76"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input aria-label="Buscar produto" placeholder="Nome ou SKU" style="border: none; outline: none; background: transparent; font-size: 14px; flex-grow: 1; min-width: 0"></label>
+      </div>
+
+      <div style="flex-grow: 1; border-radius: 22px; background: #FFFFFF; padding: 4px 22px; box-sizing: border-box; display: flex; flex-direction: column; min-height: 0; animation: {{ filterAnim }} .4s cubic-bezier(.2,.7,.2,1) both">
+        <div style="display: grid; grid-template-columns: 2.6fr 1fr 1.8fr 1fr; gap: 14px; height: 42px; align-items: center; font-size: 12px; color: #6B6F76">
+          <span>Produto</span><span>Preço atacado</span><span>Estoque (pedido / disponível)</span><span style="text-align: right">Disponível</span>
+        </div>
+        <sc-for list="{{ products }}" as="p" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: 2.6fr 1fr 1.8fr 1fr; gap: 14px; height: 64px; align-items: center; font-size: 14px; border-top: 1px solid #F1F2F4">
+            <span style="display: flex; gap: 12px; align-items: center"><span style="width: 42px; height: 42px; border-radius: 12px; background: #F1F2F4; flex-shrink: 0"></span><span style="display: flex; flex-direction: column"><span style="font-weight: 500">{{ p.name }}</span><span style="font-size: 12px; color: #6B6F76; font-family: 'Geist Mono', monospace">{{ p.sku }}</span></span></span>
+            <span style="font-weight: 500">{{ p.price }}</span>
+            <span style="display: flex; flex-direction: column; gap: 6px"><span style="display: flex; gap: 3px; height: 8px"><span style="width: {{ p.ow }}; border-radius: 999px; background: #111214"></span><span style="flex-grow: 1; border-radius: 999px; background: {{ p.ac }}"></span></span><span style="font-size: 12px; color: #6B6F76; font-family: 'Geist Mono', monospace">{{ p.ordered }} / {{ p.stock }}</span></span>
+            <span style="display: flex; justify-content: flex-end"><span style="padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; background: {{ p.cbg }}; color: {{ p.cfg }}">{{ p.avail }}</span></span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ true }}">
+    <aside class="ls-drawer" aria-label="Novo produto" style="width: 340px; flex-shrink: 0; box-sizing: border-box; padding: 22px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <h2 style="font-size: 20px; font-weight: 500; letter-spacing: -0.02em">Novo produto</h2>
+        <button onClick="{{ closeForm }}" aria-label="Fechar" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid #E4E6EA; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"></path></svg></button>
+      </div>
+      <button style="height: 110px; border-radius: 16px; border: none; background: repeating-linear-gradient(135deg, #F1F2F4 0 6px, #F7F8F9 6px 12px); color: #6B6F76; font-size: 13px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px"><span style="width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #111214">+</span>Enviar foto do produto</button>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="pn" style="font-size: 12px; color: #6B6F76">Nome</label><input id="pn" value="Garrafa térmica 1 L" style="height: 44px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="ps" style="font-size: 12px; color: #6B6F76">SKU</label><input id="ps" value="GT-1L-IN" style="height: 44px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px; font-family: 'Geist Mono', monospace"></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="pp" style="font-size: 12px; color: #6B6F76">Preço atacado</label><input id="pp" value="R$ 32,50" style="height: 44px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="pe" style="font-size: 12px; color: #6B6F76">Estoque (un.)</label><input id="pe" value="12.000" style="height: 44px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+        <div style="display: flex; flex-direction: column; gap: 6px"><label for="pmin" style="font-size: 12px; color: #6B6F76">Pedido mínimo</label><input id="pmin" value="10" style="height: 44px; box-sizing: border-box; border-radius: 12px; border: none; background: #F4F5F6; padding: 0 14px; font-size: 14px"></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="pd" style="font-size: 12px; color: #6B6F76">Descrição curta</label><textarea id="pd" rows="3" style="border-radius: 12px; border: none; background: #F4F5F6; padding: 12px 14px; font-size: 14px; resize: none">Aço inox, parede dupla. Caixa com 12 unidades.</textarea></div>
+      <label style="display: flex; justify-content: space-between; align-items: center; font-size: 14px">Bloquear pedidos acima do estoque<span style="width: 42px; height: 24px; border-radius: 999px; background: #111214; position: relative; flex-shrink: 0"><span style="position: absolute; right: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: #D6F35B"></span></span></label>
+      <div style="flex-grow: 1"></div>
+      <button onClick="{{ save }}" style="height: 50px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 15px; font-weight: 500">Salvar produto</button>
+    </aside>
+    </sc-if>
+  </main>
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" class="ls-pop-c" style="position: absolute; left: 50%; top: 28px; transform: translateX(-50%); padding: 12px 18px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 14px; display: flex; align-items: center; gap: 10px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #D6F35B"></span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { filter: 'all', form: true, toast: '' };
+  }
+  flash(msg) {
+    var self = this;
+    this.setState({ toast: msg });
+    clearTimeout(this.tt);
+    this.tt = setTimeout(function () { self.setState({ toast: '' }); }, 2400);
+  }
+  renderVals() {
+    var self = this, s = this.state;
+    var rows = [
+      ['Caneta esferográfica azul', 'CN-AZ-050', 120000, 38000],
+      ['Ventilador de mesa 40 cm', 'VT-40-BR', 6000, 1200],
+      ['Garrafa térmica 1 L', 'GT-1L-IN', 12000, 0],
+      ['Kit organizador de mesa', 'KO-3P-PT', 3500, 3180],
+      ['Luminária LED articulada', 'LM-LED-BR', 2000, 0],
+      ['Mochila executiva', 'MC-EX-15', 1800, 1800]
+    ];
+    function f(n) { return n.toLocaleString('pt-BR'); }
+    function kind(r) { var a = r[2] - r[3]; return a === 0 ? 'out' : (a / r[2] < 0.1 ? 'low' : 'in'); }
+    return {
+      formOpen: s.form,
+      formClosed: !s.form,
+      openForm: function () { self.setState({ form: true }); },
+      closeForm: function () { self.setState({ form: false }); },
+      save: function () { self.setState({ form: false }); self.flash('Produto salvo e disponível para as lives'); },
+      importSheet: function () { self.flash('Envie uma planilha .xlsx ou .csv com nome, SKU, preço e estoque'); },
+      toast: s.toast,
+      filterAnim: { all: 'lsSwapA', 'in': 'lsSwapB', low: 'lsSwapC', out: 'lsSwapD' }[s.filter],
+      filters: [['all', 'Todos'], ['in', 'Em estoque'], ['low', 'Estoque baixo'], ['out', 'Esgotados']].map(function (f) {
+        var on = s.filter === f[0];
+        return { label: f[1], on: on, bg: on ? '#111214' : 'transparent', fg: on ? '#FFFFFF' : '#44474D', pick: function () { self.setState({ filter: f[0] }); } };
+      }),
+      products: rows.filter(function (r) { return s.filter === 'all' || kind(r) === s.filter; }).map(function (r) {
+        var a = r[2] - r[3], pct = r[3] / r[2];
+        var low = a > 0 && a / r[2] < 0.1;
+        return {
+          name: r[0], sku: r[1], stock: f(r[2]), ordered: f(r[3]),
+          price: 'R$ ' + ({ 'Caneta esferográfica azul': 0.89, 'Ventilador de mesa 40 cm': 89.9, 'Garrafa térmica 1 L': 32.5, 'Kit organizador de mesa': 24.9, 'Luminária LED articulada': 54, 'Mochila executiva': 119 }[r[0]] || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+          ow: Math.max(Math.round(pct * 100), 1) + '%',
+          ac: a === 0 ? '#F1F2F4' : (low ? '#F5B97A' : '#D6F35B'),
+          avail: a === 0 ? 'Esgotado' : f(a) + ' un.',
+          cbg: a === 0 ? '#FDECEC' : (low ? '#FFF1E0' : '#EEF8D0'),
+          cfg: a === 0 ? '#A11F24' : (low ? '#8A4A0B' : '#3F5A06')
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

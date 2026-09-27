@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Live encerrada no celular</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#141518;color:#FFFFFF}
+a{color:#FFFFFF}
+h1,h2,h3{margin:0}
+button{font-family:inherit;cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes lsPop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.ls-in{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) both}
+.ls-in-2{animation:lsIn .5s cubic-bezier(.2,.7,.2,1) .1s both}
+.ls-pop{animation:lsPop .35s cubic-bezier(.2,.7,.2,1) both}
+button,a{transition:background-color .2s ease,opacity .2s ease,transform .15s ease;white-space:nowrap;flex-shrink:0}
+button:active,a:active{transform:scale(.97)}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 24px 16px 16px; display: flex; flex-direction: column; gap: 16px; background: #141518; position: relative; overflow: hidden">
+  <div class="ls-in" style="display: flex; flex-direction: column; gap: 12px; padding: 0 6px">
+    <span style="align-self: flex-start; padding: 4px 10px; border-radius: 999px; background: #26282D; color: #A9ADB5; font-size: 11px; font-weight: 500">Live encerrada</span>
+    <h1 style="font-size: 34px; font-weight: 500; line-height: 1.05; letter-spacing: -0.04em">Obrigado por participar.</h1>
+    <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #A9ADB5">Seus pedidos foram enviados para a Marca Exemplo. A fatura chega por e-mail.</p>
+  </div>
+
+  <div class="ls-in-2" style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 16px; border-radius: 24px; background: #FFFFFF; color: #111214; display: flex; flex-direction: column; gap: 10px">
+    <div style="padding: 14px 16px; border-radius: 18px; background: #141518; color: #FFFFFF; display: flex; justify-content: space-between; align-items: center"><span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 12px; color: #A9ADB5">Valor estimado</span><span style="font-size: 12px; color: #FFFFFF">1.700 un.</span></span><span style="font-size: 24px; font-weight: 500; letter-spacing: -0.03em; color: #D6F35B">R$ 52.340,00</span></div>
+    <sc-for list="{{ items }}" as="i" hint-placeholder-count="3">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid #F1F2F4"><span style="width: 38px; height: 38px; border-radius: 10px; background: #F1F2F4"></span><span style="flex-grow: 1; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 13px; font-weight: 500">{{ i.name }}</span><span style="font-size: 11px; color: #6B6F76">{{ i.qty }} × {{ i.unit }}</span></span><span style="font-size: 13px; font-weight: 500">{{ i.sub }}</span></div>
+    </sc-for>
+    <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 6px">
+      <span style="display: flex; gap: 8px; align-items: center; font-size: 12px"><span style="width: 18px; height: 18px; border-radius: 50%; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg></span>Pedidos enviados para a marca</span>
+      <span style="display: flex; gap: 8px; align-items: center; font-size: 12px; color: #6B6F76"><span style="width: 18px; height: 18px; border-radius: 50%; background: #F1F2F4"></span>Fatura por e-mail em até [prazo] dias úteis</span>
+    </div>
+    <div style="flex-grow: 1"></div>
+    <button onClick="{{ pdf }}" style="height: 52px; border-radius: 999px; border: none; background: #111214; color: #FFFFFF; font-size: 14px; font-weight: 500">Baixar resumo em PDF</button>
+  </div>
+  <a href="ContaMobile.dc.html" style="height: 48px; border-radius: 999px; border: 1px solid #3A3D44; font-size: 14px; text-decoration: none; display: flex; align-items: center; justify-content: center">Acompanhar meus pedidos</a>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" class="ls-pop" style="position: absolute; left: 16px; right: 16px; top: 16px; padding: 12px 16px; border-radius: 999px; background: #FFFFFF; color: #111214; font-size: 13px; display: flex; align-items: center; gap: 10px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #7CB518"></span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { toast: '' }; }
+  renderVals() {
+    var self = this;
+    return {
+      items: [{ name: 'Caneta esferográfica azul', qty: '1.000 un.', unit: 'R$ 0,89', sub: 'R$ 890,00' }, { name: 'Ventilador de mesa 40 cm', qty: '500 un.', unit: 'R$ 89,90', sub: 'R$ 44.950,00' }, { name: 'Garrafa térmica 1 L', qty: '200 un.', unit: 'R$ 32,50', sub: 'R$ 6.500,00' }],
+      toast: this.state.toast,
+      pdf: function () { self.setState({ toast: 'Resumo em PDF baixado' }); clearTimeout(self.tt); self.tt = setTimeout(function () { self.setState({ toast: '' }); }, 2400); }
+    };
+  }
+}
+</script>
+</body>
+</html>

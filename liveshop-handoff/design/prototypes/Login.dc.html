@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Cadastro da empresa</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Geist',system-ui,sans-serif;background:#EDEEF0;color:#111214}
+a{color:#111214}a:hover{color:#44474D}
+h1,h2,h3{margin:0}
+button,input{font-family:inherit}
+button{cursor:pointer}
+@keyframes lsIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes lsFade{from{opacity:0}to{opacity:1}}
+.ls-in{animation:lsIn .55s cubic-bezier(.2,.7,.2,1) .08s both}
+.ls-fade{animation:lsFade .45s ease both}
+a,button{transition:background-color .2s ease,color .2s ease,transform .15s ease}
+a:active,button:active{transform:scale(.97)}
+input{transition:background-color .2s ease,box-shadow .2s ease}
+input:focus{outline:none;box-shadow:0 0 0 2px #111214}
+button,a{white-space:nowrap;flex-shrink:0}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; box-sizing: border-box; padding: 16px; display: flex; gap: 16px; background: #EDEEF0">
+
+  <section class="ls-fade" style="width: 540px; flex-shrink: 0; box-sizing: border-box; padding: 40px; border-radius: 28px; background: #141518; color: #FFFFFF; display: flex; flex-direction: column; gap: 24px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <span style="width: 32px; height: 32px; border-radius: 10px; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#111214" aria-hidden="true"><path d="M7 4l13 8-13 8z"></path></svg></span>
+      <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Live Shop</span>
+    </div>
+    <div style="flex-grow: 1"></div>
+    <div style="display: flex; gap: 8px">
+      <span style="padding: 6px 12px; border-radius: 999px; background: #D6F35B; color: #111214; font-size: 13px; font-weight: 500">Quinta, 02/10</span>
+      <span style="padding: 6px 12px; border-radius: 999px; border: 1px solid #3A3D44; font-size: 13px; color: #D5D8DE">14h às 15h</span>
+    </div>
+    <h1 style="font-size: 52px; font-weight: 500; line-height: 1.02; letter-spacing: -0.045em">Lançamento Coleção Verão</h1>
+    <p style="margin: 0; font-size: 16px; line-height: 1.55; color: #A9ADB5; max-width: 420px">Assista à apresentação da Marca Exemplo e registre os pedidos de estoque da sua loja na hora, sem pagar agora.</p>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 8px">
+      <div style="padding: 16px; border-radius: 18px; background: #1E2024; display: flex; flex-direction: column; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 50%; background: #D6F35B; color: #111214; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">1</span><span style="font-size: 13px; line-height: 1.4; color: #D5D8DE">Cadastre sua empresa</span></div>
+      <div style="padding: 16px; border-radius: 18px; background: #1E2024; display: flex; flex-direction: column; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 50%; background: #26282D; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">2</span><span style="font-size: 13px; line-height: 1.4; color: #D5D8DE">Confirme o código no e-mail</span></div>
+      <div style="padding: 16px; border-radius: 18px; background: #1E2024; display: flex; flex-direction: column; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 50%; background: #26282D; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600">3</span><span style="font-size: 13px; line-height: 1.4; color: #D5D8DE">Entre e registre pedidos</span></div>
+    </div>
+  </section>
+
+  <section class="ls-in" style="flex-grow: 1; border-radius: 28px; background: #FFFFFF; display: flex; align-items: center; justify-content: center">
+    <form style="width: 420px; display: flex; flex-direction: column; gap: 18px">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding-bottom: 6px">
+        <h2 style="font-size: 32px; font-weight: 500; letter-spacing: -0.035em">Acesse a live</h2>
+        <p style="margin: 0; font-size: 15px; color: #6B6F76; line-height: 1.5">Preencha os dados da sua empresa. Vamos enviar um código de acesso para o seu e-mail.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="empresa" style="font-size: 13px; color: #6B6F76">Nome da empresa</label><input id="empresa" placeholder="Ex.: Papelaria Central Ltda" style="height: 52px; box-sizing: border-box; border-radius: 14px; border: none; background: #F4F5F6; padding: 0 16px; font-size: 15px"></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="email" style="font-size: 13px; color: #6B6F76">E-mail</label><input id="email" type="email" placeholder="compras@suaempresa.com.br" style="height: 52px; box-sizing: border-box; border-radius: 14px; border: none; background: #F4F5F6; padding: 0 16px; font-size: 15px"></div>
+      <div style="display: flex; flex-direction: column; gap: 6px"><label for="whats" style="font-size: 13px; color: #6B6F76">WhatsApp</label><input id="whats" type="tel" placeholder="(11) 90000-0000" style="height: 52px; box-sizing: border-box; border-radius: 14px; border: none; background: #F4F5F6; padding: 0 16px; font-size: 15px"></div>
+      <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #6B6F76; line-height: 1.45"><input type="checkbox" style="width: 18px; height: 18px; margin: 1px 0 0; accent-color: #111214">Concordo com os termos de uso e com o contato sobre os meus pedidos.</label>
+      <a href="Codigo.dc.html" style="height: 56px; border-radius: 999px; background: #111214; color: #FFFFFF; font-size: 15px; font-weight: 500; text-decoration: none; display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 24px">Receber código por e-mail<span style="width: 42px; height: 42px; border-radius: 50%; background: #D6F35B; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111214" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a>
+      <p style="margin: 0; font-size: 14px; color: #6B6F76; text-align: center">Já tem cadastro? <a href="Codigo.dc.html" style="font-weight: 500">Entrar só com o e-mail</a></p>
+    </form>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
