@@ -80,7 +80,7 @@ export function BrandsView({ brands, canWrite, canCreateLive }: { brands: BrandC
                 </div>
                 <div className="flex-grow" />
                 <div className="flex gap-2">
-                  <Link href={`/admin/pedidos?marca=${b.id}`} className={`flex h-[42px] flex-grow items-center justify-center rounded-full text-[13px] font-medium no-underline ${dark ? 'bg-accent text-ink' : 'bg-ink text-white'}`}>Ver pedidos</Link>
+                  <Link href={`/admin/pedidos?brandId=${b.id}`} className={`flex h-[42px] flex-grow items-center justify-center rounded-full text-[13px] font-medium no-underline ${dark ? 'bg-accent text-ink' : 'bg-ink text-white'}`}>Ver pedidos</Link>
                   {canCreateLive && (
                     <Link href={`/admin/lives/nova?marca=${b.id}`} className={`flex h-[42px] items-center rounded-full border border-solid px-4 text-[13px] no-underline ${dark ? 'border-dark-line text-white' : 'border-line text-ink'}`}>Nova live</Link>
                   )}

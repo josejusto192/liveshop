@@ -1,5 +1,5 @@
 // PDFs gerados no servidor: resumo do pedido (comprador) e PDF para a marca (agrupado por empresa).
-import { Document, Page, renderToBuffer, StyleSheet, Text, View } from '@react-pdf/renderer';
+import { Document, Image, Page, renderToBuffer, StyleSheet, Text, View } from '@react-pdf/renderer';
 import { formatBRL, formatInt } from './money';
 
 const ink = '#111214';
@@ -100,82 +100,110 @@ export function renderSummaryPdf(d: SummaryData) {
 
 export type BrandPdfData = {
   platformName: string;
-  brandName: string;
+  logo: { data: Buffer; format: 'png' | 'jpg' } | null;
   title: string;
   filters: string;
   generatedAt: string;
-  companies: {
+  brands: {
     name: string;
-    cnpj: string | null;
-    email: string;
-    whatsapp: string;
-    orderCodes: string[];
-    lines: { liveName: string; product: string; sku: string; qty: number; unitPriceCents: number }[];
+    companies: {
+      name: string;
+      cnpj: string | null;
+      email: string;
+      whatsapp: string;
+      orderCodes: string[];
+      lines: { liveName: string; product: string; sku: string; qty: number; unitPriceCents: number; offsetS: number }[];
+    }[];
   }[];
 };
 
+function BrandSection({ d, b }: { d: BrandPdfData; b: BrandPdfData['brands'][number] }) {
+  const all = b.companies.flatMap((c) => c.lines);
+  const grandUnits = all.reduce((a, l) => a + l.qty, 0);
+  const grand = all.reduce((a, l) => a + l.qty * l.unitPriceCents, 0);
+  const multiLive = new Set(all.map((l) => l.liveName)).size > 1;
+  return (
+    <Page size="A4" style={s.page}>
+      <View style={s.brandRow}>
+        {d.logo ? <Image src={d.logo} style={{ height: 24, maxWidth: 120, marginRight: 8, objectFit: 'contain' }} /> : <View style={s.logo} />}
+        <Text style={s.brandName}>{d.platformName}</Text>
+      </View>
+      <Text style={s.h1}>Pedidos para {b.name}</Text>
+      <Text style={s.sub}>{d.title}</Text>
+      <Text style={s.sub}>{d.filters} · gerado em {d.generatedAt}</Text>
+      <View style={s.box}>
+        <View>
+          <Text style={s.boxLabel}>Total geral · {b.companies.length} {b.companies.length === 1 ? 'empresa' : 'empresas'}</Text>
+          <Text style={s.boxValue}>{formatBRL(grand)}</Text>
+        </View>
+        <View>
+          <Text style={s.boxLabel}>Unidades</Text>
+          <Text style={s.boxValue}>{formatInt(grandUnits)} un.</Text>
+        </View>
+      </View>
+      <View style={s.th}>
+        <Text style={s.cName}>Produto</Text>
+        <Text style={s.cSku}>SKU</Text>
+        <Text style={s.cQty}>Quantidade</Text>
+        <Text style={s.cUnit}>Preço/un.</Text>
+        <Text style={s.cSub}>Subtotal</Text>
+      </View>
+      {b.companies.map((c, k) => {
+        const units = c.lines.reduce((a, l) => a + l.qty, 0);
+        const total = c.lines.reduce((a, l) => a + l.qty * l.unitPriceCents, 0);
+        return (
+          <View key={k} wrap>
+            <View style={s.companyHead} wrap={false}>
+              <Text style={s.companyName}>{c.name}</Text>
+              <Text style={s.companyMeta}>
+                {[c.cnpj ? `CNPJ ${c.cnpj}` : null, c.email, c.whatsapp, c.orderCodes.join(', ')].filter(Boolean).join(' · ')}
+              </Text>
+            </View>
+            {c.lines.map((l, j) => (
+              <View key={j} style={s.tr} wrap={false}>
+                <View style={s.cName}>
+                  <Text>{l.product}</Text>
+                  {multiLive && <Text style={{ fontSize: 8, color: muted, marginTop: 1 }}>{l.liveName}</Text>}
+                </View>
+                <Text style={s.cSku}>{l.sku}</Text>
+                <Text style={s.cQty}>{formatInt(l.qty)} un.</Text>
+                <Text style={s.cUnit}>{formatBRL(l.unitPriceCents)}</Text>
+                <Text style={s.cSub}>{formatBRL(l.qty * l.unitPriceCents)}</Text>
+              </View>
+            ))}
+            <View style={s.totalRow} wrap={false}>
+              <Text>
+                Total {c.name}: {formatInt(units)} un. · {formatBRL(total)}
+              </Text>
+            </View>
+          </View>
+        );
+      })}
+      <View style={[s.totalRow, { marginTop: 22, fontSize: 12 }]} wrap={false}>
+        <Text>
+          Total geral: {formatInt(grandUnits)} un. · {formatBRL(grand)}
+        </Text>
+      </View>
+      <Text style={s.note}>Valores de atacado por unidade, sem frete e impostos.</Text>
+      <View style={s.footer} fixed>
+        <Text>{d.platformName} · {b.name}</Text>
+        <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
+      </View>
+    </Page>
+  );
+}
+
 function BrandDoc({ d }: { d: BrandPdfData }) {
-  const grandUnits = d.companies.reduce((a, c) => a + c.lines.reduce((x, l) => x + l.qty, 0), 0);
-  const grand = d.companies.reduce((a, c) => a + c.lines.reduce((x, l) => x + l.qty * l.unitPriceCents, 0), 0);
   return (
     <Document title={d.title} author={d.platformName}>
-      <Page size="A4" style={s.page}>
-        <View style={s.brandRow}>
-          <View style={s.logo} />
-          <Text style={s.brandName}>{d.platformName}</Text>
-        </View>
-        <Text style={s.h1}>Pedidos para {d.brandName}</Text>
-        <Text style={s.sub}>{d.title}</Text>
-        <Text style={s.sub}>{d.filters} · gerado em {d.generatedAt}</Text>
-        <View style={s.box}>
-          <View>
-            <Text style={s.boxLabel}>Total geral · {d.companies.length} {d.companies.length === 1 ? 'empresa' : 'empresas'}</Text>
-            <Text style={s.boxValue}>{formatBRL(grand)}</Text>
-          </View>
-          <View>
-            <Text style={s.boxLabel}>Unidades</Text>
-            <Text style={s.boxValue}>{formatInt(grandUnits)} un.</Text>
-          </View>
-        </View>
-        {d.companies.map((c, k) => {
-          const units = c.lines.reduce((a, l) => a + l.qty, 0);
-          const total = c.lines.reduce((a, l) => a + l.qty * l.unitPriceCents, 0);
-          return (
-            <View key={k} wrap>
-              <View style={s.companyHead} wrap={false}>
-                <Text style={s.companyName}>{c.name}</Text>
-                <Text style={s.companyMeta}>
-                  {[c.cnpj ? `CNPJ ${c.cnpj}` : null, c.email, c.whatsapp, c.orderCodes.join(', ')].filter(Boolean).join(' · ')}
-                </Text>
-              </View>
-              {c.lines.map((l, j) => (
-                <View key={j} style={s.tr} wrap={false}>
-                  <Text style={s.cName}>{l.product}</Text>
-                  <Text style={s.cSku}>{l.sku}</Text>
-                  <Text style={s.cQty}>{formatInt(l.qty)} un.</Text>
-                  <Text style={s.cUnit}>{formatBRL(l.unitPriceCents)}</Text>
-                  <Text style={s.cSub}>{formatBRL(l.qty * l.unitPriceCents)}</Text>
-                </View>
-              ))}
-              <View style={s.totalRow} wrap={false}>
-                <Text>
-                  Total {c.name}: {formatInt(units)} un. · {formatBRL(total)}
-                </Text>
-              </View>
-            </View>
-          );
-        })}
-        <View style={[s.totalRow, { marginTop: 22, fontSize: 12 }]} wrap={false}>
-          <Text>
-            Total geral: {formatInt(grandUnits)} un. · {formatBRL(grand)}
-          </Text>
-        </View>
-        <Text style={s.note}>Valores de atacado por unidade, sem frete e impostos.</Text>
-        <View style={s.footer} fixed>
-          <Text>{d.platformName} · {d.brandName}</Text>
-          <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
-        </View>
-      </Page>
+      {d.brands.length ? (
+        d.brands.map((b, i) => <BrandSection key={i} d={d} b={b} />)
+      ) : (
+        <Page size="A4" style={s.page}>
+          <Text style={s.h1}>Nenhum pedido no filtro</Text>
+          <Text style={s.sub}>{d.filters}</Text>
+        </Page>
+      )}
     </Document>
   );
 }

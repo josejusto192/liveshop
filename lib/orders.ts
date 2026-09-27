@@ -57,10 +57,12 @@ export async function getMyOrder(liveId: string, companyId: string, tx: Tx | typ
 
 async function lockProduct(tx: Tx, productId: string) {
   const [p] = await tx.select().from(schema.products).where(eq(schema.products.id, productId)).for('update');
+  // Mesma conta da view product_stock: itens ativos de pedidos não cancelados.
   const [{ reserved }] = await tx
     .select({ reserved: sql<number>`coalesce(sum(${schema.orderItems.qty}), 0)::int` })
     .from(schema.orderItems)
-    .where(and(eq(schema.orderItems.productId, productId), isNull(schema.orderItems.canceledAt)));
+    .innerJoin(schema.orders, eq(schema.orders.id, schema.orderItems.orderId))
+    .where(and(eq(schema.orderItems.productId, productId), isNull(schema.orderItems.canceledAt), sql`${schema.orders.status} <> 'canceled'`));
   return { product: p, reserved, available: p.stockTotal - reserved };
 }
 
@@ -123,6 +125,7 @@ export async function registerOrder(input: { liveId: string; companyId: string; 
         .returning();
       if (!order) [order] = await tx.select().from(schema.orders).where(and(eq(schema.orders.liveId, live.id), eq(schema.orders.companyId, input.companyId)));
     }
+    if (order.status !== 'draft') return fail('order_locked', 'Seu pedido nesta live já está com a agência. Fale com o suporte para alterar.', 409);
 
     const [line] = await tx
       .select()
@@ -239,7 +242,7 @@ export async function cancelOrderItem(input: { itemId: string; companyId: string
 
 async function lockOwnedItem(tx: Tx, itemId: string, companyId: string) {
   const [row] = await tx
-    .select({ item: schema.orderItems, companyId: schema.orders.companyId, liveId: schema.orders.liveId })
+    .select({ item: schema.orderItems, companyId: schema.orders.companyId, liveId: schema.orders.liveId, orderStatus: schema.orders.status })
     .from(schema.orderItems)
     .innerJoin(schema.orders, eq(schema.orders.id, schema.orderItems.orderId))
     .where(eq(schema.orderItems.id, itemId))
@@ -247,6 +250,7 @@ async function lockOwnedItem(tx: Tx, itemId: string, companyId: string) {
   if (!row || row.companyId !== companyId || row.item.canceledAt) return fail('not_found', 'Pedido não encontrado.', 404);
   const [live] = await tx.select().from(schema.lives).where(eq(schema.lives.id, row.liveId)).for('share');
   if (!live || live.status !== 'live') return fail('live_not_running', 'A live terminou: os pedidos não podem mais ser alterados.', 409);
+  if (row.orderStatus !== 'draft') return fail('order_locked', 'Seu pedido nesta live já está com a agência. Fale com o suporte para alterar.', 409);
   return { ok: true as const, item: row.item, live };
 }
 

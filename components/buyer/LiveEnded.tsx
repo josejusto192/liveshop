@@ -22,6 +22,7 @@ export function LiveEnded(p: Props) {
   const o = p.order;
   const count = o ? `${o.lines.length} ${o.lines.length === 1 ? 'produto' : 'produtos'}` : '';
   const pdfHref = o ? `/api/me/orders/${o.order.id}/summary.pdf` : '#';
+  const accountHref = has ? `/conta?pedido=${o!.order.id}` : '/conta';
   const lead = has
     ? `Seus pedidos foram enviados para a ${p.brandName}. Você recebe a fatura por e-mail, sem precisar fazer mais nada agora.`
     : `Você não registrou pedidos nesta live. Fique de olho nas próximas lives da ${p.brandName}.`;
@@ -96,7 +97,7 @@ export function LiveEnded(p: Props) {
           {has && (
             <a href={pdfHref} className="flex h-[54px] items-center justify-center rounded-full bg-ink text-[15px] font-medium text-white no-underline">Baixar resumo em PDF</a>
           )}
-          <Link href="/conta" className="flex h-[50px] items-center justify-center rounded-full border border-solid border-line text-[14px] text-ink no-underline">Acompanhar meus pedidos</Link>
+          <Link href={accountHref} className="flex h-[50px] items-center justify-center rounded-full border border-solid border-line text-[14px] text-ink no-underline">Acompanhar meus pedidos</Link>
         </aside>
       </div>
 
@@ -144,7 +145,7 @@ export function LiveEnded(p: Props) {
             <p className="m-0 text-[14px] text-muted">Nenhum pedido registrado nesta live.</p>
           )}
         </div>
-        <Link href="/conta" className="flex h-12 items-center justify-center rounded-full border border-solid border-dark-line text-[14px] text-white no-underline">Acompanhar meus pedidos</Link>
+        <Link href={accountHref} className="flex h-12 items-center justify-center rounded-full border border-solid border-dark-line text-[14px] text-white no-underline">Acompanhar meus pedidos</Link>
       </div>
     </>
   );

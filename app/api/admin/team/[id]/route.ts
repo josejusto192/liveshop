@@ -17,6 +17,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   }
   await db.transaction(async (tx) => {
     await tx.delete(schema.sessions).where(and(eq(schema.sessions.adminUserId, id)));
+    await tx.delete(schema.loginLinks).where(eq(schema.loginLinks.adminUserId, id));
     await tx.delete(schema.adminUsers).where(eq(schema.adminUsers.id, id));
   });
   return NextResponse.json({ ok: true });

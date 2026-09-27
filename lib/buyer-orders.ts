@@ -111,3 +111,67 @@ export function dateTimeBR(d: Date) {
 export async function latestOrderIds(companyId: string, limit = 50) {
   return db.select({ id: schema.orders.id }).from(schema.orders).where(eq(schema.orders.companyId, companyId)).orderBy(desc(schema.orders.createdAt)).limit(limit);
 }
+
+// ---------- Minha conta ----------
+
+const dayKey = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(d);
+
+/** "hoje, 14:34" no mesmo dia; senão "09/09" (com o ano quando não é o ano atual). */
+export function whenLabel(d: Date, now = new Date()) {
+  if (dayKey(d) === dayKey(now)) {
+    return `hoje, ${new Intl.DateTimeFormat('pt-BR', { timeZone: TZ, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(d)}`;
+  }
+  const sameYear = dayKey(d).slice(0, 4) === dayKey(now).slice(0, 4);
+  return new Intl.DateTimeFormat('pt-BR', { timeZone: TZ, day: '2-digit', month: '2-digit', ...(sameYear ? {} : { year: '2-digit' }) }).format(d);
+}
+
+export type TimelineStep = { label: string; when: string; state: 'done' | 'current' | 'todo' };
+
+const STEP_OF: Record<string, number> = { draft: 0, invoicing: 1, invoiced: 2, delivered: 3 };
+
+/** Linha do tempo em 4 etapas (Pedido registrado, Enviado à marca, Fatura emitida, Entregue). */
+export function buyerTimeline(
+  o: { status: string; createdAt: Date; sentToBrandAt: Date | null; invoicedAt: Date | null; deliveredAt: Date | null },
+  liveStatus: string,
+  now = new Date(),
+): TimelineStep[] {
+  const dates = [o.createdAt, o.sentToBrandAt, o.invoicedAt, o.deliveredAt];
+  // Cancelado: a etapa atual é a última que chegou a acontecer.
+  const current = o.status === 'canceled' ? Math.max(0, dates.reduce((a, d, i) => (d ? i : a), 0)) : (STEP_OF[o.status] ?? 0);
+  return ['Pedido registrado', 'Enviado à marca', 'Fatura emitida', 'Entregue'].map((label, i) => {
+    const d = dates[i];
+    const state = i < current ? 'done' : i === current ? 'current' : 'todo';
+    const when = d && i <= current ? whenLabel(d, now) : i === 1 && liveStatus !== 'ended' ? 'após a live' : 'aguardando';
+    return { label, when, state };
+  });
+}
+
+export async function accountOrders(companyId: string, now = new Date()) {
+  const rows = await ordersForCompany(companyId);
+  const lines = rows.length
+    ? await db.execute<{ order_id: string; id: string; name: string; sku: string; image_url: string | null; qty: number; unit_price_cents: number }>(sql`
+        select oi.order_id, oi.id, p.name, p.sku, p.image_url, oi.qty, oi.unit_price_cents
+        from order_items oi join products p on p.id = oi.product_id
+        where oi.order_id in (${sql.join(rows.map((r) => sql`${r.id}::uuid`), sql`, `)}) and oi.canceled_at is null
+        order by oi.created_at`)
+    : [];
+  return rows.map((r) => ({
+    id: r.id,
+    code: r.code,
+    status: r.status,
+    statusLabel: ORDER_STATUS_LABEL[r.status] ?? r.status,
+    liveName: r.liveName,
+    liveStatus: r.liveStatus,
+    brandName: r.brandName,
+    dateLabel: whenLabel(r.liveAt, now),
+    units: r.units,
+    cents: r.cents,
+    // Fatura disponível só depois de faturado e com o PDF anexado.
+    invoice: r.status === 'invoiced' || r.status === 'delivered' ? (r.hasInvoice ? 'ready' : 'by_email') : 'pending',
+    steps: buyerTimeline(r, r.liveStatus, now),
+    items: lines
+      .filter((l) => l.order_id === r.id)
+      .map((l) => ({ id: l.id, name: l.name, sku: l.sku, imageUrl: l.image_url, qty: l.qty, unitPriceCents: l.unit_price_cents, subtotalCents: l.qty * l.unit_price_cents })),
+  }));
+}
+export type AccountOrder = Awaited<ReturnType<typeof accountOrders>>[number];

@@ -5,7 +5,7 @@ import { testOutbox } from '@/lib/mail';
 export async function resetDb() {
   await db.execute(sql`truncate table
     order_item_events, order_items, orders, stock_alerts, live_attendance, support_tickets,
-    sessions, otp_codes, live_items, lives, products, brands, companies, admin_users, settings
+    login_links, sessions, otp_codes, live_items, lives, products, brands, companies, admin_users, settings
     restart identity cascade`);
   await db.execute(sql`alter sequence order_code_seq restart with 1`);
   testOutbox.length = 0;

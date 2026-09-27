@@ -46,3 +46,18 @@ export const IconQr = ({ size = 16 }: P) => (
 export const IconSignal = ({ size = 16 }: P) => (
   <svg {...base(size)} strokeWidth={2}><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 4v16" /></svg>
 );
+export const IconDownload = ({ size = 14 }: P) => (
+  <svg {...base(size)} strokeWidth={2.2}><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg>
+);
+export const IconChevronDown = ({ size = 12 }: P) => (
+  <svg {...base(size)} strokeWidth={2.2}><path d="M6 9l6 6 6-6" /></svg>
+);
+export const IconWhatsapp = ({ size = 18 }: P) => (
+  <svg {...base(size)} strokeWidth={1.8}><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z" /></svg>
+);
+export const IconMailBox = ({ size = 18 }: P) => (
+  <svg {...base(size)} strokeWidth={1.8}><rect x="3" y="5" width="18" height="14" rx="3" /><path d="M3 8l9 6 9-6" /></svg>
+);
+export const IconPaperclip = ({ size = 16 }: P) => (
+  <svg {...base(size)} strokeWidth={2}><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9" /></svg>
+);
