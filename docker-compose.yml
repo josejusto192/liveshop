@@ -1,0 +1,32 @@
+# Desenvolvimento: Postgres + MediaMTX em containers; o app roda fora (pnpm dev).
+# Produção usa docker-compose.coolify.yml (app, Postgres e MediaMTX na mesma VPS).
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: liveshop
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/docker-init-test-db.sql:/docker-entrypoint-initdb.d/init-test-db.sql:ro
+
+  mediamtx:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    ports:
+      - "8889:8889"       # WebRTC/WHIP (a tela Transmitir publica aqui)
+      - "8189:8189/udp"   # mídia WebRTC
+      - "8888:8888"       # HLS (player do comprador)
+    environment:
+      # O app roda fora do Docker no dev: a autenticação chama o host.
+      MTX_AUTHHTTPADDRESS: http://host.docker.internal:3000/api/internal/mediamtx/auth
+      MTX_WEBRTCADDITIONALHOSTS: ${MEDIAMTX_PUBLIC_HOST:-127.0.0.1}
+    volumes:
+      - ./mediamtx.yml:/mediamtx.yml:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  pgdata:

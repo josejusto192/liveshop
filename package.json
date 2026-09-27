@@ -1,0 +1,45 @@
+{
+  "name": "liveshop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "docker compose up -d && next dev",
+    "dev:app": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.3",
+    "exceljs": "^4.4.0",
+    "geist": "^1.7.2",
+    "next": "^15.5.26",
+    "postgres": "^3.4.9",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.6.1",
+    "dotenv": "^18.0.4",
+    "drizzle-kit": "^0.31.11",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "@parcel/watcher"
+    ]
+  }
+}

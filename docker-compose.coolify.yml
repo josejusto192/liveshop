@@ -1,0 +1,65 @@
+# Produção no Coolify: uma única VPS com três serviços (docs/04-arquitetura.md).
+# - app: Next.js, exposto pelo proxy do Coolify no domínio principal (HTTPS).
+# - postgres: só na rede interna.
+# - mediamtx: WebRTC/WHIP 8889 pelo proxy do Coolify em video.dominio.com.br; HLS 8888 pelo proxy em
+#   hls.dominio.com.br; mídia WebRTC em 8189/UDP publicada direto no IP da VPS (abrir no firewall).
+#   Sem RTMP/OBS: a transmissão sai do navegador (tela Transmitir).
+# Os domínios são definidos no Coolify (variáveis SERVICE_FQDN_*). Segredos ficam nas variáveis do Coolify.
+services:
+  app:
+    build: .
+    environment:
+      SERVICE_FQDN_APP_3000: ${SERVICE_FQDN_APP_3000}
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@postgres:5432/liveshop
+      APP_URL: ${APP_URL}
+      SESSION_SECRET: ${SESSION_SECRET}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      MAIL_FROM: ${MAIL_FROM}
+      WHIP_BASE_URL: ${WHIP_BASE_URL}       # https://video.dominio.com.br
+      HLS_BASE_URL: ${HLS_BASE_URL}         # https://hls.dominio.com.br (ou a pull zone da CDN)
+      TURN_URL: ${TURN_URL:-}
+      TURN_USER: ${TURN_USER:-}
+      TURN_PASS: ${TURN_PASS:-}
+      MEDIAMTX_AUTH_SECRET: ${MEDIAMTX_AUTH_SECRET}
+      SUPPORT_WHATSAPP: ${SUPPORT_WHATSAPP}
+      SUPPORT_EMAIL: ${SUPPORT_EMAIL}
+      UPLOAD_DIR: /data/uploads
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: liveshop
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d liveshop"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  mediamtx:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    environment:
+      SERVICE_FQDN_MEDIAMTX_8889: ${SERVICE_FQDN_MEDIAMTX_8889}   # video.dominio.com.br (WHIP)
+      SERVICE_FQDN_MEDIAMTX_8888: ${SERVICE_FQDN_MEDIAMTX_8888}   # hls.dominio.com.br (HLS)
+      # Autenticação pela rede interna, sem sair para a internet.
+      MTX_AUTHHTTPADDRESS: http://app:3000/api/internal/mediamtx/auth
+      MTX_WEBRTCADDITIONALHOSTS: ${MEDIAMTX_PUBLIC_HOST}           # IP/domínio público da VPS
+    ports:
+      - "8189:8189/udp"   # mídia WebRTC (liberar 8189/UDP no firewall da VPS)
+    volumes:
+      - ./mediamtx.yml:/mediamtx.yml:ro
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  uploads:

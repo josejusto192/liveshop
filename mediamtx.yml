@@ -1,0 +1,33 @@
+# MediaMTX: recebe a transmissão do navegador por WebRTC/WHIP e entrega LL-HLS aos compradores.
+# Na produção roda na mesma VPS do app (docs/04-arquitetura.md). Sem RTMP/OBS.
+logLevel: info
+
+# Toda publicação e leitura passa pelo app (POST /api/internal/mediamtx/auth, M2):
+# leitura liberada; publicação só com token de publicação válido de dona/operador.
+# O endereço vem de MTX_AUTHHTTPADDRESS (docker-compose).
+authMethod: http
+
+api: no
+rtmp: no
+rtsp: no
+srt: no
+
+webrtc: yes
+webrtcAddress: :8889            # sinalização WHIP (HTTP; HTTPS pelo proxy do Coolify)
+webrtcLocalUDPAddress: :8189    # mídia (UDP, aberta no firewall)
+webrtcLocalTCPAddress: ''
+# webrtcAdditionalHosts vem de MTX_WEBRTCADDITIONALHOSTS (IP/domínio público da VPS).
+webrtcAllowOrigin: '*'
+
+hls: yes
+hlsAddress: :8888
+hlsVariant: lowLatency
+hlsAllowOrigin: '*'
+
+paths:
+  # live/{liveId}
+  # Se o Safari do iPhone não tocar o áudio Opus no HLS, ligar a conversão para AAC (docs/04),
+  # com rtsp habilitado só para uso interno do FFmpeg:
+  #   runOnReady: ffmpeg -i rtsp://localhost:$RTSP_PORT/$MTX_PATH -c:v copy -c:a aac -f rtsp rtsp://localhost:$RTSP_PORT/$MTX_PATH-aac
+  #   runOnReadyRestart: yes
+  "~^live/[0-9a-f-]{36}(-aac)?$": {}
