@@ -1,0 +1,8 @@
+# Configurações do pnpm (lidas daqui a partir do pnpm 10).
+# Pacotes que podem rodar script de instalação (binários nativos).
+onlyBuiltDependencies:
+  - 'esbuild'
+  - 'sharp'
+  - '@parcel/watcher'
+# Não bloquear pacotes recém-publicados que já estão travados no pnpm-lock.yaml.
+minimumReleaseAge: 0
