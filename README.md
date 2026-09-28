@@ -2,13 +2,22 @@
 
 Plataforma de live commerce B2B: a agência transmite lives de marcas direto do navegador e empresas compradoras registram pedidos de estoque durante a live, sem pagamento. Especificação completa em `docs/` (comece pelo `CLAUDE.md`), telas de referência em `design/`.
 
+## Usuários de teste
+
+| Papel | E-mail | Onde entrar |
+|---|---|---|
+| Admin (dona, acesso a tudo) | `admin@teste.com` | http://localhost:3000/admin |
+| Comprador (Loja Teste) | `comprador@teste.com` | link da live ou http://localhost:3000/conta |
+
+Não há senha: o acesso é por código de 6 dígitos enviado por e-mail. Sem `RESEND_API_KEY`, o código aparece no terminal onde está rodando o `pnpm dev`. Rodar `pnpm db:seed` de novo recria tudo do zero.
+
 ## Teste rápido com a câmera do notebook
 
 1. `cp .env.example .env`, `pnpm install` e `pnpm db:setup` (sobe Postgres e MediaMTX no Docker, aplica as migrações e carrega os dados de exemplo).
-2. `pnpm dev` e abra http://localhost:3000/admin. Entre com `admin@agencia.com.br`: o código de 6 dígitos aparece no terminal do `pnpm dev`.
+2. `pnpm dev` e abra http://localhost:3000/admin. Entre com `admin@teste.com`: o código de 6 dígitos aparece no terminal do `pnpm dev`.
 3. Na Visão geral, abra a **Central** da live "Lançamento Coleção Verão" e clique em **Transmitir** (abre numa aba nova). Permita câmera e microfone, escolha a webcam e o microfone e clique em **Iniciar transmissão**.
 4. Volte à Central: quando aparecer "Sinal recebido", clique em **Iniciar live**.
-5. Numa janela anônima (ou outro navegador), abra http://localhost:3000/l/lancamento-colecao-verao e entre com `compras@papelariacentral.com.br` (ou cadastre uma empresa nova). O código também sai no terminal. O vídeo chega com alguns segundos de atraso; registre pedidos no produto no ar.
+5. Numa janela anônima (ou outro navegador), abra http://localhost:3000/l/lancamento-colecao-verao e entre com `comprador@teste.com` (ou cadastre uma empresa nova). O código também sai no terminal. O vídeo chega com alguns segundos de atraso; registre pedidos no produto no ar.
 6. Use fone de ouvido ou deixe o som do comprador desligado, senão o microfone capta o áudio da própria live (eco).
 7. Encerre pela Central e confira o resumo do comprador, **Pedidos** (filtros, "Marcar como faturado", CSV/Excel/PDF), **Empresas** e **Minha conta** (http://localhost:3000/conta).
 

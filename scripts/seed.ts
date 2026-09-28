@@ -29,6 +29,8 @@ async function main() {
     { name: 'Administradora da agência', email: 'admin@agencia.com.br', role: 'owner' },
     { name: 'Operador de live', email: 'operacao@agencia.com.br', role: 'operator' },
     { name: 'Financeiro', email: 'financeiro@agencia.com.br', role: 'finance' },
+    // Usuário de teste do painel (dona: acesso a tudo).
+    { name: 'Admin Teste', email: 'admin@teste.com', role: 'owner' },
   ]);
 
   // Uma inserção por vez para a ordem de criação (created_at) seguir a do protótipo.
@@ -99,6 +101,8 @@ async function main() {
     ['Loja do Shopping Norte', 'gerencia@shoppingnorte.com.br', '(19) 99104-7732', 'Campinas', '2026-09-03'],
     ['Mercado Ponto Certo', 'compras@pontocerto.com.br', '(15) 99102-3344', 'Sorocaba', '2026-09-05'],
     ['Bazar Três Irmãos', 'bazar3irmaos@email.com.br', '(11) 96611-2080', null, '2026-09-08'],
+    // Comprador de teste (sem pedidos: comece por ele numa live nova).
+    ['Loja Teste', 'comprador@teste.com', '(11) 99999-0000', 'São Paulo', '2026-09-20'],
   ];
   const companies: (typeof schema.companies.$inferSelect)[] = [];
   for (const [name, email, whatsapp, city, since] of companyRows) {
@@ -185,6 +189,7 @@ async function main() {
   console.log('Seed pronto.');
   console.log(`  Live: /l/${live.slug} (${startsAt.toISOString()})`);
   console.log(`  Live encerrada com pedidos: /l/${past.slug}`);
+  console.log('  Teste: admin@teste.com (painel) e comprador@teste.com (comprador). O código de acesso aparece no terminal.');
   console.log('  Admin: admin@agencia.com.br (dona), operacao@agencia.com.br, financeiro@agencia.com.br');
   await sqlClient.end();
 }
