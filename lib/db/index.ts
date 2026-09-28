@@ -13,7 +13,7 @@ function url() {
 }
 
 // Reaproveita a conexão entre recargas do `next dev`.
-export const sqlClient = globalForDb.__sql ?? postgres(url(), { max: 10 });
+export const sqlClient = globalForDb.__sql ?? postgres(url(), { max: Number(process.env.DATABASE_POOL_MAX) || 20 });
 export const db: Db = globalForDb.__db ?? drizzle(sqlClient, { schema });
 
 if (process.env.NODE_ENV !== 'production') {

@@ -3,7 +3,7 @@
 import { EventEmitter } from 'node:events';
 
 export type Audience = 'buyer' | 'admin' | 'all';
-export type LiveEvent = { event: string; data: unknown; audience: Audience };
+export type LiveEvent = { event: string; data: unknown; audience: Audience; frame: () => Uint8Array };
 
 type Globals = {
   __lsBus?: EventEmitter;
@@ -19,8 +19,35 @@ const bus =
     return e;
   })());
 
+const enc = new TextEncoder();
+
+/** Publica um evento. O quadro SSE é serializado uma única vez e reaproveitado por todas as conexões. */
 export function publish(liveId: string, event: string, data: unknown, audience: Audience = 'all') {
-  bus.emit(liveId, { event, data, audience } satisfies LiveEvent);
+  let bytes: Uint8Array | undefined;
+  const frame = () => (bytes ??= enc.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`));
+  bus.emit(liveId, { event, data, audience, frame } satisfies LiveEvent);
+}
+
+// Picos de pedidos: no máximo um evento por chave a cada `ms`, sempre com o dado mais recente (trailing).
+const throttles = new Map<string, { last: number; timer?: ReturnType<typeof setTimeout>; args?: [string, string, unknown, Audience] }>();
+export function publishThrottled(key: string, ms: number, liveId: string, event: string, data: unknown, audience: Audience = 'all') {
+  const now = Date.now();
+  const t = throttles.get(key) ?? { last: 0 };
+  throttles.set(key, t);
+  if (!t.timer && now - t.last >= ms) {
+    t.last = now;
+    publish(liveId, event, data, audience);
+    return;
+  }
+  t.args = [liveId, event, data, audience];
+  if (!t.timer) {
+    t.timer = setTimeout(() => {
+      t.timer = undefined;
+      t.last = Date.now();
+      if (t.args) publish(...t.args);
+      t.args = undefined;
+    }, Math.max(0, ms - (now - t.last)));
+  }
 }
 
 export function subscribe(liveId: string, fn: (e: LiveEvent) => void) {

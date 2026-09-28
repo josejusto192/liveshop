@@ -137,6 +137,8 @@ mediamtx.yml
 - Dimensionar a VPS com pelo menos 4 vCPU / 8 GB e porta de 1 Gbps com tráfego suficiente para as horas de live do mês.
 - `// simplificação: vídeo e app na mesma VPS, separar o MediaMTX numa VPS própria se a live disputar recursos com o app mesmo com a CDN ligada`
 - Registro de pedido deve responder em < 300 ms.
+- Medido com `pnpm load:test` (build de produção, 300 conexões SSE e uma transmissão ativa na mesma máquina): pedido isolado ~50 ms; 300 pedidos espalhados em 5 s (60/s) com p95 de 47 ms. A vazão por instância fica em torno de 130 pedidos/s: se os 300 compradores clicarem no mesmo segundo, as respostas passam de 1 s (os pedidos entram todos, só demoram). `// simplificação: uma instância do app, trocar por mais instâncias com LISTEN/NOTIFY no lugar do barramento em memória quando o pico passar de ~100 pedidos por segundo`
+- Nos picos, os eventos `stock` (por produto) e `activity` são agrupados: no máximo um a cada 250 ms e 500 ms, sempre com o valor mais recente. O quadro SSE de cada evento é serializado uma vez e reaproveitado por todas as conexões.
 
 ## Alternativa (se o cliente preferir)
 

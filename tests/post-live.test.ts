@@ -9,6 +9,8 @@ import { brandPdfSections, ordersCsv, ordersXlsx } from '@/lib/order-exports';
 import { accountOrders, buyerTimeline } from '@/lib/buyer-orders';
 import { adminTickets, companyTickets, createTicket, setTicketStatus } from '@/lib/support';
 import { companyDetail, companyKpis, listCompanies } from '@/lib/admin-companies';
+import { afterLiveEnded } from '@/lib/post-live';
+import { testOutbox } from '@/lib/mail';
 import { at, resetDb, seedLive } from './helpers';
 
 async function company(i: number, city: string | null = null) {
@@ -181,5 +183,32 @@ describe('chamados de suporte', () => {
     expect(await setTicketStatus(open[0].id, 'answered')).toBe(true);
     expect(await adminTickets()).toHaveLength(0);
     expect((await companyTickets(a.id))[0].status).toBe('answered');
+  });
+});
+
+describe('e-mails depois da live', () => {
+  beforeEach(resetDb);
+
+  it('resumo com PDF para quem pediu e aceita e-mail; aviso a cada mudança de status', async () => {
+    const { a, b, orderA, orderB } = await endedLive();
+    await db.update(schema.companies).set({ notifyEmail: false }).where(eq(schema.companies.id, b.id));
+    testOutbox.length = 0;
+    expect(await afterLiveEnded(orderA.liveId)).toBe(1);
+    expect(testOutbox).toHaveLength(1);
+    const m = testOutbox[0];
+    expect(m.to).toBe(a.email);
+    expect(m.subject).toBe('Resumo dos seus pedidos · Lançamento Coleção Verão');
+    expect(m.text).toContain('Produto 1: 100 un. × R$ 89,90 = R$ 8.990,00');
+    expect(m.text).toContain('Total estimado: R$ 13.485,00 (150 un.)');
+    expect(m.attachments?.[0].filename).toBe(`resumo-${orderA.code.replace('#', '')}.pdf`);
+    expect(m.attachments?.[0].content.subarray(0, 5).toString()).toBe('%PDF-');
+
+    testOutbox.length = 0;
+    await setOrdersStatus([orderA.id, orderB.id], 'invoicing');
+    // B desligou os avisos por e-mail.
+    expect(testOutbox.map((x) => [x.to, x.subject])).toEqual([[a.email, `Seu pedido ${orderA.code} foi enviado à marca`]]);
+    testOutbox.length = 0;
+    await setOrdersStatus([orderA.id], 'draft');
+    expect(testOutbox).toHaveLength(0);
   });
 });

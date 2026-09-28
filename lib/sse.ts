@@ -1,7 +1,8 @@
 // Resposta Server-Sent Events para route handlers. Mantém a conexão viva e limpa tudo ao fechar.
 export type Send = (event: string, data: unknown) => void;
+export type SendFrame = (bytes: Uint8Array) => void;
 
-export function sseResponse(req: Request, open: (send: Send) => Promise<(() => void) | void> | (() => void) | void) {
+export function sseResponse(req: Request, open: (send: Send, sendFrame: SendFrame) => Promise<(() => void) | void> | (() => void) | void) {
   const enc = new TextEncoder();
   let closed = false;
   let cleanup: (() => void) | void;
@@ -27,20 +28,21 @@ export function sseResponse(req: Request, open: (send: Send) => Promise<(() => v
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       controllerRef = controller;
-      const write = (chunk: string) => {
+      const writeBytes = (bytes: Uint8Array) => {
         if (closed) return;
         try {
-          controller.enqueue(enc.encode(chunk));
+          controller.enqueue(bytes);
         } catch {
           finish();
         }
       };
+      const write = (chunk: string) => writeBytes(enc.encode(chunk));
       req.signal.addEventListener('abort', finish);
       write('retry: 3000\n\n');
       const send: Send = (event, data) => write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
       ping = setInterval(() => write(': ping\n\n'), 15_000);
       try {
-        const c = await open(send);
+        const c = await open(send, writeBytes);
         if (closed) c?.();
         else cleanup = c;
       } catch (e) {

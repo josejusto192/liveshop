@@ -1,7 +1,7 @@
 // Fluxo de acesso (cadastro/login por código) usado pelas rotas /api/auth/*.
 import { eq } from 'drizzle-orm';
 import { db, schema } from './db';
-import { sendMail } from './mail';
+import { senderFrom, sendMail } from './mail';
 import { OTP_MESSAGES, requestCode, verifyCode, type OtpSubject } from './otp';
 import { getSettings } from './settings';
 import { createSession } from './auth';
@@ -25,7 +25,7 @@ export function formatWhatsapp(digits: string) {
 async function mailCode(email: string, code: string, ttlMin: number) {
   const s = await getSettings();
   const subject = (s.mailSubject || 'Seu código para entrar na live: {código}').replace('{código}', code);
-  const from = s.mailFromEmail ? `${s.mailFromName || s.platformName} <${s.mailFromEmail}>` : undefined;
+  const from = senderFrom(s);
   await sendMail({
     to: email,
     from,

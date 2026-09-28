@@ -45,6 +45,10 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
   ]);
 
   const live = lives.find((l) => l.id === f.liveId);
+  const brandIds = [...new Set(lines.map((l) => l.brandId))];
+  const brandEmails = brandIds.length
+    ? await db.execute<{ name: string; email: string | null }>(sql`select name, orders_email as email from brands where id in (${sql.join(brandIds.map((id) => sql`${id}::uuid`), sql`, `)}) order by name`)
+    : [];
   return (
     <PedidosView
       filters={f}
@@ -59,6 +63,7 @@ export default async function Pedidos({ searchParams }: { searchParams: Promise<
       liveDurationS={live?.duration_s ?? Math.max(0, perMinute.length - 1) * 60}
       canStatus={can(admin.role, 'orders:status')}
       canExport={can(admin.role, 'orders:export')}
+      brandEmails={brandEmails.map((b) => ({ name: b.name, email: b.email }))}
       shown={SHOW}
     />
   );

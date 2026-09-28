@@ -9,6 +9,7 @@ import { formatBRL, formatInt } from '@/lib/money';
 import { initialsOf } from '@/lib/phone';
 import { ADMIN_STATUS_LABEL, filtersToQuery, offsetLabel, STATUS_PILL, type OrderFilters, type OrderTab } from '@/lib/orders-shared';
 import type { AdminOrderLine } from '@/lib/admin-orders';
+import { useDismiss } from '@/components/useDismiss';
 import { OrderPanel } from './OrderPanel';
 
 type Props = {
@@ -25,6 +26,7 @@ type Props = {
   canStatus: boolean;
   canExport: boolean;
   shown: number;
+  brandEmails: { name: string; email: string | null }[];
 };
 
 const TABS: [OrderTab, string][] = [['draft', 'Rascunho'], ['invoiced', 'Faturados'], ['canceled', 'Cancelados']];
@@ -42,6 +44,12 @@ export function PedidosView(p: Props) {
   const [minOpen, setMinOpen] = useState(false);
   const [dlOpen, setDlOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [pdfMenu, setPdfMenu] = useState(false);
+  const [sending, setSending] = useState(false);
+  const pdfRef = useRef<HTMLDivElement>(null);
+  const dlRef = useRef<HTMLDivElement>(null);
+  useDismiss(pdfRef, pdfMenu, () => setPdfMenu(false));
+  useDismiss(dlRef, dlOpen, () => setDlOpen(false));
 
   // Navega mantendo os filtros; "Todas" as lives vai explícito na URL (senão a tela volta para a última live).
   function go(patch: Partial<OrderFilters>) {
@@ -92,6 +100,18 @@ export function PedidosView(p: Props) {
     router.refresh();
   }
 
+  async function sendToBrand() {
+    setSending(true);
+    const res = await fetch(`/api/admin/orders/send-to-brand?${exportQs}`, { method: 'POST' });
+    const data = await res.json().catch(() => ({}));
+    setSending(false);
+    setPdfMenu(false);
+    if (!res.ok) return flash(data.error?.message ?? 'Não foi possível enviar.');
+    const sent = data.sent as { brand: string; email: string }[];
+    flash(sent.length === 1 ? `PDF enviado para ${sent[0].email}` : `PDF enviado para ${sent.length} marcas`);
+    router.refresh();
+  }
+
   function toggle(id: string) {
     setSel((s) => {
       const n = new Set(s);
@@ -110,9 +130,30 @@ export function PedidosView(p: Props) {
           <>
             <a href={`/api/admin/orders/export.csv?${exportQs}`} download onClick={() => flash('Arquivo CSV gerado com os pedidos do filtro')} className="flex h-11 items-center rounded-full bg-white px-[18px] text-[14px] text-ink no-underline">CSV</a>
             <a href={`/api/admin/orders/export.xlsx?${exportQs}`} download onClick={() => flash('Planilha Excel gerada com os pedidos do filtro')} className="flex h-11 items-center rounded-full bg-white px-[18px] text-[14px] text-ink no-underline">Excel</a>
-            <a href={`/api/admin/orders/export.pdf?${exportQs}`} download onClick={() => flash(pdfToast)} className="flex h-11 items-center gap-[10px] rounded-full bg-ink pl-2 pr-5 text-[14px] font-medium text-white no-underline">
-              <span className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-accent text-ink"><IconDownload /></span>PDF para a marca
-            </a>
+            <div ref={pdfRef} className="relative flex h-11 items-center rounded-full bg-ink">
+              <a href={`/api/admin/orders/export.pdf?${exportQs}`} download onClick={() => flash(pdfToast)} className="flex h-11 items-center gap-[10px] rounded-l-full pl-2 pr-3 text-[14px] font-medium text-white no-underline">
+                <span className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-accent text-ink"><IconDownload /></span>PDF para a marca
+              </a>
+              <span className="h-5 w-px bg-dark-line" aria-hidden />
+              <button type="button" aria-label="Enviar o PDF para a marca por e-mail" aria-expanded={pdfMenu} onClick={() => setPdfMenu((o) => !o)} className="flex h-11 w-10 items-center justify-center rounded-r-full border-none bg-transparent pr-1 text-white">
+                <IconChevronDown />
+              </button>
+              {pdfMenu && (
+                <div className="anim-fade absolute right-0 top-[52px] z-30 flex w-[300px] flex-col gap-2 rounded-[18px] bg-white p-3 text-ink shadow-[0_16px_40px_rgba(17,18,20,0.18)]">
+                  <span className="px-1 text-[13px] font-medium">Enviar por e-mail</span>
+                  {p.brandEmails.length === 0 && <span className="px-1 text-[12px] text-muted">Nenhum pedido no filtro.</span>}
+                  {p.brandEmails.map((b) => (
+                    <span key={b.name} className="px-1 text-[12px] text-muted">
+                      {b.name}: {b.email ?? 'sem e-mail de pedidos (cadastre em Marcas)'}
+                    </span>
+                  ))}
+                  <button type="button" onClick={sendToBrand} disabled={sending || !p.brandEmails.some((b) => b.email)} className="mt-1 h-10 rounded-full border-none bg-ink text-[13px] font-medium text-white disabled:opacity-50">
+                    {sending ? 'Enviando…' : 'Enviar PDF para a marca'}
+                  </button>
+                  <span className="px-1 text-[11px] leading-[1.4] text-muted">Os pedidos enviados aparecem como “Enviado à marca” na linha do tempo do comprador.</span>
+                </div>
+              )}
+            </div>
           </>
         )}
       </PageHeader>
@@ -221,7 +262,7 @@ export function PedidosView(p: Props) {
           </span>
           <button type="button" onClick={() => setSel(new Set())} className="h-10 whitespace-nowrap rounded-full border border-solid border-dark-line bg-transparent px-4 text-[13px] text-white">Limpar seleção</button>
           {p.canExport && (
-            <div className="relative">
+            <div ref={dlRef} className="relative">
               <button type="button" aria-expanded={dlOpen} onClick={() => setDlOpen((o) => !o)} className="h-10 whitespace-nowrap rounded-full border border-solid border-dark-line bg-transparent px-4 text-[13px] text-white">Baixar selecionados</button>
               {dlOpen && (
                 <div className="anim-fade absolute bottom-12 left-0 flex w-[190px] flex-col gap-1 rounded-2xl bg-white p-2 text-ink shadow-[0_16px_40px_rgba(17,18,20,0.2)]">

@@ -227,7 +227,9 @@ export async function setOrdersStatus(orderIds: string[], status: OrderStatus, n
   if (res.touched.length) {
     // Cancelar (ou desfazer o cancelamento) muda o estoque: avisa as lives no ar com esses produtos.
     if (status === 'canceled' || res.wasCanceled) await broadcastStockFor(res.touched);
-    await notifyOrderStatus(res.touched, status).catch((e) => console.error('[pedidos] aviso de status falhou', e));
+    // E-mails saem em segundo plano para não segurar a resposta (nos testes, espera para conferir a caixa de saída).
+    const mails = notifyOrderStatus(res.touched, status).catch((e) => console.error('[pedidos] aviso de status falhou', e));
+    if (process.env.NODE_ENV === 'test') await mails;
   }
   return { ok: true, changed: res.changed };
 }

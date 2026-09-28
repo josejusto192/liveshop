@@ -14,9 +14,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const { id } = await params;
   const full = await loadLive(id);
   if (!full) return apiError('not_found', 'Live não encontrada.', 404);
-  return sseResponse(req, async (send) => {
+  return sseResponse(req, async (send, sendFrame) => {
     const unsub = subscribe(id, (e) => {
-      if (e.audience !== 'buyer') send(e.event, e.data);
+      if (e.audience !== 'buyer') sendFrame(e.frame());
     });
     send('snapshot', await adminSnapshot(full, { signal: signalOf(id) }));
     return unsub;

@@ -13,7 +13,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
   if (!company) return apiError('unauthorized', 'Entre com o código para assistir.', 401);
   const l = await liveIdBySlug((await params).slug);
   if (!l) return apiError('not_found', 'Live não encontrada.', 404);
-  return sseResponse(req, async (send) => {
+  return sseResponse(req, async (send, sendFrame) => {
     const full = await loadLive(l.id);
     if (!full) return;
     if (full.live.status === 'live') await recordAttendance(l.id, company.id);
@@ -26,7 +26,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
         if (d.companyId !== company.id) return;
       }
       if (e.event === 'status' && (e.data as { status: string }).status === 'live') recordAttendance(l.id, company.id).catch(() => {});
-      send(e.event, e.data);
+      sendFrame(e.frame());
     });
     send('snapshot', buyerSnapshot(full));
     return () => {

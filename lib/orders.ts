@@ -2,11 +2,17 @@
 // (SELECT ... FOR UPDATE) na mesma transação para nunca vender além do estoque.
 import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { db, schema, type Tx } from './db';
-import { publish } from './events';
+import { publish, publishThrottled } from './events';
 import { companyInitials, graceItemId } from './live-state';
 import { formatInt } from './money';
 
 export type OrderFail = { ok: false; code: string; message: string; status: number; extra?: Record<string, unknown> };
+/** Desfaz a transação devolvendo uma falha pronta para a tela. */
+class Rollback extends Error {
+  constructor(public result: OrderFail) {
+    super(result.code);
+  }
+}
 const fail = (code: string, message: string, status = 400, extra?: Record<string, unknown>): OrderFail => ({ ok: false, code, message, status, extra });
 
 export type MyOrderItem = {
@@ -56,7 +62,7 @@ export async function getMyOrder(liveId: string, companyId: string, tx: Tx | typ
 }
 
 async function lockProduct(tx: Tx, productId: string) {
-  const [p] = await tx.select().from(schema.products).where(eq(schema.products.id, productId)).for('update');
+  const [p] = await tx.select().from(schema.products).where(eq(schema.products.id, productId)).for('no key update');
   // Mesma conta da view product_stock: itens ativos de pedidos não cancelados.
   const [{ reserved }] = await tx
     .select({ reserved: sql<number>`coalesce(sum(${schema.orderItems.qty}), 0)::int` })
@@ -74,14 +80,15 @@ const offsetOf = (startedAt: Date | null, now: Date) => (startedAt ? Math.max(0,
 
 type Effects = { liveId: string; companyId: string; productId: string; available: number; feed?: { company: string; product: string; qty: number; liveOffsetS: number; id: string }; activity?: string };
 
-async function emit(e: Effects) {
-  publish(e.liveId, 'stock', { productId: e.productId, available: Math.max(0, e.available) }, 'all');
+async function emit(e: Effects): Promise<MyOrder> {
+  publishThrottled(`${e.liveId}:stock:${e.productId}`, 250, e.liveId, 'stock', { productId: e.productId, available: Math.max(0, e.available) }, 'all');
   if (e.feed) {
     publish(e.liveId, 'order', { id: e.feed.id, company: e.feed.company, initials: companyInitials(e.feed.company), product: e.feed.product, qty: e.feed.qty, liveOffsetS: e.feed.liveOffsetS, at: Date.now() }, 'admin');
   }
-  if (e.activity) publish(e.liveId, 'activity', { text: e.activity, at: Date.now() }, 'all');
+  if (e.activity) publishThrottled(`${e.liveId}:activity`, 500, e.liveId, 'activity', { text: e.activity, at: Date.now() }, 'all');
   const my = await getMyOrder(e.liveId, e.companyId);
   publish(e.liveId, 'my-order', { companyId: e.companyId, order: my }, 'buyer');
+  return my;
 }
 
 /** Registra um pedido do produto no ar. Mesmo produto de novo: soma na mesma linha. */
@@ -105,7 +112,8 @@ export async function registerOrder(input: { liveId: string; companyId: string; 
     const inGrace = !!item && graceItemId(live.id, live.videoDelayS, now.getTime()) === item.id;
     if (!item || (!onAir && !inGrace)) return fail('not_on_air', 'Este produto não está mais no ar.', 409);
 
-    const { product, available } = await lockProduct(tx, item.productId);
+    // Produto lido sem trava: a trava do estoque só é pega no fim, para os pedidos simultâneos esperarem o mínimo.
+    const [product] = await tx.select().from(schema.products).where(eq(schema.products.id, item.productId));
     if (!product.active) return fail('not_on_air', 'Este produto não está disponível.', 409);
 
     const [company] = await tx.select({ name: schema.companies.name, city: schema.companies.city }).from(schema.companies).where(eq(schema.companies.id, input.companyId));
@@ -137,10 +145,6 @@ export async function registerOrder(input: { liveId: string; companyId: string; 
 
     if (product.stepQty > 1 && qty % product.stepQty !== 0) return fail('not_multiple', `Use múltiplos de ${formatInt(product.stepQty)}`, 400, { step: product.stepQty });
     if (newTotal < product.minQty) return fail('below_min', `Pedido mínimo ${formatInt(product.minQty)} un.`, 400, { min: product.minQty });
-    if (product.blockOverStock && qty > available) {
-      const a = Math.max(0, available);
-      return fail('over_stock', a > 0 ? `Só temos ${formatInt(a)} un. em estoque` : 'Todo o estoque foi pedido', 409, { available: a });
-    }
 
     const offset = offsetOf(live.startedAt, now);
     let itemId: string;
@@ -171,6 +175,14 @@ export async function registerOrder(input: { liveId: string; companyId: string; 
       .returning({ id: schema.orderItemEvents.id });
     await tx.update(schema.orders).set({ updatedAt: now }).where(eq(schema.orders.id, order.id));
 
+    // Trava do produto + conferência do estoque já contando este registro. Passou do estoque: desfaz tudo.
+    const { available: after } = await lockProduct(tx, product.id);
+    const available = after + qty;
+    if (product.blockOverStock && after < 0) {
+      const a = Math.max(0, available);
+      throw new Rollback(fail('over_stock', a > 0 ? `Só temos ${formatInt(a)} un. em estoque` : 'Todo o estoque foi pedido', 409, { available: a }));
+    }
+
     effects = {
       liveId: live.id,
       companyId: input.companyId,
@@ -180,11 +192,14 @@ export async function registerOrder(input: { liveId: string; companyId: string; 
       activity: live.showActivity ? (company.city ? `Uma empresa de ${company.city} pediu ${formatInt(qty)} un.` : `Uma empresa pediu ${formatInt(qty)} un.`) : undefined,
     };
     return { ok: true as const, itemId };
+  }).catch((e) => {
+    if (e instanceof Rollback) return e.result;
+    throw e;
   });
 
   if (!res.ok) return res;
-  if (effects) await emit(effects);
-  return { ok: true, itemId: res.itemId, order: await getMyOrder(input.liveId, input.companyId) };
+  const order = effects ? await emit(effects) : await getMyOrder(input.liveId, input.companyId);
+  return { ok: true, itemId: res.itemId, order };
 }
 
 /** Comprador altera a quantidade (0 = excluir). Só com a live no ar. */
@@ -214,8 +229,8 @@ export async function changeOrderItem(input: { itemId: string; companyId: string
     return { ok: true as const };
   });
   if (!res.ok) return res;
-  if (effects) await emit(effects);
-  return { ok: true, order: await getMyOrder(liveId, input.companyId) };
+  const order = effects ? await emit(effects) : await getMyOrder(liveId, input.companyId);
+  return { ok: true, order };
 }
 
 /** Exclusão lógica (canceled_at): devolve o estoque. Só com a live no ar. */
@@ -236,8 +251,8 @@ export async function cancelOrderItem(input: { itemId: string; companyId: string
     return { ok: true as const };
   });
   if (!res.ok) return res;
-  if (effects) await emit(effects);
-  return { ok: true, order: await getMyOrder(liveId, input.companyId) };
+  const order = effects ? await emit(effects) : await getMyOrder(liveId, input.companyId);
+  return { ok: true, order };
 }
 
 async function lockOwnedItem(tx: Tx, itemId: string, companyId: string) {
