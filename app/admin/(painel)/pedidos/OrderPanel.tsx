@@ -167,7 +167,7 @@ export function OrderPanel({ orderId, canStatus, onClose, onChanged }: { orderId
                 {steps.map(([label, at]) => (
                   <li key={label} className="flex items-center gap-[10px] text-[13px]">
                     <span className={`h-2 w-2 shrink-0 rounded-full ${at ? (label === 'Cancelado' ? 'bg-live' : 'bg-ink') : 'bg-line'}`} />
-                    <span className={`flex-grow ${at ? 'text-ink' : 'text-[#8A8F99]'}`}>{label}</span>
+                    <span className={`flex-grow ${at ? 'text-ink' : 'text-muted'}`}>{label}</span>
                     <span className="text-[12px] text-muted">{when(at) ?? 'aguardando'}</span>
                   </li>
                 ))}

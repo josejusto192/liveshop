@@ -50,7 +50,7 @@ function ticketMeta(t: CompanyTicket) {
 }
 
 const stepBar = (s: TimelineStep) => (s.state === 'done' ? 'bg-ink' : s.state === 'current' ? 'bg-accent' : 'bg-bg');
-const stepFg = (s: TimelineStep) => (s.state === 'todo' ? 'text-[#8A8F99]' : 'text-ink');
+const stepFg = (s: TimelineStep) => (s.state === 'todo' ? 'text-muted' : 'text-ink');
 
 // Máscaras dos campos do perfil.
 const maskCnpj = (v: string) => {
@@ -377,14 +377,14 @@ function Mobile(s: Shared & { sheet: 'open' | 'closing' | null; openSheet: (id: 
     return () => document.removeEventListener('keydown', onKey);
   }, [s]);
   return (
-    <div className="relative box-border flex min-h-[100dvh] flex-col gap-3 px-3 pb-3 pt-4">
+    <main className="relative box-border flex min-h-[100dvh] flex-col gap-3 px-3 pb-3 pt-4">
       <div className="flex items-center gap-[10px] px-1">
         <Link href={s.backLive ? `/l/${s.backLive.slug}` : '/conta'} aria-label="Voltar para a live" className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink">
           <IconBack />
         </Link>
         <span className="flex min-w-0 flex-grow flex-col">
-          <span className="text-[17px] font-medium tracking-[-0.02em]">Minha conta</span>
-          <span className="truncate text-[12px] text-muted">{s.company.name}</span>
+          <h1 className="text-[17px] font-medium tracking-[-0.02em]">Minha conta</h1>
+          <span className="truncate text-[12px] text-ink-2">{s.company.name}</span>
         </span>
         <span className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-[13px] font-semibold text-accent">{initialsOf(s.company.name)}</span>
       </div>
@@ -506,7 +506,7 @@ function Mobile(s: Shared & { sheet: 'open' | 'closing' | null; openSheet: (id: 
           </div>
         </>
       )}
-    </div>
+    </main>
   );
 }
 

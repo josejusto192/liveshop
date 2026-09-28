@@ -235,7 +235,7 @@ function DesktopHeader({ s, onOpenOrders }: { s: Shared; onOpenOrders: () => voi
     <header className="box-border flex h-16 shrink-0 items-center gap-4 rounded-card bg-white pl-5 pr-[10px]">
       <span className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-accent text-ink"><IconPlay /></span>
       <div className="flex min-w-0 flex-col">
-        <span className="truncate text-[15px] font-medium tracking-[-0.01em]">{room.live.name}</span>
+        <h1 className="truncate text-[15px] font-medium tracking-[-0.01em]">{room.live.name}</h1>
         <span className="text-[12px] text-muted">{room.live.brandName}</span>
       </div>
       <LiveBadge />
@@ -362,7 +362,7 @@ function VerticalDesktop(s: Shared) {
           <div className="box-border flex max-h-[55%] flex-col gap-1 overflow-y-auto rounded-card bg-white p-5">
             <span className="pb-2 text-[15px] font-medium">Nesta live</span>
             {tags.map(({ it, isCur, past, tag }) => (
-              <div key={it.id} className={`flex h-[52px] shrink-0 items-center gap-3 border-t border-solid border-line-2 ${past ? 'opacity-50' : ''}`}>
+              <div key={it.id} className={`flex h-[52px] shrink-0 items-center gap-3 border-t border-solid border-line-2 ${past ? 'opacity-80' : ''}`}>
                 {it.imageUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={it.imageUrl} alt="" className="h-9 w-9 rounded-[10px] object-cover" />
@@ -557,7 +557,7 @@ function LineupSheetBody({ s }: { s: Shared }) {
   return (
     <ul className="m-0 list-none p-0">
       {lineupTags(s.room).map(({ it, isCur, past, tag }) => (
-        <li key={it.id} className={`flex items-center gap-3 border-t border-solid border-line-2 py-2 ${past ? 'opacity-50' : ''}`}>
+        <li key={it.id} className={`flex items-center gap-3 border-t border-solid border-line-2 py-2 ${past ? 'opacity-80' : ''}`}>
           {it.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={it.imageUrl} alt="" className="h-10 w-10 rounded-xl object-cover" />
@@ -614,7 +614,7 @@ function VerticalMobile(s: Shared) {
   }, [room.current.itemId, sheet]);
 
   return (
-    <div className="on-dark fixed inset-0 overflow-hidden bg-[#1A1C20] text-white">
+    <main className="on-dark fixed inset-0 overflow-hidden bg-[#1A1C20] text-white">
       <div className="absolute inset-0 bg-[#202226]">
         <Video s={s} label="Vídeo vertical da live" />
       </div>
@@ -710,7 +710,7 @@ function VerticalMobile(s: Shared) {
       <MobileOrderToast toast={s.toast} order={room.myOrder} />
       <MobileSheets s={s} sheet={sheet} setSheet={setSheet} />
       <span className="sr-only">{p.company.name}</span>
-    </div>
+    </main>
   );
 }
 
@@ -723,7 +723,7 @@ function HorizontalMobile(s: Shared) {
   const kind = item ? stockKindOf(item) : 'in';
   const t = orderTotals(room.myOrder);
   return (
-    <div className="box-border flex min-h-[100dvh] flex-col gap-[10px] bg-bg p-3">
+    <main className="box-border flex min-h-[100dvh] flex-col gap-[10px] bg-bg p-3">
       <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-card bg-dark">
         <Video s={s} label="Transmissão ao vivo" className="object-contain" />
         <span className="absolute left-3 top-3"><LiveBadge small /></span>
@@ -799,6 +799,6 @@ function HorizontalMobile(s: Shared) {
         </span>
       </button>
       <MobileSheets s={s} sheet={sheet} setSheet={setSheet} />
-    </div>
+    </main>
   );
 }

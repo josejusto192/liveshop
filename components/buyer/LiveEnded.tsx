@@ -30,7 +30,7 @@ export function LiveEnded(p: Props) {
   return (
     <>
       {/* Desktop */}
-      <div className="box-border hidden h-screen min-h-[720px] gap-4 bg-bg p-4 lg:flex">
+      <main className="box-border hidden h-screen min-h-[720px] gap-4 bg-bg p-4 lg:flex">
         <section className="anim-in on-dark box-border flex flex-grow flex-col gap-[22px] rounded-panel bg-dark p-12 text-white">
           <Logo name={p.platformName} dark />
           <div className="flex-grow" />
@@ -99,10 +99,10 @@ export function LiveEnded(p: Props) {
           )}
           <Link href={accountHref} className="flex h-[50px] items-center justify-center rounded-full border border-solid border-line text-[14px] text-ink no-underline">Acompanhar meus pedidos</Link>
         </aside>
-      </div>
+      </main>
 
       {/* Celular */}
-      <div className="on-dark relative box-border flex min-h-[100dvh] flex-col gap-4 bg-dark px-4 pb-4 pt-6 text-white lg:hidden">
+      <main className="on-dark relative box-border flex min-h-[100dvh] flex-col gap-4 bg-dark px-4 pb-4 pt-6 text-white lg:hidden">
         <div className="anim-in flex flex-col gap-3 px-[6px]">
           <span className="self-start rounded-full bg-dark-3 px-[10px] py-1 text-[11px] font-medium text-dark-muted">Live encerrada</span>
           <h1 className="text-[34px] font-medium leading-[1.05] tracking-[-0.04em]">Obrigado por participar.</h1>
@@ -146,7 +146,7 @@ export function LiveEnded(p: Props) {
           )}
         </div>
         <Link href={accountHref} className="flex h-12 items-center justify-center rounded-full border border-solid border-dark-line text-[14px] text-white no-underline">Acompanhar meus pedidos</Link>
-      </div>
+      </main>
     </>
   );
 }

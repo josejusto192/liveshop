@@ -16,7 +16,7 @@ export function CodeScreen({ platformName, title, lead, children }: { platformNa
         {children}
       </section>
       <div className="hidden flex-grow lg:block" />
-      <p className="m-0 hidden text-center text-[13px] text-muted lg:block">Não recebeu? Olhe a caixa de spam ou promoções.</p>
+      <p className="m-0 hidden text-center text-[13px] text-ink-2 lg:block">Não recebeu? Olhe a caixa de spam ou promoções.</p>
     </main>
   );
 }
