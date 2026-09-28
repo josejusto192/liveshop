@@ -15,8 +15,8 @@ export function Modal({ labelledBy, onClose, children, width = 460 }: { labelled
     };
   }, [onClose]);
   return (
-    <div className="anim-overlay fixed inset-0 z-40 flex items-center justify-center bg-[rgba(17,18,20,0.45)]" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
-      <div ref={box} role="dialog" aria-modal="true" aria-labelledby={labelledBy} style={{ width }} className="anim-modal box-border flex flex-col gap-[14px] rounded-card-lg bg-surface p-7">
+    <div className="anim-overlay fixed inset-0 z-40 flex items-center justify-center bg-[rgba(17,18,20,0.45)] p-3" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+      <div ref={box} role="dialog" aria-modal="true" aria-labelledby={labelledBy} style={{ width, maxWidth: '100%' }} className="anim-modal box-border flex max-h-[calc(100dvh-24px)] flex-col gap-[14px] overflow-y-auto rounded-card-lg bg-surface p-5 sm:p-7">
         {children}
       </div>
     </div>

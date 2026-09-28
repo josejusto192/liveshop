@@ -134,21 +134,21 @@ export function LiveForm(p: LiveFormProps) {
 
   return (
     <>
-      <header className="flex h-[60px] shrink-0 items-center gap-[10px]">
+      <header className="flex shrink-0 flex-wrap items-center gap-[10px] lg:h-[60px] lg:flex-nowrap">
         <Link href="/admin" aria-label="Voltar para a visão geral" className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-ink">
           <IconBack />
         </Link>
-        <div className="flex flex-grow flex-col gap-[2px] pl-[6px]">
-          <span className="text-[14px] text-muted">Lives</span>
-          <h1 className="text-[30px] font-medium tracking-[-0.03em]">{p.liveId ? 'Editar live' : 'Nova live'}</h1>
+        <div className="flex min-w-0 flex-grow flex-col gap-[2px] pl-[6px]">
+          <span className="text-[13px] text-muted lg:text-[14px]">Lives</span>
+          <h1 className="text-[24px] font-medium tracking-[-0.03em] lg:text-[30px]">{p.liveId ? 'Editar live' : 'Nova live'}</h1>
         </div>
         {!ended && (
-          <button type="button" onClick={() => save('draft')} disabled={!!saving} className="h-11 rounded-full border-none bg-white px-[18px] text-[14px] disabled:opacity-60">
+          <button type="button" onClick={() => save('draft')} disabled={!!saving} className="h-11 rounded-full border-none bg-white px-[18px] text-[14px] disabled:opacity-60 max-sm:flex-1">
             {saving === 'draft' ? 'Salvando…' : p.status && p.status !== 'draft' ? 'Salvar' : 'Salvar rascunho'}
           </button>
         )}
         {!ended && (
-          <button type="button" onClick={() => save('open')} disabled={!!saving} className="flex h-11 items-center gap-[10px] rounded-full border-none bg-ink pl-2 pr-5 text-[14px] font-medium text-white disabled:opacity-70">
+          <button type="button" onClick={() => save('open')} disabled={!!saving} className="flex h-11 items-center gap-[10px] whitespace-nowrap rounded-full border-none bg-ink pl-2 pr-5 text-[14px] font-medium text-white disabled:opacity-70 max-sm:flex-1">
             <span className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-accent text-ink"><IconCheckSmall /></span>
             {saving === 'open' ? 'Salvando…' : 'Salvar e abrir central'}
           </button>
@@ -157,11 +157,11 @@ export function LiveForm(p: LiveFormProps) {
 
       {errors.form && <p role="alert" className="m-0 rounded-2xl bg-danger-bg px-4 py-3 text-[14px] text-danger">{errors.form}</p>}
 
-      <div className="flex min-h-0 flex-grow gap-4">
+      <div className="flex min-h-0 flex-grow flex-col gap-4 lg:flex-row">
         <div className="flex min-w-0 flex-grow flex-col gap-4">
-          <section className="box-border flex flex-col gap-[14px] rounded-card bg-surface p-[22px]">
+          <section className="box-border flex flex-col gap-[14px] rounded-card bg-surface p-4 sm:p-[22px]">
             <h2 className="text-[16px] font-medium">Informações da live</h2>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
               <div className="col-span-2 flex flex-col gap-[6px]">
                 <label htmlFor="ln" className="text-[12px] text-muted">Nome da live</label>
                 <input id="ln" value={f.name} onChange={(e) => set('name', e.target.value)} disabled={ended} aria-invalid={!!errors.name} className={fieldCls(errors.name)} placeholder="Ex.: Lançamento Coleção Verão" />
@@ -208,11 +208,11 @@ export function LiveForm(p: LiveFormProps) {
                   })}
                 </div>
               </div>
-              {errors.date && <span className="col-span-4 -mt-1 text-[12px] text-danger">{errors.date}</span>}
+              {errors.date && <span className="col-span-2 -mt-1 text-[12px] text-danger lg:col-span-4">{errors.date}</span>}
             </div>
           </section>
 
-          <section className="box-border flex min-h-0 flex-grow flex-col gap-[6px] overflow-hidden rounded-card bg-surface p-[22px]">
+          <section className="box-border flex min-h-[320px] flex-grow flex-col gap-[6px] overflow-hidden rounded-card bg-surface p-4 sm:p-[22px] lg:min-h-0">
             <div className="flex items-center gap-[10px] pb-2">
               <h2 className="flex-grow text-[16px] font-medium">Roteiro de produtos</h2>
               <span className="text-[13px] text-muted">
@@ -319,7 +319,7 @@ export function LiveForm(p: LiveFormProps) {
           </section>
         </div>
 
-        <aside className="flex w-[360px] shrink-0 flex-col gap-4">
+        <aside className="flex w-full flex-col gap-4 lg:w-[360px] lg:shrink-0">
           <section className="box-border flex flex-col gap-4 rounded-card bg-surface p-[22px]">
             <h2 className="text-[16px] font-medium">Troca de produtos</h2>
             <div role="group" aria-label="Modo padrão" className="flex rounded-full bg-surface-2 p-1">

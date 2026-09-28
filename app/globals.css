@@ -37,6 +37,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: non
 .anim-swap { animation: lsSwapIn .4s var(--ease) both; }
 .anim-overlay { animation: lsFade .2s ease both; }
 .anim-pop-c { animation: lsPopC .35s var(--ease) both; }
+@media (min-width: 1024px) { .lg\:anim-pop-c { animation: lsPopC .35s var(--ease) both; } }
 
 /* Entradas sem "forwards": depois da animação o elemento fica sem transform. Com transform preso, ele vira o
    bloco de contenção dos filhos position: fixed (painéis e avisos ficariam presos à área do conteúdo). */

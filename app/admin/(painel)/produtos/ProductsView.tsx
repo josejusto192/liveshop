@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { fieldCls } from '@/components/Field';
 import { IconClose, IconSearch } from '@/components/icons';
@@ -34,6 +34,10 @@ export function ProductsView({ brands, brand, products, inToday }: { brands: { i
   const [report, setReport] = useState<ImportReport | null>(null);
   const sheetInput = useRef<HTMLInputElement>(null);
   const photoInput = useRef<HTMLInputElement>(null);
+  // No celular o painel do produto abre em tela cheia só quando pedido.
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 1023px)').matches) setPanel(false);
+  }, []);
 
   const kpi = useMemo(() => {
     const available = products.reduce((s, p) => s + Math.max(0, p.available), 0);
@@ -115,7 +119,7 @@ export function ProductsView({ brands, brand, products, inToday }: { brands: { i
   const err = (k: string) => errors[k] && <span id={`${k}-err`} className="text-[12px] text-danger">{errors[k]}</span>;
 
   return (
-    <div className="flex min-h-0 flex-grow gap-4">
+    <div className="flex min-h-0 flex-grow flex-col gap-4 lg:flex-row">
       <div className="flex min-w-0 flex-grow flex-col gap-4">
         <PageHeader
           title="Produtos e estoque"
@@ -143,7 +147,7 @@ export function ProductsView({ brands, brand, products, inToday }: { brands: { i
           )}
         </PageHeader>
 
-        <div className="grid h-[118px] shrink-0 grid-cols-3 gap-4">
+        <div className="grid shrink-0 grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 lg:h-[118px]">
           <div className="box-border flex flex-col gap-[6px] rounded-card bg-surface px-5 py-[18px]">
             <span className="text-[13px] text-muted">Produtos cadastrados</span>
             <span className="text-[32px] font-medium tracking-[-0.04em] tabular">{formatInt(products.length)}</span>
@@ -164,21 +168,21 @@ export function ProductsView({ brands, brand, products, inToday }: { brands: { i
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-[10px]">
-          <div role="group" aria-label="Filtro de estoque" className="flex rounded-full bg-white p-1">
+        <div className="flex shrink-0 flex-wrap items-center gap-[10px]">
+          <div role="group" aria-label="Filtro de estoque" className="flex max-w-full overflow-x-auto rounded-full bg-white p-1">
             {FILTERS.map(([k, l]) => (
-              <button key={k} type="button" aria-pressed={filter === k} onClick={() => setFilter(k)} className={`h-[34px] rounded-full border-none px-4 text-[13px] font-medium ${filter === k ? 'bg-ink text-white' : 'bg-transparent text-ink-2'}`}>{l}</button>
+              <button key={k} type="button" aria-pressed={filter === k} onClick={() => setFilter(k)} className={`h-[34px] shrink-0 whitespace-nowrap rounded-full border-none px-4 text-[13px] font-medium ${filter === k ? 'bg-ink text-white' : 'bg-transparent text-ink-2'}`}>{l}</button>
             ))}
           </div>
           <div className="flex-grow" />
-          <label className="box-border flex h-[42px] w-[240px] items-center gap-2 rounded-full bg-white px-4 text-muted focus-within:shadow-[0_0_0_2px_var(--ink)]">
+          <label className="box-border flex h-[42px] w-full items-center gap-2 rounded-full bg-white px-4 sm:w-[240px] text-muted focus-within:shadow-[0_0_0_2px_var(--ink)]">
             <IconSearch />
             <input aria-label="Buscar produto" placeholder="Nome ou SKU" value={q} onChange={(e) => setQ(e.target.value)} className="min-w-0 flex-grow border-none bg-transparent text-[14px] text-ink outline-none focus-visible:shadow-none" />
           </label>
         </div>
 
-        <div key={filter} className="anim-swap box-border flex min-h-0 flex-grow flex-col rounded-card bg-surface px-[22px] py-1">
-          <div className="grid h-[42px] shrink-0 grid-cols-[2.6fr_1fr_1.8fr_1fr] items-center gap-[14px] text-[12px] text-muted" role="row">
+        <div key={filter} className="anim-swap box-border flex min-h-[200px] flex-grow flex-col rounded-card bg-surface px-4 py-1 lg:min-h-0 lg:px-[22px]">
+          <div className="hidden h-[42px] shrink-0 lg:grid grid-cols-[2.6fr_1fr_1.8fr_1fr] items-center gap-[14px] text-[12px] text-muted" role="row">
             <span>Produto</span><span>Preço atacado</span><span>Estoque (pedido / disponível)</span><span className="text-right">Disponível</span>
           </div>
           <div className="min-h-0 flex-grow overflow-y-auto">
@@ -196,9 +200,9 @@ export function ProductsView({ brands, brand, products, inToday }: { brands: { i
                   type="button"
                   onClick={() => openEdit(p)}
                   aria-label={`Editar ${p.name}`}
-                  className={`grid h-16 w-full grid-cols-[2.6fr_1fr_1.8fr_1fr] items-center gap-[14px] border-x-0 border-b-0 border-t border-solid border-line-2 bg-transparent p-0 text-left text-[14px] text-ink hover:bg-[#FAFAFB] ${form.id === p.id && panel ? 'bg-[#FAFAFB]' : ''}`}
+                  className={`flex w-full flex-wrap items-center gap-x-[14px] gap-y-2 border-x-0 border-b-0 border-t border-solid border-line-2 bg-transparent px-0 py-3 first:border-t-0 lg:grid lg:h-16 lg:grid-cols-[2.6fr_1fr_1.8fr_1fr] lg:py-0 lg:first:border-t text-left text-[14px] text-ink hover:bg-[#FAFAFB] ${form.id === p.id && panel ? 'bg-[#FAFAFB]' : ''}`}
                 >
-                  <span className="flex min-w-0 items-center gap-3">
+                  <span className="flex min-w-0 basis-full items-center gap-3 lg:basis-auto">
                     {p.imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={p.imageUrl} alt="" className="h-[42px] w-[42px] shrink-0 rounded-xl object-cover" />
@@ -211,7 +215,7 @@ export function ProductsView({ brands, brand, products, inToday }: { brands: { i
                     </span>
                   </span>
                   <span className="font-medium tabular">{formatBRL(p.priceCents)}</span>
-                  <span className="flex flex-col gap-[6px] pr-2">
+                  <span className="flex min-w-[120px] flex-grow flex-col gap-[6px] pr-2 lg:flex-grow-0">
                     <span className="flex h-2 gap-[3px]" aria-hidden>
                       <span className="rounded-full bg-ink" style={{ width: `${Math.max(Math.round(pct * 100), 1)}%` }} />
                       <span className={`flex-grow rounded-full ${k === 'out' ? 'bg-line-2' : k === 'low' ? 'bg-[#F5B97A]' : 'bg-accent'}`} />
@@ -231,7 +235,7 @@ export function ProductsView({ brands, brand, products, inToday }: { brands: { i
       </div>
 
       {panel && brand && (
-        <aside key={form.id ?? 'novo'} aria-label={form.id ? 'Editar produto' : 'Novo produto'} className="anim-panel box-border flex w-[340px] shrink-0 flex-col overflow-y-auto rounded-card bg-surface p-[22px]">
+        <aside key={form.id ?? 'novo'} aria-label={form.id ? 'Editar produto' : 'Novo produto'} className="anim-panel box-border flex flex-col overflow-y-auto bg-surface p-[22px] max-lg:fixed max-lg:inset-0 max-lg:z-50 lg:w-[340px] lg:shrink-0 lg:rounded-card">
           <form onSubmit={save} noValidate className="flex flex-grow flex-col gap-[14px]">
             <div className="flex items-center justify-between">
               <h2 className="text-[20px] font-medium tracking-[-0.02em]">{form.id ? 'Editar produto' : 'Novo produto'}</h2>

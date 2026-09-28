@@ -146,10 +146,10 @@ export function Central({ initial, hlsUrl, hlsFallback, addable: addableInit }: 
 
   return (
     <>
-      <header className="flex h-[60px] shrink-0 items-center gap-[10px]">
-        <div className="flex min-w-0 flex-grow flex-col gap-1">
-          <span className="flex items-center gap-2 text-[14px] text-muted">{statusPill}{live.brandName}</span>
-          <h1 className="truncate text-[30px] font-medium tracking-[-0.03em]">{live.name}</h1>
+      <header className="flex shrink-0 flex-wrap items-center gap-[10px] lg:h-[60px] lg:flex-nowrap">
+        <div className="flex min-w-0 flex-grow basis-full flex-col gap-1 sm:basis-auto">
+          <span className="flex items-center gap-2 text-[13px] text-muted lg:text-[14px]">{statusPill}{live.brandName}</span>
+          <h1 className="truncate text-[22px] font-medium tracking-[-0.03em] lg:text-[30px]">{live.name}</h1>
         </div>
         {running && live.startedAt ? (
           <span className="flex h-11 items-center gap-2 rounded-full bg-white px-[18px] font-mono text-[15px]" aria-label="Tempo de live">
@@ -177,14 +177,14 @@ export function Central({ initial, hlsUrl, hlsFallback, addable: addableInit }: 
         )}
       </header>
 
-      <div className="grid h-[104px] shrink-0 grid-cols-4 gap-4">
+      <div className="grid shrink-0 grid-cols-2 gap-3 lg:h-[104px] lg:grid-cols-4 lg:gap-4">
         {kpiCards.map((k) => (
-          <div key={k.label} className="box-border flex items-center gap-[14px] rounded-card bg-surface px-5 py-[18px]">
+          <div key={k.label} className="box-border flex items-center gap-[10px] rounded-card bg-surface px-4 py-[14px] lg:gap-[14px] lg:px-5 lg:py-[18px]">
             <div className="flex min-w-0 flex-grow flex-col gap-1">
               <span className="text-[13px] text-muted">{k.label}</span>
-              <span className="text-[32px] font-medium leading-[1.05] tracking-[-0.04em] tabular">{k.value}</span>
+              <span className="text-[26px] font-medium leading-[1.05] tracking-[-0.04em] tabular lg:text-[32px]">{k.value}</span>
             </div>
-            <div className="flex h-11 items-end gap-[3px]" aria-hidden>
+            <div className="hidden h-11 items-end gap-[3px] sm:flex" aria-hidden>
               {k.spark.map((h, i) => (
                 <span key={i} className={`w-[6px] rounded-[3px] ${i === k.spark.length - 1 ? k.last : 'bg-line'}`} style={{ height: h }} />
               ))}
@@ -193,9 +193,9 @@ export function Central({ initial, hlsUrl, hlsFallback, addable: addableInit }: 
         ))}
       </div>
 
-      <div className="flex min-h-0 flex-grow gap-4">
-        <section className="flex w-[320px] shrink-0 flex-col gap-4">
-          <div className="on-dark box-border flex min-h-0 flex-grow flex-col items-center gap-[10px] rounded-card bg-dark p-3 text-white">
+      <div className="flex min-h-0 flex-grow flex-col gap-4 lg:flex-row">
+        <section className="flex w-full flex-col gap-4 max-lg:order-2 lg:w-[320px] lg:shrink-0">
+          <div className="on-dark box-border flex min-h-0 flex-grow flex-col max-lg:h-[440px] items-center gap-[10px] rounded-card bg-dark p-3 text-white">
             <div
               aria-label={`Prévia da transmissão ${vertical ? 'vertical' : 'horizontal'}`}
               className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-[18px] bg-dark-3"
@@ -256,8 +256,8 @@ export function Central({ initial, hlsUrl, hlsFallback, addable: addableInit }: 
           </div>
         </section>
 
-        <section className="flex min-w-0 flex-grow flex-col gap-4">
-          <div className="on-dark box-border flex flex-col gap-4 rounded-card bg-dark p-[22px] text-white">
+        <section className="flex min-w-0 flex-grow flex-col gap-4 max-lg:order-1">
+          <div className="on-dark box-border flex flex-col gap-4 rounded-card bg-dark p-4 text-white sm:p-[22px]">
             <div className="flex items-center justify-between">
               <span className="text-[13px] text-dark-muted">
                 {running && current ? `No ar agora · produto ${curIdx + 1} de ${items.length}` : live.status === 'ended' ? 'Live encerrada' : 'A live ainda não começou'}
@@ -286,16 +286,16 @@ export function Central({ initial, hlsUrl, hlsFallback, addable: addableInit }: 
                 <div key={swapKey} className="anim-swap flex items-center gap-4">
                   {shown.imageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={shown.imageUrl} alt="" className="h-[76px] w-[76px] shrink-0 rounded-2xl object-cover" />
+                    <img src={shown.imageUrl} alt="" className="h-14 w-14 shrink-0 rounded-2xl object-cover sm:h-[76px] sm:w-[76px]" />
                   ) : (
-                    <span className="h-[76px] w-[76px] shrink-0 rounded-2xl bg-dark-3" />
+                    <span className="h-14 w-14 shrink-0 rounded-2xl bg-dark-3 sm:h-[76px] sm:w-[76px]" />
                   )}
                   <div className="flex min-w-0 flex-grow flex-col gap-1">
-                    <span className="truncate text-[26px] font-medium tracking-[-0.03em]">{shown.name}</span>
+                    <span className="truncate text-[20px] font-medium tracking-[-0.03em] sm:text-[26px]">{shown.name}</span>
                     <span className="text-[13px] text-dark-muted">{running ? info : `Primeiro do roteiro · ${mmss(shown.durationS * 1000)}`}</span>
                   </div>
                   <div className="flex flex-col items-end gap-[2px]">
-                    <span className={`font-mono text-[40px] leading-none tracking-[-0.04em] ${running && auto && !cur.paused ? (remaining <= 60_000 ? 'text-[#F5B97A]' : 'text-accent') : 'text-dark-muted'}`} aria-live="off">
+                    <span className={`whitespace-nowrap font-mono text-[28px] leading-none tracking-[-0.04em] sm:text-[40px] ${running && auto && !cur.paused ? (remaining <= 60_000 ? 'text-[#F5B97A]' : 'text-accent') : 'text-dark-muted'}`} aria-live="off">
                       {running && auto ? mmss(remaining) : '--:--'}
                     </span>
                     <span className="text-[12px] text-dark-muted">{!running ? 'aguardando início' : !auto ? 'troca manual' : cur.paused ? 'timer pausado' : remaining === 0 && curIdx === items.length - 1 ? 'último produto' : 'para trocar'}</span>
@@ -308,23 +308,23 @@ export function Central({ initial, hlsUrl, hlsFallback, addable: addableInit }: 
                 <span key={i} className={`flex-grow rounded-[2px] transition-colors duration-500 ${running && auto && i < progressDone ? 'bg-accent' : 'bg-[#34373D]'}`} />
               ))}
             </div>
-            <div className="flex gap-[6px]">
-              <button type="button" onClick={() => act('next')} disabled={!running || curIdx >= items.length - 1 || busy === 'next'} className="h-11 flex-[1.6_1_0] rounded-full border-none bg-accent px-4 text-[14px] font-medium text-ink disabled:opacity-40">
+            <div className="grid grid-cols-3 gap-[6px] sm:flex">
+              <button type="button" onClick={() => act('next')} disabled={!running || curIdx >= items.length - 1 || busy === 'next'} className="h-11 rounded-full border-none bg-accent px-4 max-sm:col-span-3 sm:flex-[1.6_1_0] text-[14px] font-medium text-ink disabled:opacity-40">
                 Próximo agora
               </button>
-              <button type="button" onClick={() => act('extend', { seconds: 300 })} disabled={!running || busy === 'extend'} className="h-11 flex-[1_1_0] rounded-full border border-solid border-dark-line bg-transparent px-[14px] text-[14px] text-white disabled:opacity-40">
+              <button type="button" onClick={() => act('extend', { seconds: 300 })} disabled={!running || busy === 'extend'} className="h-11 sm:flex-[1_1_0] rounded-full border border-solid border-dark-line bg-transparent px-[14px] text-[14px] text-white disabled:opacity-40">
                 +5 min
               </button>
-              <button type="button" onClick={() => act(cur.paused ? 'resume' : 'pause')} disabled={!running || !!busy} className="h-11 flex-[1_1_0] rounded-full border border-solid border-dark-line bg-transparent px-[14px] text-[14px] text-white disabled:opacity-40">
+              <button type="button" onClick={() => act(cur.paused ? 'resume' : 'pause')} disabled={!running || !!busy} className="h-11 sm:flex-[1_1_0] rounded-full border border-solid border-dark-line bg-transparent px-[14px] text-[14px] text-white disabled:opacity-40">
                 {cur.paused ? 'Retomar' : 'Pausar'}
               </button>
-              <button type="button" onClick={() => act(cur.hidden ? 'show' : 'hide')} disabled={!running || !!busy} className={`h-11 flex-[1_1_0] rounded-full border border-solid border-dark-line px-[14px] text-[14px] text-white disabled:opacity-40 ${cur.hidden ? 'bg-dark-line' : 'bg-transparent'}`}>
+              <button type="button" onClick={() => act(cur.hidden ? 'show' : 'hide')} disabled={!running || !!busy} className={`h-11 sm:flex-[1_1_0] rounded-full border border-solid border-dark-line px-[14px] text-[14px] text-white disabled:opacity-40 ${cur.hidden ? 'bg-dark-line' : 'bg-transparent'}`}>
                 {cur.hidden ? 'Mostrar' : 'Ocultar'}
               </button>
             </div>
           </div>
 
-          <div className="box-border flex min-h-0 flex-grow flex-col overflow-hidden rounded-card bg-surface px-[22px] pb-2 pt-[18px]">
+          <div className="box-border flex min-h-0 flex-grow flex-col overflow-hidden rounded-card bg-surface px-4 pb-2 pt-[18px] max-lg:max-h-[520px] sm:px-[22px]">
             <div className="relative flex items-center justify-between pb-2">
               <span className="text-[15px] font-medium">Roteiro da live</span>
               {live.status !== 'ended' && (
@@ -348,11 +348,11 @@ export function Central({ initial, hlsUrl, hlsFallback, addable: addableInit }: 
                 const on = running && q.id === cur.itemId;
                 const status = on ? 'No ar' : q.status === 'presented' ? 'Apresentado' : running && i === curIdx + 1 ? 'Próximo' : 'Na fila';
                 return (
-                  <li key={q.id} className={`flex h-[46px] items-center gap-[14px] border-t border-solid border-line-2 ${q.status === 'presented' && !on ? 'opacity-50' : ''}`}>
+                  <li key={q.id} className={`flex flex-wrap items-center gap-x-[14px] gap-y-1 py-2 sm:h-[46px] sm:flex-nowrap sm:py-0 border-t border-solid border-line-2 ${q.status === 'presented' && !on ? 'opacity-50' : ''}`}>
                     <span className={`flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full text-[12px] font-medium ${on ? 'bg-accent' : 'bg-line-2'}`}>{i + 1}</span>
-                    <span className="min-w-0 flex-grow truncate text-[14px] font-medium">{q.name}</span>
-                    <span className="whitespace-nowrap text-[12px] text-muted">{status}</span>
-                    <span className="w-14 text-right font-mono text-[13px]">{mmss(q.durationS * 1000)}</span>
+                    <span className="min-w-0 flex-grow truncate text-[14px] font-medium max-sm:basis-[calc(100%-40px)]">{q.name}</span>
+                    <span className="whitespace-nowrap text-[12px] text-muted max-sm:ml-10">{status}</span>
+                    <span className="w-14 text-right font-mono text-[13px] max-sm:mr-auto max-sm:text-left">{mmss(q.durationS * 1000)}</span>
                     {on ? (
                       <span className="flex h-[30px] items-center rounded-full bg-ink px-3 text-[12px] text-accent">No ar</span>
                     ) : (
@@ -367,7 +367,7 @@ export function Central({ initial, hlsUrl, hlsFallback, addable: addableInit }: 
           </div>
         </section>
 
-        <aside className="flex w-[300px] shrink-0 flex-col overflow-hidden rounded-card bg-surface">
+        <aside className="flex w-full flex-col overflow-hidden rounded-card bg-surface max-lg:order-3 max-lg:max-h-[460px] lg:w-[300px] lg:shrink-0">
           <div className="flex items-center justify-between px-5 pb-[10px] pt-[18px]">
             <span className="text-[15px] font-medium">Pedidos em tempo real</span>
             <span className={`h-2 w-2 rounded-full ${running ? 'bg-[#7CB518]' : 'bg-line'}`} aria-hidden />

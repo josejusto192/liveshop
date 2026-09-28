@@ -106,14 +106,14 @@ export function ConfigView(p: { initialTab: Tab; settings: Settings; env: { doma
         )}
       </PageHeader>
 
-      <div role="tablist" aria-label="Seções" className="flex shrink-0 self-start rounded-full bg-white p-1">
+      <div role="tablist" aria-label="Seções" className="flex max-w-full shrink-0 self-start overflow-x-auto rounded-full bg-white p-1">
         {TABS.map(([k, l]) => (
-          <button key={k} id={`tab-${k}`} role="tab" type="button" aria-selected={tab === k} aria-controls="tab-panel" onClick={() => pick(k)} className={`h-9 rounded-full border-none px-[18px] text-[13px] font-medium ${tab === k ? 'bg-ink text-white' : 'bg-transparent text-ink-2'}`}>{l}</button>
+          <button key={k} id={`tab-${k}`} role="tab" type="button" aria-selected={tab === k} aria-controls="tab-panel" onClick={() => pick(k)} className={`h-9 shrink-0 whitespace-nowrap rounded-full border-none px-[18px] text-[13px] font-medium ${tab === k ? 'bg-ink text-white' : 'bg-transparent text-ink-2'}`}>{l}</button>
         ))}
       </div>
 
-      <div className="flex min-h-0 flex-grow gap-4">
-        <section key={tab} id="tab-panel" role="tabpanel" aria-labelledby={`tab-${tab}`} className="anim-swap box-border flex min-w-0 flex-grow flex-col gap-[18px] overflow-y-auto rounded-card bg-surface p-[26px]">
+      <div className="flex min-h-0 flex-grow flex-col gap-4 lg:flex-row">
+        <section key={tab} id="tab-panel" role="tabpanel" aria-labelledby={`tab-${tab}`} className="anim-swap box-border flex min-w-0 flex-grow flex-col gap-[18px] overflow-y-auto rounded-card bg-surface p-4 sm:p-[26px]">
           {tab === 'geral' && (
             <>
               <h2 className="text-[18px] font-medium tracking-[-0.02em]">Identidade da plataforma</h2>
@@ -134,7 +134,7 @@ export function ConfigView(p: { initialTab: Tab; settings: Settings; env: { doma
                   </label>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-[14px]">
+              <div className="grid grid-cols-1 gap-[14px] sm:grid-cols-2">
                 <Field id="g1" label="Nome da plataforma" value={s.platformName} error={errors.platformName} onChange={(e) => setS({ ...s, platformName: e.target.value })} />
                 <Field id="g2" label="Domínio" value={p.env.domain} readOnly title="Definido na variável APP_URL do servidor" className="[&_input]:font-mono" />
                 <div className="flex flex-col gap-[6px]">
@@ -158,7 +158,7 @@ export function ConfigView(p: { initialTab: Tab; settings: Settings; env: { doma
           {tab === 'transmissao' && (
             <>
               <h2 className="text-[18px] font-medium tracking-[-0.02em]">Transmissão</h2>
-              <div className="grid grid-cols-2 gap-[14px]">
+              <div className="grid grid-cols-1 gap-[14px] sm:grid-cols-2">
                 <Field id="t1" label="Servidor de vídeo (WebRTC)" value={p.env.whip} readOnly title="Definido na variável WHIP_BASE_URL do servidor" className="[&_input]:font-mono [&_input]:text-[13px]" />
                 <Field id="t2" label="URL de entrega (CDN)" value={p.env.hls} readOnly title="Definido na variável HLS_BASE_URL do servidor" className="[&_input]:font-mono [&_input]:text-[13px]" />
                 <div className="flex flex-col gap-[6px]">
@@ -186,7 +186,7 @@ export function ConfigView(p: { initialTab: Tab; settings: Settings; env: { doma
           {tab === 'email' && (
             <>
               <h2 className="text-[18px] font-medium tracking-[-0.02em]">E-mail do código de acesso</h2>
-              <div className="grid grid-cols-2 gap-[14px]">
+              <div className="grid grid-cols-1 gap-[14px] sm:grid-cols-2">
                 <Field id="m1" label="Nome do remetente" value={s.mailFromName} placeholder={s.platformName} onChange={(e) => setS({ ...s, mailFromName: e.target.value })} />
                 <Field id="m2" type="email" label="E-mail do remetente" value={s.mailFromEmail} placeholder="acesso@[dominio].com.br" error={errors.mailFromEmail} onChange={(e) => setS({ ...s, mailFromEmail: e.target.value })} />
               </div>
@@ -227,7 +227,7 @@ export function ConfigView(p: { initialTab: Tab; settings: Settings; env: { doma
           )}
         </section>
 
-        <aside className="box-border flex w-[340px] shrink-0 flex-col gap-3 rounded-card bg-dark p-[22px] text-white">
+        <aside className="box-border flex w-full flex-col gap-3 rounded-card bg-dark p-[22px] text-white lg:w-[340px] lg:shrink-0">
           <span className="text-[15px] font-medium">Plano e uso</span>
           <span className="text-[13px] text-dark-muted">Este mês</span>
           {[

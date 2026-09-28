@@ -49,7 +49,7 @@ export function BrandsView({ brands, canWrite, canCreateLive }: { brands: BrandC
       {brands.length === 0 ? (
         <section className="flex flex-grow items-center justify-center rounded-card bg-surface text-[14px] text-muted">Nenhuma marca cadastrada ainda.</section>
       ) : (
-        <div className="grid min-h-0 flex-grow auto-rows-[360px] grid-cols-3 content-start gap-4 overflow-y-auto">
+        <div className="grid min-h-0 flex-grow auto-rows-[minmax(340px,auto)] grid-cols-1 content-start gap-4 overflow-y-auto sm:grid-cols-2 lg:auto-rows-[360px] xl:grid-cols-3">
           {brands.map((b, i) => {
             const dark = b.live;
             const tile = dark ? 'bg-dark-2' : 'bg-surface-2';

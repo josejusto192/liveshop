@@ -68,31 +68,31 @@ export default async function VisaoGeral({ searchParams }: { searchParams: Promi
   return (
     <>
       {sp['sem-permissao'] && <p role="alert" className="m-0 rounded-2xl bg-warn-bg px-4 py-3 text-[14px] text-warn">Seu papel não tem acesso a essa página.</p>}
-      <header className="flex h-[60px] shrink-0 items-center gap-[10px]">
-        <div className="flex flex-grow flex-col gap-[2px]">
-          <span className="text-[14px] text-muted">{greeting()}, {admin.name.split(' ')[0]}</span>
-          <h1 className="text-[30px] font-medium tracking-[-0.03em]">Visão geral</h1>
+      <header className="flex shrink-0 flex-wrap items-center gap-[10px] lg:h-[60px] lg:flex-nowrap">
+        <div className="flex min-w-0 flex-grow flex-col gap-[2px]">
+          <span className="text-[13px] text-muted lg:text-[14px]">{greeting()}, {admin.name.split(' ')[0]}</span>
+          <h1 className="text-[24px] font-medium tracking-[-0.03em] lg:text-[30px]">Visão geral</h1>
         </div>
-        <form role="search" className="box-border flex h-11 w-[260px] items-center gap-2 rounded-full bg-white px-4 text-muted focus-within:shadow-[0_0_0_2px_var(--ink)]">
+        <form role="search" className="order-last box-border flex h-11 w-full items-center lg:order-none lg:w-[260px] gap-2 rounded-full bg-white px-4 text-muted focus-within:shadow-[0_0_0_2px_var(--ink)]">
           <IconSearch />
           {sp.mes && <input type="hidden" name="mes" value={sp.mes} />}
           <input name="q" defaultValue={sp.q ?? ''} aria-label="Buscar" placeholder="Buscar live, marca ou empresa" className="min-w-0 flex-grow border-none bg-transparent text-[14px] text-ink outline-none focus-visible:shadow-none" />
         </form>
         <NotificationsBell />
-        <div className="flex h-11 items-center rounded-full bg-white px-1 text-[14px]">
+        <div className="flex h-11 items-center rounded-full bg-white px-1 text-[14px] max-sm:order-last max-sm:w-full max-sm:justify-between">
           <Link href={`/admin?mes=${prevM}`} aria-label="Mês anterior" className="flex h-9 w-9 items-center justify-center rounded-full text-ink no-underline hover:bg-surface-2">‹</Link>
           <span className="flex items-center gap-2 px-2"><IconCalendar />{monthLabel(month)}</span>
           <Link href={`/admin?mes=${nextM}`} aria-label="Próximo mês" className="flex h-9 w-9 items-center justify-center rounded-full text-ink no-underline hover:bg-surface-2">›</Link>
         </div>
         {canWrite && (
-          <Link href="/admin/lives/nova" className="flex h-11 items-center gap-[10px] rounded-full bg-ink pl-2 pr-5 text-[14px] font-medium text-white no-underline">
+          <Link href="/admin/lives/nova" className="flex h-11 items-center gap-[10px] whitespace-nowrap rounded-full bg-ink pl-2 pr-5 text-[14px] font-medium text-white no-underline">
             <span className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-accent text-[18px] leading-none text-ink">+</span>Nova live
           </Link>
         )}
       </header>
 
-      <div className="flex h-[200px] shrink-0 gap-4">
-        <div className="on-dark box-border flex w-[360px] shrink-0 flex-col gap-[10px] rounded-card bg-dark p-[22px] text-white">
+      <div className="grid shrink-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:flex lg:h-[200px]">
+        <div className="on-dark box-border flex min-h-[190px] flex-col sm:col-span-2 lg:min-h-0 lg:w-[360px] lg:shrink-0 gap-[10px] rounded-card bg-dark p-[22px] text-white">
           {d.liveNow ? (
             <>
               <div className="flex items-center gap-2">
@@ -143,7 +143,7 @@ export default async function VisaoGeral({ searchParams }: { searchParams: Promi
           )}
         </div>
 
-        <div className="box-border flex min-w-0 flex-grow flex-col gap-[10px] rounded-card bg-surface p-[22px]">
+        <div className="box-border flex min-h-[180px] min-w-0 flex-grow flex-col gap-[10px] rounded-card bg-surface p-[22px] sm:col-span-2 lg:min-h-0">
           <div className="flex items-center justify-between">
             <span className="text-[15px] font-medium">Unidades registradas</span>
             {canOrders && (
@@ -165,7 +165,7 @@ export default async function VisaoGeral({ searchParams }: { searchParams: Promi
           </div>
         </div>
 
-        <div className="box-border flex w-[230px] shrink-0 flex-col gap-[10px] rounded-card bg-surface p-[22px]">
+        <div className="box-border flex min-h-[180px] flex-col gap-[10px] rounded-card bg-surface p-[22px] lg:min-h-0 lg:w-[230px] lg:shrink-0">
           <span className="text-[15px] font-medium">Conversão da live</span>
           <div className="flex items-baseline gap-[6px]">
             <span className="text-[36px] font-medium tracking-[-0.04em] tabular">{conv}%</span>
@@ -179,7 +179,7 @@ export default async function VisaoGeral({ searchParams }: { searchParams: Promi
           </div>
         </div>
 
-        <div className="box-border flex w-[230px] shrink-0 flex-col gap-[10px] rounded-card bg-accent p-[22px]">
+        <div className="box-border flex min-h-[180px] flex-col gap-[10px] rounded-card bg-accent p-[22px] lg:min-h-0 lg:w-[230px] lg:shrink-0">
           <span className="text-[15px] font-medium">Pedidos em rascunho</span>
           <span className="text-[36px] font-medium tracking-[-0.04em] tabular">{formatInt(d.draftOrders)}</span>
           <span className="text-[13px] text-accent-ink">Aguardando faturamento</span>
@@ -190,18 +190,18 @@ export default async function VisaoGeral({ searchParams }: { searchParams: Promi
         </div>
       </div>
 
-      <div className="flex h-[270px] shrink-0 gap-4">
-        <div className="box-border flex min-w-0 flex-grow flex-col gap-[14px] rounded-card bg-surface p-[22px]">
-          <div className="flex items-center gap-3">
+      <div className="flex shrink-0 flex-col gap-4 lg:h-[270px] lg:flex-row">
+        <div className="box-border flex h-[280px] min-w-0 flex-grow flex-col gap-[14px] rounded-card bg-surface p-[22px] lg:h-auto">
+          <div className="flex flex-wrap items-center gap-3">
             <span className="flex-grow text-[15px] font-medium">Unidades por live</span>
             <span className="flex items-center gap-[6px] text-[12px] text-muted"><span className="h-2 w-2 rounded-full bg-ink" />Registradas</span>
             <span className="flex items-center gap-[6px] text-[12px] text-muted"><span className="h-2 w-2 rounded-full bg-[#D8DBE0]" />Estoque ofertado</span>
-            <span className="rounded-full border border-solid border-line px-3 py-[7px] text-[13px]">Últimas 10 lives</span>
+            <span className="hidden rounded-full border border-solid border-line px-3 py-[7px] text-[13px] sm:inline">Últimas 10 lives</span>
           </div>
           {d.bars.length === 0 ? (
             <div className="flex flex-grow items-center justify-center text-[14px] text-muted">As lives realizadas aparecem aqui.</div>
           ) : (
-            <div className="relative flex flex-grow items-end gap-[14px]" role="img" aria-label={`Unidades por live: ${d.bars.map((b) => `${b.name} ${formatInt(b.units)}`).join(', ')}`}>
+            <div className="relative flex flex-grow items-end gap-[6px] sm:gap-[14px]" role="img" aria-label={`Unidades por live: ${d.bars.map((b) => `${b.name} ${formatInt(b.units)}`).join(', ')}`}>
               {d.bars.map((b) => {
                 const hi = b.units === maxBar && b.units > 0;
                 const h = Math.round((b.units / maxOffer) * 150);
@@ -219,7 +219,7 @@ export default async function VisaoGeral({ searchParams }: { searchParams: Promi
           )}
         </div>
 
-        <div className="box-border flex w-[380px] shrink-0 flex-col gap-3 rounded-card bg-surface p-[22px]">
+        <div className="box-border flex w-full flex-col gap-3 rounded-card bg-surface p-[22px] lg:w-[380px] lg:shrink-0">
           <div className="flex items-center justify-between">
             <span className="text-[15px] font-medium">Mais pedidos no mês</span>
             {can(admin.role, 'products:write') && <Link href="/admin/produtos" className="text-[13px] text-muted">Ver todos</Link>}

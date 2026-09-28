@@ -1,9 +1,9 @@
 export function PageHeader({ eyebrow, title, children }: { eyebrow: React.ReactNode; title: string; children?: React.ReactNode }) {
   return (
-    <header className="flex h-[60px] shrink-0 items-center gap-[10px]">
-      <div className="flex flex-grow flex-col gap-[2px]">
-        <span className="text-[14px] text-muted">{eyebrow}</span>
-        <h1 className="text-[30px] font-medium tracking-[-0.03em]">{title}</h1>
+    <header className="flex shrink-0 flex-wrap items-center gap-[10px] lg:h-[60px] lg:flex-nowrap">
+      <div className="flex min-w-0 flex-grow basis-full flex-col gap-[2px] sm:basis-auto">
+        <span className="text-[13px] text-muted lg:text-[14px]">{eyebrow}</span>
+        <h1 className="text-[24px] font-medium tracking-[-0.03em] lg:text-[30px]">{title}</h1>
       </div>
       {children}
     </header>

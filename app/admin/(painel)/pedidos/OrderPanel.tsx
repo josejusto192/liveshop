@@ -91,7 +91,7 @@ export function OrderPanel({ orderId, canStatus, onClose, onChanged }: { orderId
   return (
     <div className="fixed inset-0 z-40">
       <button type="button" aria-label="Fechar" onClick={close} className={`absolute inset-0 cursor-default border-none bg-[rgba(17,18,20,0.35)] p-0 ${closing ? 'opacity-0' : 'anim-overlay'}`} />
-      <aside role="dialog" aria-modal="true" aria-labelledby="order-panel-title" className={`absolute bottom-4 right-4 top-4 box-border flex w-[420px] flex-col gap-4 overflow-y-auto rounded-card bg-bg p-4 ${closing ? 'anim-drawer-out' : 'anim-drawer'}`}>
+      <aside role="dialog" aria-modal="true" aria-labelledby="order-panel-title" className={`absolute inset-2 box-border flex flex-col sm:inset-y-4 sm:left-auto sm:right-4 sm:w-[420px] gap-4 overflow-y-auto rounded-card bg-bg p-4 ${closing ? 'anim-drawer-out' : 'anim-drawer'}`}>
         <section className="on-dark box-border flex flex-col gap-[14px] rounded-card bg-dark p-[22px] text-white">
           <div className="flex items-start gap-3">
             <span className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-accent text-[16px] font-semibold text-ink">{o ? initialsOf(o.company.name) : ''}</span>

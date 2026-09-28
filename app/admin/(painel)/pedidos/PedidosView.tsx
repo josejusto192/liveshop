@@ -31,7 +31,9 @@ type Props = {
 
 const TABS: [OrderTab, string][] = [['draft', 'Rascunho'], ['invoiced', 'Faturados'], ['canceled', 'Cancelados']];
 const TITLE: Record<OrderTab, string> = { draft: 'Pedidos em rascunho', invoiced: 'Pedidos faturados', canceled: 'Pedidos cancelados' };
-const GRID = 'grid grid-cols-[24px_2fr_1.9fr_1.7fr_0.7fr_0.8fr_0.9fr_0.7fr_0.9fr] gap-[14px]';
+const GRID = 'lg:grid lg:grid-cols-[24px_2fr_1.9fr_1.7fr_0.7fr_0.8fr_0.9fr_0.7fr_0.9fr] lg:gap-[14px]';
+// No celular cada linha vira um cartão: empresa e status em cima, produto e valores embaixo.
+const M2 = 'max-lg:order-2';
 const mm = (m: number) => `${String(m).padStart(2, '0')}:00`;
 
 export function PedidosView(p: Props) {
@@ -158,20 +160,20 @@ export function PedidosView(p: Props) {
         )}
       </PageHeader>
 
-      <div className="grid h-[104px] shrink-0 grid-cols-4 gap-4">
+      <div className="grid shrink-0 grid-cols-2 gap-3 lg:h-[104px] lg:grid-cols-4 lg:gap-4">
         <Kpi label="Pedidos no filtro" value={formatInt(p.kpis.orders)} />
         <Kpi label="Unidades" value={formatInt(p.kpis.units)} />
         <Kpi label="Empresas" value={formatInt(p.kpis.companies)} />
-        <div className="box-border flex flex-col gap-2 rounded-card bg-surface px-5 py-[18px]">
+        <div className="col-span-2 box-border flex h-[104px] flex-col gap-2 rounded-card bg-surface px-5 py-[18px] lg:col-span-1 lg:h-auto">
           <span className="text-[13px] text-muted">Pedidos por minuto da live</span>
           <MinuteBars data={p.perMinute} from={f.minFrom} to={f.minTo} />
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center gap-2">
-        <div role="group" aria-label="Status" className="flex rounded-full bg-white p-1">
+      <div className="flex shrink-0 flex-wrap items-center gap-2">
+        <div role="group" aria-label="Status" className="flex max-w-full overflow-x-auto rounded-full bg-white p-1">
           {TABS.map(([t, label]) => (
-            <button key={t} type="button" aria-pressed={f.tab === t} onClick={() => go({ tab: t })} className={`h-[34px] rounded-full border-none px-4 text-[13px] font-medium ${f.tab === t ? 'bg-ink text-white' : 'bg-transparent text-ink-2'}`}>
+            <button key={t} type="button" aria-pressed={f.tab === t} onClick={() => go({ tab: t })} className={`h-[34px] shrink-0 whitespace-nowrap rounded-full border-none px-4 text-[13px] font-medium ${f.tab === t ? 'bg-ink text-white' : 'bg-transparent text-ink-2'}`}>
               {label} · {formatInt(p.counts[t])}
             </button>
           ))}
@@ -189,14 +191,20 @@ export function PedidosView(p: Props) {
         {p.brandName && <FilterTag label="Marca" value={p.brandName} onClear={() => go({ brandId: null })} />}
         {p.companyName && <FilterTag label="Empresa" value={p.companyName} onClear={() => go({ companyId: null })} />}
         <div className="flex-grow" />
-        <label className="box-border flex h-[42px] w-[200px] min-w-[150px] shrink items-center gap-2 rounded-full bg-white px-4 text-muted">
+        <label className="box-border flex h-[42px] w-full items-center gap-2 rounded-full bg-white px-4 text-muted sm:w-[200px] sm:min-w-[150px] sm:shrink">
           <IconSearch />
           <input aria-label="Buscar empresa" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Empresa, e-mail, WhatsApp" className="min-w-0 flex-grow border-none bg-transparent text-[14px] text-ink outline-none focus-visible:shadow-none" />
         </label>
       </div>
 
-      <div key={f.tab} className="anim-swap box-border flex min-h-0 flex-grow flex-col overflow-hidden rounded-card bg-surface px-[22px] py-1">
-        <div className={`${GRID} h-[42px] shrink-0 items-center text-[12px] text-muted`}>
+      <div key={f.tab} className="anim-swap box-border flex min-h-[240px] flex-grow flex-col overflow-hidden rounded-card bg-surface px-4 py-1 lg:min-h-0 lg:px-[22px]">
+        {(p.canStatus || p.canExport) && visible.length > 0 && (
+          <label className="flex h-11 items-center gap-3 text-[13px] text-muted lg:hidden">
+            <input type="checkbox" checked={allSel} onChange={() => setSel(allSel ? new Set() : new Set(visible.map((l) => l.itemId)))} className="m-0 h-4 w-4 accent-ink" />
+            Selecionar todos
+          </label>
+        )}
+        <div className={`${GRID} hidden h-[42px] shrink-0 items-center text-[12px] text-muted`}>
           {p.canStatus || p.canExport ? (
             <input type="checkbox" aria-label="Selecionar todos" checked={allSel} onChange={() => setSel(allSel ? new Set() : new Set(visible.map((l) => l.itemId)))} className="m-0 h-4 w-4 accent-ink" />
           ) : (
@@ -217,29 +225,29 @@ export function PedidosView(p: Props) {
             Nenhum pedido com esse status no filtro atual.
           </div>
         ) : (
-          <div className="-mx-[22px] min-h-0 flex-grow overflow-y-auto">
+          <div className="-mx-4 min-h-0 flex-grow overflow-y-auto lg:-mx-[22px]">
             {visible.map((l) => {
               const on = sel.has(l.itemId);
               return (
-                <div key={l.itemId} className={`${GRID} h-14 items-center border-t border-solid border-line-2 px-[22px] text-[14px] ${on ? 'bg-[#F7F9EC]' : 'bg-white'}`}>
+                <div key={l.itemId} className={`${GRID} flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-solid border-line-2 px-4 py-3 text-[14px] lg:h-14 lg:px-[22px] lg:py-0 ${on ? 'bg-[#F7F9EC]' : 'bg-white'}`}>
                   {p.canStatus || p.canExport ? <input type="checkbox" checked={on} onChange={() => toggle(l.itemId)} aria-label={`Selecionar pedido de ${l.company}, ${l.product}`} className="m-0 h-4 w-4 accent-ink" /> : <span />}
-                  <button type="button" onClick={() => setPanel(l.orderId)} className="flex min-w-0 items-center gap-[10px] border-none bg-transparent p-0 text-left text-ink" aria-label={`Abrir pedido ${l.code} de ${l.company}`}>
+                  <button type="button" onClick={() => setPanel(l.orderId)} className="flex min-w-0 flex-1 items-center gap-[10px] border-none bg-transparent p-0 text-left text-ink lg:flex-none" aria-label={`Abrir pedido ${l.code} de ${l.company}`}>
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-line-2 text-[11px] font-semibold">{initialsOf(l.company)}</span>
                     <span className="truncate font-medium">{l.company}</span>
                   </button>
-                  <span className="flex min-w-0 flex-col text-[13px]">
+                  <span className={`hidden min-w-0 flex-col text-[13px] lg:flex`}>
                     <span className="truncate">{l.email}</span>
                     <span className="text-muted">{l.whatsapp}</span>
                   </span>
-                  <span className="flex min-w-0 flex-col">
+                  <span className={`flex min-w-0 basis-full flex-col pl-[26px] lg:basis-auto lg:pl-0 ${M2}`}>
                     <span className="truncate">{l.product}</span>
                     {!f.liveId && <span className="truncate text-[12px] text-muted">{l.liveName}</span>}
                   </span>
-                  <span className="font-mono">{formatInt(l.qty)}</span>
-                  <span className="tabular whitespace-nowrap text-[13px] text-ink-2">{formatBRL(l.unitPriceCents)}</span>
-                  <span className="tabular whitespace-nowrap text-[13px] font-medium">{formatBRL(l.subtotalCents)}</span>
-                  <span className="font-mono text-muted">{offsetLabel(l.offsetS)}</span>
-                  <span>
+                  <span className={`font-mono max-lg:pl-[26px] ${M2}`}>{formatInt(l.qty)}<span className="font-sans text-[12px] text-muted lg:hidden"> un.</span></span>
+                  <span className={`tabular whitespace-nowrap text-[13px] text-ink-2 ${M2}`}><span className="lg:hidden">× </span>{formatBRL(l.unitPriceCents)}</span>
+                  <span className={`tabular whitespace-nowrap text-[13px] font-medium ${M2}`}><span className="font-normal text-muted lg:hidden">= </span>{formatBRL(l.subtotalCents)}</span>
+                  <span className={`font-mono text-muted max-lg:ml-auto max-lg:text-[12px] ${M2}`}>{offsetLabel(l.offsetS)}</span>
+                  <span className="shrink-0">
                     <span className={`whitespace-nowrap rounded-full px-[10px] py-1 text-[12px] font-medium ${STATUS_PILL[l.status]}`}>{ADMIN_STATUS_LABEL[l.status]}</span>
                   </span>
                 </div>
@@ -255,7 +263,7 @@ export function PedidosView(p: Props) {
       </div>
 
       {selected.length > 0 && (
-        <div className="on-dark anim-pop-c absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 items-center gap-[14px] rounded-full bg-dark py-2 pl-[22px] pr-2 text-white shadow-[0_16px_40px_rgba(17,18,20,0.25)]" role="region" aria-label="Pedidos selecionados">
+        <div className="on-dark anim-fade lg:anim-pop-c fixed inset-x-3 bottom-3 z-30 flex flex-wrap items-center gap-2 rounded-[22px] bg-dark p-3 lg:absolute lg:inset-x-auto lg:bottom-8 lg:left-1/2 lg:flex-nowrap lg:gap-[14px] lg:rounded-full lg:py-2 lg:pl-[22px] lg:pr-2 lg:-translate-x-1/2 text-white shadow-[0_16px_40px_rgba(17,18,20,0.25)]" role="region" aria-label="Pedidos selecionados">
           <span className="whitespace-nowrap text-[14px]">
             <strong className="font-medium">{selected.length === 1 ? '1 selecionado' : `${formatInt(selected.length)} selecionados`}</strong>
             <span className="text-dark-muted"> · {formatInt(selUnits)} un.</span>

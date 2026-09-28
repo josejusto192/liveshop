@@ -27,9 +27,9 @@ export default async function PainelLayout({ children }: { children: React.React
   const settingsItem: NavItem | null = can(admin.role, 'settings:write') ? { href: '/admin/configuracoes', label: 'Configurações', icon: 'settings' } : null;
 
   return (
-    <div className="flex min-h-screen min-w-[1100px] bg-bg">
+    <div className="flex min-h-screen flex-col bg-bg lg:min-w-[1100px] lg:flex-row">
       <Sidebar items={items} settingsItem={settingsItem} platformName={settings.platformName} user={{ initials: initials(admin.name), name: admin.name, title: ROLE_TITLE[admin.role] }} />
-      <main className="anim-in m-6 ml-4 box-border flex h-[calc(100vh-48px)] min-h-[600px] min-w-0 flex-grow flex-col gap-4">{children}</main>
+      <main className="anim-in box-border flex min-w-0 flex-grow flex-col gap-4 p-3 sm:p-4 lg:m-6 lg:ml-4 lg:h-[calc(100vh-48px)] lg:min-h-[600px] lg:p-0">{children}</main>
     </div>
   );
 }
